@@ -237,6 +237,18 @@ class WebSocketClient {
     this.send({ type: 'message', message });
   }
 
+  // Sync contact
+  syncContact(contact) {
+    if (!this.connected) return;
+    this.send({ type: 'contact_sync', contact });
+  }
+
+  // Sync message
+  syncMessage(message) {
+    if (!this.connected) return;
+    this.send({ type: 'message_sync', message });
+  }
+
   // Sync combat state
   syncCombat(state) {
     if (!this.connected) return;

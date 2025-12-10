@@ -184,6 +184,24 @@ function handleMessage(ws, data) {
       }
       break;
 
+    case 'contact_sync':
+      broadcast({
+        type: 'contact_sync',
+        clientId: client.id,
+        contact: data.contact,
+        timestamp: new Date().toISOString()
+      }, ws);
+      break;
+
+    case 'message_sync':
+      broadcast({
+        type: 'message_sync',
+        clientId: client.id,
+        message: data.message,
+        timestamp: new Date().toISOString()
+      }, ws);
+      break;
+
     case 'combat_update':
       broadcast({
         type: 'combat_update',

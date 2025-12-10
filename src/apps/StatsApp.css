@@ -1,0 +1,304 @@
+.stats-app {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.stats-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.stats-header h2 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+}
+
+.character-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #666;
+}
+
+.no-character {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border: 4px solid black;
+  border-radius: 12px;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
+}
+
+.stats-section,
+.dice-section,
+.recent-rolls-section {
+  background: white;
+  border: 4px solid black;
+  border-radius: 12px;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.stats-section h3,
+.dice-section h3,
+.recent-rolls-section h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid black;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.stat-box {
+  background: #F5F5F5;
+  border: 3px solid black;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.stat-box:hover {
+  background: #E0E0E0;
+  transform: translateY(-2px);
+}
+
+.stat-box.selected {
+  background: #BAFFC9;
+  border-color: #00AA00;
+  border-width: 4px;
+}
+
+.stat-label {
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 4px;
+  color: #666;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.stat-modifier {
+  font-size: 16px;
+  color: #666;
+}
+
+.stats-hint {
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+}
+
+.dice-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-dice {
+  flex: 1;
+  min-width: 100px;
+  padding: 14px;
+  background: #BAE1FF;
+  border: 3px solid black;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-dice:hover {
+  background: #A0D1EF;
+  transform: translateY(-2px);
+}
+
+.selected-dice,
+.selected-bonuses {
+  margin-bottom: 16px;
+}
+
+.selected-dice h4,
+.selected-bonuses h4 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.empty-selection {
+  padding: 12px;
+  background: #F5F5F5;
+  border: 2px dashed #CCC;
+  border-radius: 8px;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}
+
+.dice-queue {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dice-chip {
+  padding: 8px 12px;
+  background: #FFFFBA;
+  border: 3px solid black;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: context-menu;
+  transition: all 0.2s;
+}
+
+.dice-chip:hover {
+  background: #FFEF8A;
+  transform: scale(1.05);
+}
+
+.bonus-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.bonus-chip {
+  padding: 8px 12px;
+  background: #BAFFC9;
+  border: 3px solid black;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.bonus-total {
+  padding: 8px 12px;
+  background: #FFB3BA;
+  border: 3px solid black;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.btn-roll {
+  width: 100%;
+  padding: 16px;
+  background: #BAFFC9;
+  border: 3px solid black;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-roll:hover:not(:disabled) {
+  background: #A0EFB9;
+  transform: translateY(-2px);
+}
+
+.btn-roll:disabled {
+  background: #E0E0E0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.empty-state {
+  padding: 32px;
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}
+
+.rolls-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.roll-card {
+  background: #F5F5F5;
+  border: 3px solid black;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.roll-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid black;
+}
+
+.roll-time {
+  font-size: 12px;
+  color: #666;
+}
+
+.roll-total {
+  font-size: 16px;
+  font-weight: bold;
+  background: #FFFFBA;
+  padding: 4px 8px;
+  border: 2px solid black;
+  border-radius: 6px;
+}
+
+.roll-details {
+  font-size: 14px;
+}
+
+.roll-dice {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.dice-result {
+  padding: 4px 8px;
+  background: #BAE1FF;
+  border: 2px solid black;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.roll-bonuses {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dice-buttons {
+    flex-direction: column;
+  }
+
+  .btn-dice {
+    width: 100%;
+  }
+}

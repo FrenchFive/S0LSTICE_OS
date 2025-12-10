@@ -13,6 +13,9 @@ import Settings from './pages/Settings';
 import FriendsApp from './apps/FriendsApp';
 import CodexApp from './apps/CodexApp';
 import MapApp from './apps/MapApp';
+import IDCardApp from './apps/IDCardApp';
+import ContactsApp from './apps/ContactsApp';
+import StatsApp from './apps/StatsApp';
 
 // Placeholder for new apps (to be implemented)
 const PlaceholderApp = ({ appName, onBack }) => (
@@ -106,13 +109,13 @@ function PhoneApp() {
         return <MapApp />;
 
       case 'id':
-        return <PlaceholderApp appName="ID Card" onBack={handleBackToHome} />;
+        return <IDCardApp />;
       
       case 'contacts':
-        return <PlaceholderApp appName="Contacts" onBack={handleBackToHome} />;
+        return <ContactsApp />;
       
       case 'stats':
-        return <PlaceholderApp appName="Stats & Dice" onBack={handleBackToHome} />;
+        return <StatsApp />;
       
       case 'quest':
         return <PlaceholderApp appName="Quests" onBack={handleBackToHome} />;
