@@ -43,6 +43,8 @@ jobs:
     # Only calculate version and release on push to main, not on PRs
     if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: build-verify
+    permissions:
+      contents: write
     outputs:
       version: ${{ steps.calc_version.outputs.version }}
       should_release: ${{ steps.calc_version.outputs.should_release }}
@@ -164,6 +166,8 @@ jobs:
     needs: [version, release]
     runs-on: ubuntu-latest
     if: needs.version.outputs.should_release == 'true'
+    permissions:
+      contents: write
     
     steps:
       - name: Download all artifacts
