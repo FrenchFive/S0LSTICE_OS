@@ -1,137 +1,163 @@
-# Hunters RPG Multiplayer Server
+# Hunters RPG WebSocket Server
 
-This directory contains the WebSocket server configuration for multiplayer dice rolling functionality.
+Real-time multiplayer server for the Hunters RPG application.
 
-## Setup
+## Quick Start
 
-### Installing the Server
+### Development (Local)
 
-1. **Install Node.js** on your server (v18 or higher recommended)
-
-2. **Install dependencies**:
 ```bash
-cd server
+# Install dependencies
 npm install ws
+
+# Start server
+node websocket-server.cjs
+
+# Or with custom port
+PORT=9000 node websocket-server.cjs
 ```
 
-3. **Run the WebSocket server**:
-```bash
-node websocket-server.js
-```
-
-Or with PM2 for production:
-```bash
-npm install -g pm2
-pm2 start websocket-server.js --name hunters-rpg-server
-pm2 save
-pm2 startup
-```
-
-### Nginx Configuration
-
-1. **Install Nginx** on your server:
-```bash
-# Ubuntu/Debian
-sudo apt update
-sudo apt install nginx
-
-# CentOS/RHEL
-sudo yum install nginx
-```
-
-2. **Copy the nginx configuration**:
-```bash
-sudo cp nginx.conf /etc/nginx/sites-available/hunters-rpg
-sudo ln -s /etc/nginx/sites-available/hunters-rpg /etc/nginx/sites-enabled/
-```
-
-3. **Update the configuration**:
-   - Replace `your-server-domain.com` with your actual domain
-   - Update SSL certificate paths
-   - Adjust the upstream port if needed
-
-4. **Test and reload Nginx**:
-```bash
-sudo nginx -t
-sudo systemctl reload nginx
-```
-
-### SSL Certificate (Let's Encrypt)
+### Production (Automated)
 
 ```bash
-sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d your-server-domain.com
+# Run the setup script (as root)
+sudo ./setup-server.sh --domain your-domain.com --ssl
 ```
 
-## Firewall Configuration
+## Manual Setup
 
-Open the necessary ports:
-```bash
-# Allow HTTP and HTTPS
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
+See the complete [SERVER_SETUP.md](../SERVER_SETUP.md) guide for detailed instructions.
 
-# If running WebSocket server directly (not behind nginx)
-sudo ufw allow 8080/tcp
-```
+## Files
+
+| File | Description |
+|------|-------------|
+| `websocket-server.cjs` | Main WebSocket server |
+| `nginx.conf` | Example Nginx configuration |
+| `setup-server.sh` | Automated setup script |
+
+## Endpoints
+
+| Endpoint | Type | Description |
+|----------|------|-------------|
+| `/ws` | WebSocket | Main connection endpoint |
+| `/health` | HTTP GET | Health check with connection info |
+| `/stats` | HTTP GET | Server statistics |
 
 ## Environment Variables
 
-You can configure the server using environment variables:
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PORT` | `8080` | Server port |
 
-- `PORT`: WebSocket server port (default: 8080)
+## Real-time Message Types
 
-Example:
+### Client → Server
+
+| Type | Description |
+|------|-------------|
+| `set_character` | Set character info for this connection |
+| `set_dm_mode` | Enable/disable DM mode |
+| `dice_roll` | Broadcast a dice roll |
+| `codex_sync` | Sync codex pages |
+| `bestiary_sync` | Sync bestiary entries |
+| `quest_sync` | Sync quest updates |
+| `map_sync` | Sync all map pins |
+| `map_update` | Update single map pin |
+| `message` | Send chat message |
+| `combat_update` | Update combat state |
+| `encounter_sync` | Sync encounter (DM only) |
+| `xp_award` | Award XP to player (DM only) |
+| `ping` | Latency check |
+
+### Server → Client
+
+| Type | Description |
+|------|-------------|
+| `connected` | Connection successful |
+| `user_joined` | New user connected |
+| `user_left` | User disconnected |
+| `user_updated` | User info changed |
+| `dice_roll` | Dice roll from any player |
+| `codex_sync` | Codex data synced |
+| `bestiary_sync` | Bestiary data synced |
+| `quest_sync` | Quest update |
+| `map_sync` | Map pins synced |
+| `map_update` | Single pin updated |
+| `message` | Chat message received |
+| `combat_update` | Combat state changed |
+| `encounter_sync` | Encounter data from DM |
+| `xp_award` | XP awarded to you |
+| `pong` | Latency response |
+| `error` | Error message |
+
+## PM2 Commands
+
 ```bash
-PORT=9000 node websocket-server.js
+pm2 start websocket-server.cjs --name hunters-rpg  # Start
+pm2 stop hunters-rpg                               # Stop
+pm2 restart hunters-rpg                            # Restart
+pm2 logs hunters-rpg                               # View logs
+pm2 status                                         # View status
+pm2 monit                                          # Monitor resources
 ```
 
-## Monitoring
+## Nginx Setup
 
-### Check server status
+1. Copy `nginx.conf` to `/etc/nginx/sites-available/hunters-rpg`
+2. Update `your-server-domain.com` to your domain
+3. Update SSL certificate paths (if using HTTPS)
+4. Enable: `ln -s /etc/nginx/sites-available/hunters-rpg /etc/nginx/sites-enabled/`
+5. Test: `nginx -t`
+6. Reload: `systemctl reload nginx`
+
+## SSL with Let's Encrypt
+
 ```bash
-# With PM2
-pm2 status
-pm2 logs hunters-rpg-server
+# Install certbot
+apt install certbot python3-certbot-nginx
 
-# Check health endpoint
+# Get certificate
+certbot --nginx -d your-domain.com
+
+# Auto-renewal is configured automatically
+```
+
+## Health Check
+
+```bash
 curl http://localhost:8080/health
 ```
 
-### Nginx logs
-```bash
-tail -f /var/log/nginx/hunters-rpg-access.log
-tail -f /var/log/nginx/hunters-rpg-error.log
+Response:
+```json
+{
+  "status": "ok",
+  "uptime": 3600.5,
+  "connections": 3,
+  "clients": [
+    {"id": "client_abc", "character": "Sir Galahad", "isDM": false}
+  ],
+  "timestamp": "2024-01-15T12:00:00.000Z"
+}
 ```
-
-## Client Configuration
-
-In the Hunters RPG app:
-1. Go to Settings
-2. Enter your server IP/domain: `wss://your-server-domain.com/ws`
-3. Click "Connect"
-
-## Security Notes
-
-- Always use WSS (WebSocket Secure) in production
-- Keep your SSL certificates up to date
-- Consider implementing rate limiting
-- Use a firewall to restrict access if needed
-- Monitor logs for suspicious activity
 
 ## Troubleshooting
 
+### Server won't start
+- Check if port is in use: `lsof -i :8080`
+- Check Node.js version: `node --version` (needs v18+)
+- Check logs: `pm2 logs hunters-rpg`
+
 ### Connection refused
-- Check if the WebSocket server is running
-- Verify firewall rules
-- Check Nginx configuration
+- Verify server is running: `pm2 status`
+- Check firewall: `ufw status`
+- Verify Nginx config: `nginx -t`
 
 ### SSL errors
-- Verify certificate paths in nginx.conf
-- Ensure certificates are valid and not expired
-- Check certificate permissions
+- Check certificate: `certbot certificates`
+- Renew if needed: `certbot renew`
 
-### High latency
-- Check server resources (CPU, RAM, network)
-- Consider using a CDN or edge locations
-- Optimize WebSocket message size
+## License
+
+Part of the Hunters RPG project.
