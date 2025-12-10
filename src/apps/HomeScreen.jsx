@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { database } from '../utils/database';
+import { useState } from 'react';
+import { database, dmMode } from '../utils/database';
 import {
   UserIcon,
   UsersIcon,
@@ -15,6 +15,7 @@ import {
   WalletIcon,
   NotesIcon,
   SettingsIcon,
+  CrownIcon,
 } from '../components/icons/Icons';
 import './HomeScreen.css';
 
@@ -36,20 +37,27 @@ const APPS = [
   { id: 'settings', name: 'Settings', icon: SettingsIcon, color: 'var(--app-color-8)' }
 ];
 
+// DM-only apps
+const DM_APPS = [
+  { id: 'rewards', name: 'Rewards', icon: CrownIcon, color: 'linear-gradient(135deg, var(--color-warning) 0%, var(--color-primary) 100%)', dmOnly: true }
+];
+
+// Helper to get greeting based on time
+function getTimeGreeting() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good Morning';
+  if (hour < 18) return 'Good Afternoon';
+  return 'Good Evening';
+}
+
 function HomeScreen({ onAppOpen }) {
-  const [character, setCharacter] = useState(null);
-  const [greeting, setGreeting] = useState('');
+  // Initialize state from localStorage synchronously to avoid useEffect setState
+  const [character] = useState(() => database.getCurrentCharacter());
+  const [greeting] = useState(() => getTimeGreeting());
+  const [isDM] = useState(() => dmMode.isDM());
 
-  useEffect(() => {
-    const char = database.getCurrentCharacter();
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCharacter(char);
-
-    const hour = new Date().getHours();
-    if (hour < 12) setGreeting('Good Morning');
-    else if (hour < 18) setGreeting('Good Afternoon');
-    else setGreeting('Good Evening');
-  }, []);
+  // Combine regular apps with DM apps if in DM mode
+  const visibleApps = isDM ? [...APPS.slice(0, -1), ...DM_APPS, APPS[APPS.length - 1]] : APPS;
 
   return (
     <div className="home-screen">
@@ -71,24 +79,31 @@ function HomeScreen({ onAppOpen }) {
               <div className="widget-name">{character.name}</div>
               <div className="widget-level">Level {character.level} Hunter</div>
             </div>
+            {isDM && (
+              <div className="dm-badge">
+                <CrownIcon size={14} />
+                <span>DM</span>
+              </div>
+            )}
           </div>
         )}
 
         {/* App Grid */}
         <div className="app-grid">
-          {APPS.map(app => {
+          {visibleApps.map(app => {
             const IconComponent = app.icon;
             return (
               <button
                 key={app.id}
-                className="app-icon"
-                style={{ backgroundColor: app.color }}
+                className={`app-icon ${app.dmOnly ? 'dm-only' : ''}`}
+                style={{ background: app.color }}
                 onClick={() => onAppOpen(app.id)}
               >
                 <div className="app-icon-graphic">
                   <IconComponent size={32} />
                 </div>
                 <div className="app-icon-name">{app.name}</div>
+                {app.dmOnly && <div className="app-dm-badge">DM</div>}
               </button>
             );
           })}

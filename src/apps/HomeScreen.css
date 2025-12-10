@@ -84,6 +84,20 @@
   font-weight: var(--font-weight-semibold);
 }
 
+/* DM Badge in Character Widget */
+.dm-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-2) var(--spacing-3);
+  background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-primary) 100%);
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  box-shadow: var(--shadow-sm);
+}
+
 /* ==========================================
    APP GRID
    ========================================== */
@@ -136,6 +150,34 @@
   color: var(--color-text);
   text-align: center;
   line-height: 1.2;
+}
+
+/* DM-only App Styling */
+.app-icon.dm-only {
+  position: relative;
+  border-color: var(--color-warning);
+  box-shadow: 0 0 12px rgba(234, 179, 8, 0.3), var(--shadow-md);
+}
+
+.app-icon.dm-only .app-icon-graphic {
+  color: white;
+}
+
+.app-icon.dm-only .app-icon-name {
+  color: white;
+}
+
+.app-dm-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: var(--color-bg-base);
+  color: var(--color-warning);
+  font-size: 8px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-warning);
 }
 
 /* ==========================================

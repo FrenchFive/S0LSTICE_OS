@@ -1,6 +1,7 @@
 /**
  * LevelUpModal Component
  * A beautiful, visual experience for leveling up characters
+ * Note: XP Awards are now DM-only via the DMRewardsApp
  */
 import { useState, useEffect } from 'react';
 import {
@@ -9,16 +10,10 @@ import {
   getAvailableXP,
   getAvailableUpgrades,
   applyUpgrade,
-  awardXP,
   formatXPCost,
-  XP_AWARDS,
   getTraitCost
 } from '../utils/levelUp';
 import {
-  ATTRIBUTES,
-  ATTRIBUTE_LABELS,
-  SKILLS,
-  SKILL_LABELS,
   calculateHealth,
   calculateWillpower
 } from '../utils/huntersData';
@@ -304,64 +299,7 @@ function NewTraitSelector({ onAdd, availableXP, existingTraitIds }) {
   );
 }
 
-/**
- * XP Award Section
- */
-function XPAwardSection({ onAward }) {
-  const [customAmount, setCustomAmount] = useState(1);
-  const [customReason, setCustomReason] = useState('');
-  
-  const quickAwards = [
-    { amount: XP_AWARDS.sessionBase, label: 'Session (Base)', reason: 'Base session reward' },
-    { amount: XP_AWARDS.sessionGood, label: 'Good Session', reason: 'Good roleplay and progress' },
-    { amount: XP_AWARDS.sessionGreat, label: 'Great Session', reason: 'Exceptional session' },
-    { amount: XP_AWARDS.achievedAmbition, label: 'Major Goal', reason: 'Achieved major character goal' },
-  ];
-  
-  return (
-    <div className="xp-award-section">
-      <h4>Award XP</h4>
-      
-      <div className="quick-awards">
-        {quickAwards.map(award => (
-          <button
-            key={award.label}
-            className="btn btn-outline btn-sm"
-            onClick={() => onAward(award.amount, award.reason)}
-          >
-            +{award.amount} {award.label}
-          </button>
-        ))}
-      </div>
-      
-      <div className="custom-award">
-        <div className="custom-award-inputs">
-          <input
-            type="number"
-            className="input input-sm"
-            value={customAmount}
-            onChange={(e) => setCustomAmount(Math.max(1, parseInt(e.target.value) || 1))}
-            min="1"
-            max="50"
-          />
-          <input
-            type="text"
-            className="input input-sm"
-            value={customReason}
-            onChange={(e) => setCustomReason(e.target.value)}
-            placeholder="Reason..."
-          />
-          <button
-            className="btn btn-primary btn-sm"
-            onClick={() => onAward(customAmount, customReason || 'Custom award')}
-          >
-            Award
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+// XP Award Section removed - now handled by DM-only DMRewardsApp
 
 /**
  * Main Level Up Modal Component
@@ -395,16 +333,6 @@ export default function LevelUpModal({ character, onUpdate, onClose }) {
   const handleAddNewTrait = (traitData) => {
     const { character: updated, changeLog } = applyUpgrade(character, 'newTrait', traitData);
     setRecentUpgrades(prev => [...prev, changeLog]);
-    onUpdate(updated);
-  };
-  
-  const handleAwardXP = (amount, reason) => {
-    const { character: updated, leveledUp, changeLog } = awardXP(character, amount, reason);
-    
-    if (leveledUp && changeLog.levelUp) {
-      setCelebration(changeLog.levelUp);
-    }
-    
     onUpdate(updated);
   };
   
@@ -443,12 +371,6 @@ export default function LevelUpModal({ character, onUpdate, onClose }) {
             onClick={() => setActiveTab('traits')}
           >
             <PlusIcon size={16} /> New Traits
-          </button>
-          <button 
-            className={`modal-tab ${activeTab === 'xp' ? 'active' : ''}`}
-            onClick={() => setActiveTab('xp')}
-          >
-            <SparkleIcon size={16} /> Award XP
           </button>
         </div>
         
@@ -541,11 +463,12 @@ export default function LevelUpModal({ character, onUpdate, onClose }) {
               existingTraitIds={existingTraitIds}
             />
           )}
-          
-          {/* Award XP Tab */}
-          {activeTab === 'xp' && (
-            <XPAwardSection onAward={handleAwardXP} />
-          )}
+        </div>
+        
+        {/* DM Rewards Note */}
+        <div className="dm-rewards-note">
+          <SparkleIcon size={14} />
+          <span>XP is awarded by the DM via the Rewards panel</span>
         </div>
         
         {/* Recent Upgrades */}

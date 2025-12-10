@@ -21,6 +21,7 @@ import InventoryApp from './apps/InventoryApp';
 import PetsApp from './apps/PetsApp';
 import NotesApp from './apps/NotesApp';
 import CombatApp from './apps/CombatApp';
+import DMRewardsApp from './apps/DMRewardsApp';
 
 // Icons
 import { UserIcon, WalletIcon } from './components/icons/Icons';
@@ -38,6 +39,7 @@ const SIMPLE_APPS = {
   pets: PetsApp,
   notes: NotesApp,
   combat: CombatApp,
+  rewards: DMRewardsApp,
 };
 
 // Placeholder for requiring character selection

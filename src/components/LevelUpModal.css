@@ -460,44 +460,24 @@
 }
 
 /* ==========================================
-   XP AWARD SECTION
+   DM REWARDS NOTE
    ========================================== */
 
-.xp-award-section {
-  padding: var(--spacing-2);
-}
-
-.xp-award-section h4 {
-  margin: 0 0 var(--spacing-4) 0;
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-}
-
-.quick-awards {
+.dm-rewards-note {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   gap: var(--spacing-2);
-  margin-bottom: var(--spacing-4);
-}
-
-.custom-award {
-  padding: var(--spacing-4);
+  padding: var(--spacing-3) var(--spacing-4);
   background-color: var(--color-bg-sunken);
-  border: 2px solid var(--color-border-light);
-  border-radius: var(--radius-lg);
+  border-top: var(--outline-width) solid var(--outline-color);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
 }
 
-.custom-award-inputs {
-  display: flex;
-  gap: var(--spacing-2);
-}
-
-.custom-award-inputs input[type="number"] {
-  width: 80px;
-}
-
-.custom-award-inputs input[type="text"] {
-  flex: 1;
+.dm-rewards-note svg {
+  color: var(--color-warning);
+  flex-shrink: 0;
 }
 
 /* ==========================================
