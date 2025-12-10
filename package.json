@@ -42,11 +42,7 @@
         "nsis",
         "portable"
       ],
-      "icon": "public/icon.ico",
-      "signingHashAlgorithms": [
-        "sha256"
-      ],
-      "publisherName": "FrenchFive"
+      "icon": "public/icon.ico"
     },
     "mac": {
       "target": [
