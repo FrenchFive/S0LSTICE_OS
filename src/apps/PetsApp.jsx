@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { petsDatabase } from '../utils/sharedData';
-import { getCurrentCharacter } from '../utils/database';
+import { database } from '../utils/database';
 import './PetsApp.css';
 
 function PetsApp() {
@@ -22,7 +22,7 @@ function PetsApp() {
   }, []);
 
   const loadPets = () => {
-    const character = getCurrentCharacter();
+    const character = database.getCurrentCharacter();
     if (character) {
       const characterPets = petsDatabase.getCharacterPets(character.id);
       setPets(characterPets);
@@ -31,7 +31,7 @@ function PetsApp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const character = getCurrentCharacter();
+    const character = database.getCurrentCharacter();
     if (!character) {
       alert('Please select a character first');
       return;
@@ -53,7 +53,7 @@ function PetsApp() {
   };
 
   const handleFeed = (pet) => {
-    const character = getCurrentCharacter();
+    const character = database.getCurrentCharacter();
     if (!character) return;
 
     const updated = {
@@ -70,7 +70,7 @@ function PetsApp() {
   };
 
   const handleRest = (pet) => {
-    const character = getCurrentCharacter();
+    const character = database.getCurrentCharacter();
     if (!character) return;
 
     const updated = {
@@ -88,7 +88,7 @@ function PetsApp() {
 
   const handleDelete = (petId) => {
     if (confirm('Remove this pet/familiar?')) {
-      const character = getCurrentCharacter();
+      const character = database.getCurrentCharacter();
       if (character) {
         petsDatabase.deletePet(character.id, petId);
         if (selectedPet && selectedPet.id === petId) {

@@ -20,29 +20,6 @@ export default function ContactsApp() {
   const character = db.getCharacter(db.getCurrentCharacterId());
   const isDM = dmMode.isDM();
 
-  useEffect(() => {
-    loadContacts();
-    loadMessages();
-
-    // Listen for WebSocket updates
-    if (wsClient) {
-      const handleContactSync = () => {
-        loadContacts();
-      };
-      const handleMessageSync = () => {
-        loadMessages();
-      };
-
-      window.addEventListener('contact_synced', handleContactSync);
-      window.addEventListener('message_synced', handleMessageSync);
-
-      return () => {
-        window.removeEventListener('contact_synced', handleContactSync);
-        window.removeEventListener('message_synced', handleMessageSync);
-      };
-    }
-  }, []);
-
   const loadContacts = () => {
     const allContacts = contactsDb.contactsDatabase.getAllContacts();
     
@@ -72,6 +49,29 @@ export default function ContactsApp() {
       setMessages(filtered);
     }
   };
+
+  useEffect(() => {
+    loadContacts();
+    loadMessages();
+
+    // Listen for WebSocket updates
+    if (wsClient) {
+      const handleContactSync = () => {
+        loadContacts();
+      };
+      const handleMessageSync = () => {
+        loadMessages();
+      };
+
+      window.addEventListener('contact_synced', handleContactSync);
+      window.addEventListener('message_synced', handleMessageSync);
+
+      return () => {
+        window.removeEventListener('contact_synced', handleContactSync);
+        window.removeEventListener('message_synced', handleMessageSync);
+      };
+    }
+  }, [loadContacts, loadMessages]);
 
   const handleAddContact = () => {
     if (!newContact.name.trim()) return;

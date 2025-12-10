@@ -15,6 +15,17 @@ export default function CodexApp() {
   const isDM = dmMode.isDM();
   const character = database.getCurrentCharacter();
 
+  const loadData = () => {
+    const allPages = codexDatabase.getAllPages();
+    const filteredPages = isDM || showPrivatePages
+      ? allPages
+      : allPages.filter(p => !p.isPrivate);
+    setPages(filteredPages);
+
+    const allCreatures = bestiaryDatabase.getAllEntries();
+    setCreatures(allCreatures);
+  };
+
   useEffect(() => {
     loadData();
 
@@ -43,18 +54,7 @@ export default function CodexApp() {
         ws.off('bestiary_sync');
       }
     };
-  }, []);
-
-  const loadData = () => {
-    const allPages = codexDatabase.getAllPages();
-    const filteredPages = isDM || showPrivatePages
-      ? allPages
-      : allPages.filter(p => !p.isPrivate);
-    setPages(filteredPages);
-
-    const allCreatures = bestiaryDatabase.getAllEntries();
-    setCreatures(allCreatures);
-  };
+  }, [loadData]);
 
   const handleCreatePage = () => {
     const newPage = {

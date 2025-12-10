@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { inventoryDatabase } from '../utils/sharedData';
-import { getCharacters, getCurrentCharacter } from '../utils/database';
+import { database } from '../utils/database';
 import './InventoryApp.css';
 
 function InventoryApp() {
@@ -22,7 +22,7 @@ function InventoryApp() {
   }, []);
 
   const loadInventory = () => {
-    const character = getCurrentCharacter();
+    const character = database.getCurrentCharacter();
     if (character) {
       const characterItems = inventoryDatabase.getCharacterItems(character.id);
       setItems(characterItems);
@@ -37,7 +37,7 @@ function InventoryApp() {
       return;
     }
 
-    const character = getCurrentCharacter();
+    const character = database.getCurrentCharacter();
     if (!character) {
       alert('Please select a character first');
       return;
@@ -58,7 +58,7 @@ function InventoryApp() {
   };
 
   const handleQuantityChange = (item, delta) => {
-    const character = getCurrentCharacter();
+    const character = database.getCurrentCharacter();
     if (!character) return;
 
     const newQuantity = Math.max(0, item.quantity + delta);
@@ -79,7 +79,7 @@ function InventoryApp() {
 
   const handleDeleteItem = (itemId) => {
     if (confirm('Delete this item?')) {
-      const character = getCurrentCharacter();
+      const character = database.getCurrentCharacter();
       if (character) {
         inventoryDatabase.deleteItem(character.id, itemId);
         loadInventory();

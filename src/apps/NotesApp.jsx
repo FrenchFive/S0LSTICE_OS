@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { notesDatabase } from '../utils/sharedData';
-import { getCurrentCharacter } from '../utils/database';
+import { database } from '../utils/database';
 import './NotesApp.css';
 
 function NotesApp() {
@@ -15,7 +15,7 @@ function NotesApp() {
   }, []);
 
   const loadNotes = () => {
-    const character = getCurrentCharacter();
+    const character = database.getCurrentCharacter();
     if (character) {
       const characterNotes = notesDatabase.getCharacterNotes(character.id);
       setNotes(characterNotes);
@@ -35,7 +35,7 @@ function NotesApp() {
       return;
     }
 
-    const character = getCurrentCharacter();
+    const character = database.getCurrentCharacter();
     if (!character) {
       alert('Please select a character first');
       return;
@@ -61,7 +61,7 @@ function NotesApp() {
     if (!selectedNote) return;
     
     if (confirm('Delete this note?')) {
-      const character = getCurrentCharacter();
+      const character = database.getCurrentCharacter();
       if (character) {
         notesDatabase.deleteNote(character.id, selectedNote.id);
         setSelectedNote(null);
