@@ -102,6 +102,7 @@ export function createDefaultCharacter() {
       player: '',
       chronicle: '',
       concept: '',
+      occupation: '',
       creed: '',
       drive: '',
       ambition: '',

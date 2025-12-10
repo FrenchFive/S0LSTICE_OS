@@ -261,6 +261,34 @@ function CreateCharacterStep({ onBack, onCreate, hasCharacters }) {
 
           <div className="form-row">
             <div className="form-group">
+              <label>Age</label>
+              <input
+                type="number"
+                className="input"
+                value={character.biography?.age || ''}
+                onChange={(e) => setCharacter(prev => ({
+                  ...prev,
+                  biography: { ...prev.biography, age: parseInt(e.target.value) || null }
+                }))}
+                placeholder="Age"
+                min="0"
+                max="150"
+              />
+            </div>
+            <div className="form-group">
+              <label>Occupation / Job</label>
+              <input
+                type="text"
+                className="input"
+                value={character.identity.occupation}
+                onChange={(e) => updateIdentity('occupation', e.target.value)}
+                placeholder="e.g., Private Investigator"
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
               <label>Concept</label>
               <input
                 type="text"
@@ -422,6 +450,8 @@ function CreateCharacterStep({ onBack, onCreate, hasCharacters }) {
             <div className="review-info">
               <h4>{character.identity.name}</h4>
               <p>{character.identity.concept || 'Hunter'}</p>
+              {character.identity.occupation && <p className="occupation-text">{character.identity.occupation}</p>}
+              {character.biography?.age && <p className="age-text">Age: {character.biography.age}</p>}
               {character.identity.creed && <p className="creed-badge">{character.identity.creed}</p>}
             </div>
           </div>

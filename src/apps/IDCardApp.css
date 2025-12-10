@@ -230,6 +230,182 @@
   background-color: var(--color-surface);
 }
 
+/* Identity Badge Variants */
+.identity-badge.disguise {
+  background-color: var(--color-warning-light);
+}
+
+.identity-badge.secret_identity {
+  background-color: var(--color-info-light);
+}
+
+/* ==========================================
+   IDENTITIES SECTION
+   ========================================== */
+
+.identities-section {
+  background-color: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-5);
+  margin-bottom: var(--spacing-5);
+}
+
+.btn-add-identity {
+  padding: var(--spacing-2) var(--spacing-3);
+  background-color: var(--color-primary-light);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  transition: all var(--transition-fast);
+}
+
+.btn-add-identity:hover {
+  background-color: var(--color-primary);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Identity Switcher */
+.identity-switcher {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.identity-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.identity-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
+  background-color: var(--color-bg-sunken);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+  font-size: var(--font-size-base);
+}
+
+.identity-option:hover {
+  background-color: var(--color-primary-light);
+}
+
+.identity-option.active {
+  background-color: var(--color-success-light);
+  border-color: var(--color-success);
+}
+
+.identity-icon {
+  font-size: var(--font-size-lg);
+}
+
+.identity-name {
+  flex: 1;
+  font-weight: var(--font-weight-semibold);
+}
+
+.identity-actions {
+  display: flex;
+  gap: var(--spacing-1);
+}
+
+.btn-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-surface);
+  border: 2px solid var(--outline-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-icon:hover {
+  background-color: var(--color-primary-light);
+}
+
+.btn-icon.btn-danger:hover {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+/* Identity Form */
+.identity-form {
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-4);
+  background-color: var(--color-bg-sunken);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+}
+
+.identity-form h4 {
+  margin: 0 0 var(--spacing-4) 0;
+  font-size: var(--font-size-lg);
+}
+
+.identity-form .form-group {
+  margin-bottom: var(--spacing-3);
+}
+
+.identity-form .form-group label {
+  display: block;
+  margin-bottom: var(--spacing-1);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.identity-form .input {
+  width: 100%;
+  padding: var(--spacing-2) var(--spacing-3);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+}
+
+.identity-form textarea.input {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.identity-form .form-actions {
+  display: flex;
+  gap: var(--spacing-3);
+  justify-content: flex-end;
+  margin-top: var(--spacing-4);
+}
+
+.no-identities {
+  padding: var(--spacing-5);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.no-identities p {
+  margin: 0;
+}
+
+.no-identities .hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-2);
+}
+
 /* Backstory Section */
 .backstory-section {
   background-color: var(--color-surface);

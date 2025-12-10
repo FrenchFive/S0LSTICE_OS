@@ -633,6 +633,18 @@
   font-weight: var(--font-weight-bold);
 }
 
+.occupation-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.age-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
 .review-stats {
   display: flex;
   justify-content: center;
