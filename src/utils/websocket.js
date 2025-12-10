@@ -140,20 +140,35 @@ class WebSocketClient {
         this.emit('pong');
         break;
       
-      case 'codex_update':
-        this.emit('codex_update', data);
+      case 'codex_sync':
+        this.emit('codex_sync', data);
+        this.emit('codex_update', data); // Legacy support
         break;
       
-      case 'bestiary_update':
-        this.emit('bestiary_update', data);
+      case 'bestiary_sync':
+        this.emit('bestiary_sync', data);
+        this.emit('bestiary_update', data); // Legacy support
         break;
       
-      case 'quest_update':
-        this.emit('quest_update', data);
+      case 'quest_sync':
+        this.emit('quest_sync', data);
+        this.emit('quest_update', data); // Legacy support
+        break;
+      
+      case 'map_sync':
+        this.emit('map_sync', data);
         break;
       
       case 'map_update':
         this.emit('map_update', data);
+        break;
+      
+      case 'contact_sync':
+        this.emit('contact_sync', data);
+        break;
+      
+      case 'message_sync':
+        this.emit('message_sync', data);
         break;
       
       case 'message':
@@ -174,13 +189,45 @@ class WebSocketClient {
         this.emit('encounter_sync', data);
         break;
       
+      case 'initiative_update':
+        this.emit('initiative_update', data);
+        break;
+      
+      case 'xp_announcement':
+        this.emit('xp_announcement', data);
+        break;
+      
+      case 'note_sync':
+        this.emit('note_sync', data);
+        break;
+      
+      case 'shared_note':
+        this.emit('shared_note', data);
+        break;
+      
+      case 'game_state':
+        this.emit('game_state', data);
+        break;
+      
+      case 'user_list':
+        this.connectedUsers = data.users || [];
+        this.emit('user_list', data.users);
+        break;
+      
+      case 'server_shutdown':
+        console.warn('Server is shutting down:', data.message);
+        this.emit('server_shutdown', data);
+        break;
+      
       case 'error':
-        console.error('Server error:', data.message);
+        console.error('Server error:', data.message, data.code);
         this.emit('server_error', data);
         break;
       
       default:
         console.log('Unknown message type:', data.type);
+        // Emit as generic event for extensibility
+        this.emit(data.type, data);
     }
   }
 
@@ -283,6 +330,99 @@ class WebSocketClient {
       type: 'encounter_sync',
       encounter,
       action
+    });
+  }
+
+  // Update initiative order (DM only)
+  updateInitiative(order, currentTurn) {
+    if (!this.connected || !this.isDM) return;
+    this.send({
+      type: 'initiative_update',
+      order,
+      currentTurn
+    });
+  }
+
+  // Sync note
+  syncNote(note, action = 'update') {
+    if (!this.connected) return;
+    this.send({
+      type: 'note_sync',
+      note,
+      action
+    });
+  }
+
+  // Share a note with all players (DM only)
+  shareNote(note) {
+    if (!this.connected || !this.isDM) return;
+    this.send({
+      type: 'shared_note',
+      note
+    });
+  }
+
+  // Request current game state
+  requestGameState() {
+    if (!this.connected) return;
+    this.send({ type: 'get_game_state' });
+  }
+
+  // Request user list
+  requestUsers() {
+    if (!this.connected) return;
+    this.send({ type: 'get_users' });
+  }
+
+  // Add a map pin
+  addMapPin(pin) {
+    if (!this.connected) return;
+    this.send({
+      type: 'map_pin_add',
+      pin
+    });
+  }
+
+  // Remove a map pin
+  removeMapPin(pinId) {
+    if (!this.connected) return;
+    this.send({
+      type: 'map_pin_remove',
+      pinId
+    });
+  }
+
+  // Update a single map pin
+  updateMapPin(pin) {
+    if (!this.connected) return;
+    this.send({
+      type: 'map_update',
+      pin,
+      action: 'update'
+    });
+  }
+
+  // Send private message to specific player
+  sendPrivateMessage(targetClientId, message) {
+    if (!this.connected) return;
+    this.send({
+      type: 'message',
+      message: {
+        ...message,
+        toClientId: targetClientId
+      }
+    });
+  }
+
+  // Award XP with announcement (DM only)
+  awardXPWithAnnouncement(targetClientId, amount, reason) {
+    if (!this.connected || !this.isDM) return;
+    this.send({
+      type: 'xp_award',
+      targetClientId,
+      amount,
+      reason,
+      announce: true
     });
   }
 

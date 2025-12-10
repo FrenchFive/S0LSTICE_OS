@@ -344,6 +344,11 @@ export const inventoryDatabase = {
     return data ? JSON.parse(data) : [];
   },
 
+  // Alias for getInventory
+  getCharacterItems(characterId) {
+    return this.getInventory(characterId);
+  },
+
   getItem(characterId, id) {
     const inventory = this.getInventory(characterId);
     return inventory.find(i => i.id === id);
@@ -358,6 +363,32 @@ export const inventoryDatabase = {
       createdAt: new Date().toISOString()
     };
 
+    inventory.push(newItem);
+    localStorage.setItem(INVENTORY_KEY + characterId, JSON.stringify(inventory));
+    return newItem;
+  },
+
+  // Save item (create or update)
+  saveItem(characterId, itemId, itemData) {
+    const inventory = this.getInventory(characterId);
+    
+    if (itemId) {
+      // Update existing
+      const index = inventory.findIndex(i => i.id === itemId);
+      if (index >= 0) {
+        inventory[index] = { ...inventory[index], ...itemData, updatedAt: new Date().toISOString() };
+        localStorage.setItem(INVENTORY_KEY + characterId, JSON.stringify(inventory));
+        return inventory[index];
+      }
+    }
+    
+    // Create new
+    const newItem = {
+      ...itemData,
+      id: Date.now().toString(),
+      quantity: itemData.quantity || 1,
+      createdAt: new Date().toISOString()
+    };
     inventory.push(newItem);
     localStorage.setItem(INVENTORY_KEY + characterId, JSON.stringify(inventory));
     return newItem;

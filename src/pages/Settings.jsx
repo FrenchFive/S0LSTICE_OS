@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { database, dmMode } from '../utils/database';
 import { wsClient } from '../utils/websocket';
+import { SERVER_CONFIG } from '../utils/serverConfig';
 import {
   SettingsIcon,
   WifiIcon,
@@ -505,11 +506,11 @@ function Settings({ currentCharacter, onClose, onSwitchCharacter }) {
               className="input"
               value={serverUrl}
               onChange={(e) => setServerUrl(e.target.value)}
-              placeholder="wss://your-server.com/ws"
+              placeholder={SERVER_CONFIG.getLocalUrl()}
               disabled={isConnected}
             />
             <p className="help-text">
-              Example: wss://example.com/ws or ws://localhost:8080/ws
+              Local: {SERVER_CONFIG.getLocalUrl()} • Remote: wss://your-server.com/ws
             </p>
           </div>
 

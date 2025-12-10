@@ -57,6 +57,175 @@ const DIFFICULTY_COLORS = {
   deadly: '#7c3aed'
 };
 
+// Status effect definitions
+const STATUS_EFFECTS = [
+  { id: 'blinded', name: 'Blinded', icon: '👁️', description: 'Cannot see, auto-fail sight checks', color: '#6b7280' },
+  { id: 'charmed', name: 'Charmed', icon: '💕', description: 'Cannot attack charmer', color: '#ec4899' },
+  { id: 'deafened', name: 'Deafened', icon: '👂', description: 'Cannot hear, auto-fail hearing checks', color: '#6b7280' },
+  { id: 'frightened', name: 'Frightened', icon: '😨', description: 'Disadvantage while source visible', color: '#7c3aed' },
+  { id: 'grappled', name: 'Grappled', icon: '🤼', description: 'Speed becomes 0', color: '#f59e0b' },
+  { id: 'incapacitated', name: 'Incapacitated', icon: '💫', description: 'Cannot take actions or reactions', color: '#ef4444' },
+  { id: 'invisible', name: 'Invisible', icon: '👻', description: 'Cannot be seen without special sense', color: '#8b5cf6' },
+  { id: 'paralyzed', name: 'Paralyzed', icon: '⚡', description: 'Incapacitated, auto-fail Str/Dex saves', color: '#dc2626' },
+  { id: 'poisoned', name: 'Poisoned', icon: '🤢', description: 'Disadvantage on attacks and ability checks', color: '#22c55e' },
+  { id: 'prone', name: 'Prone', icon: '🛌', description: 'Disadvantage on attacks, advantage for melee vs', color: '#78716c' },
+  { id: 'restrained', name: 'Restrained', icon: '⛓️', description: 'Speed 0, disadvantage on Dex saves', color: '#57534e' },
+  { id: 'stunned', name: 'Stunned', icon: '💥', description: 'Incapacitated, auto-fail Str/Dex saves', color: '#fbbf24' },
+  { id: 'unconscious', name: 'Unconscious', icon: '😴', description: 'Incapacitated, prone, auto-fail Str/Dex', color: '#1f2937' },
+  { id: 'exhausted', name: 'Exhausted', icon: '😩', description: 'Cumulative exhaustion effects', color: '#9ca3af' },
+  { id: 'concentrating', name: 'Concentrating', icon: '🎯', description: 'Maintaining concentration on spell', color: '#3b82f6' },
+  { id: 'hidden', name: 'Hidden', icon: '🥷', description: 'Location unknown to enemies', color: '#1e293b' },
+];
+
+// Action economy icons
+const ActionIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+    <circle cx="12" cy="12" r="10" />
+  </svg>
+);
+
+const BonusActionIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+    <polygon points="12,2 22,12 12,22 2,12" />
+  </svg>
+);
+
+const ReactionIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+  </svg>
+);
+
+const MovementIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M5 12h14M12 5l7 7-7 7" />
+  </svg>
+);
+
+/**
+ * Status Effect Selector Modal
+ */
+function StatusEffectSelector({ currentEffects = [], onToggle, onClose }) {
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="status-selector-modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-header">
+          <h3>Status Effects</h3>
+          <button className="btn-close" onClick={onClose}>✕</button>
+        </div>
+        <div className="modal-body">
+          <div className="status-effects-grid">
+            {STATUS_EFFECTS.map(effect => {
+              const isActive = currentEffects.includes(effect.id);
+              return (
+                <button
+                  key={effect.id}
+                  className={`status-effect-btn ${isActive ? 'active' : ''}`}
+                  onClick={() => onToggle(effect.id)}
+                  style={{ borderColor: isActive ? effect.color : undefined }}
+                >
+                  <span className="status-icon">{effect.icon}</span>
+                  <span className="status-name">{effect.name}</span>
+                  <span className="status-desc">{effect.description}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Action Economy Display
+ */
+function ActionEconomy({ creature, onUpdate }) {
+  const actions = creature.actions || { action: true, bonus: true, reaction: true, movement: creature.speed || 30 };
+  
+  const toggleAction = (type) => {
+    onUpdate({
+      ...creature,
+      actions: { ...actions, [type]: !actions[type] }
+    });
+  };
+  
+  const spendMovement = (amount) => {
+    const newMovement = Math.max(0, actions.movement - amount);
+    onUpdate({
+      ...creature,
+      actions: { ...actions, movement: newMovement }
+    });
+  };
+
+  return (
+    <div className="action-economy">
+      <div className="action-row">
+        <button 
+          className={`action-btn action ${actions.action ? 'available' : 'used'}`}
+          onClick={() => toggleAction('action')}
+          title="Action"
+        >
+          <ActionIcon size={14} />
+          <span>Action</span>
+        </button>
+        <button 
+          className={`action-btn bonus ${actions.bonus ? 'available' : 'used'}`}
+          onClick={() => toggleAction('bonus')}
+          title="Bonus Action"
+        >
+          <BonusActionIcon size={14} />
+          <span>Bonus</span>
+        </button>
+        <button 
+          className={`action-btn reaction ${actions.reaction ? 'available' : 'used'}`}
+          onClick={() => toggleAction('reaction')}
+          title="Reaction"
+        >
+          <ReactionIcon size={14} />
+          <span>React</span>
+        </button>
+      </div>
+      <div className="movement-row">
+        <MovementIcon size={14} />
+        <span className="movement-value">{actions.movement}ft</span>
+        <div className="movement-buttons">
+          <button onClick={() => spendMovement(5)}>-5</button>
+          <button onClick={() => spendMovement(10)}>-10</button>
+          <button onClick={() => spendMovement(-actions.movement + (creature.speed || 30))}>Reset</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Status Effects Display for Creature
+ */
+function CreatureStatusEffects({ effects = [], onRemove }) {
+  if (effects.length === 0) return null;
+  
+  return (
+    <div className="creature-effects">
+      {effects.map(effectId => {
+        const effect = STATUS_EFFECTS.find(e => e.id === effectId);
+        if (!effect) return null;
+        return (
+          <span 
+            key={effectId} 
+            className="effect-badge"
+            style={{ backgroundColor: effect.color }}
+            onClick={() => onRemove(effectId)}
+            title={`${effect.name}: ${effect.description} (click to remove)`}
+          >
+            {effect.icon}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
 /**
  * Creature Editor Modal
  */
@@ -128,6 +297,20 @@ function CreatureEditor({ creature, onSave, onCancel }) {
               />
             </div>
             <div className="form-group">
+              <label>Speed (ft)</label>
+              <input
+                type="number"
+                className="input"
+                value={form.speed || 30}
+                onChange={(e) => handleChange('speed', parseInt(e.target.value) || 30)}
+                min="0"
+                step="5"
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
               <label>Initiative Bonus</label>
               <input
                 type="number"
@@ -136,9 +319,6 @@ function CreatureEditor({ creature, onSave, onCancel }) {
                 onChange={(e) => handleChange('initiative', parseInt(e.target.value) || 0)}
               />
             </div>
-          </div>
-
-          <div className="form-row">
             <div className="form-group">
               <label>Attack</label>
               <input
@@ -156,15 +336,6 @@ function CreatureEditor({ creature, onSave, onCancel }) {
                 value={form.damage}
                 onChange={(e) => handleChange('damage', e.target.value)}
                 placeholder="e.g., 1d6+2"
-              />
-            </div>
-            <div className="form-group">
-              <label>Defense</label>
-              <input
-                type="number"
-                className="input"
-                value={form.defense}
-                onChange={(e) => handleChange('defense', parseInt(e.target.value) || 0)}
               />
             </div>
           </div>
@@ -449,6 +620,7 @@ function EncounterEditor({ encounter, onSave, onCancel }) {
  */
 function ActiveCombat({ encounter, onUpdate, onEnd }) {
   const [combat, setCombat] = useState(encounter);
+  const [showStatusSelector, setShowStatusSelector] = useState(null); // creatureId
   
   const currentTurnCreature = combat.initiativeOrder[combat.turn];
 
@@ -461,11 +633,69 @@ function ActiveCombat({ encounter, onUpdate, onEnd }) {
             return { ...c, hp: Math.max(0, Math.min(c.maxHp, c.hp + delta)) };
           }
           return c;
+        }),
+        initiativeOrder: prev.initiativeOrder.map(c => {
+          if (c.id === creatureId) {
+            return { ...c, hp: Math.max(0, Math.min(c.maxHp, c.hp + delta)) };
+          }
+          return c;
         })
       };
       onUpdate(updated);
       return updated;
     });
+  };
+
+  const handleCreatureUpdate = (updatedCreature) => {
+    setCombat(prev => {
+      const updated = {
+        ...prev,
+        creatures: prev.creatures.map(c => c.id === updatedCreature.id ? updatedCreature : c),
+        initiativeOrder: prev.initiativeOrder.map(c => c.id === updatedCreature.id ? updatedCreature : c)
+      };
+      onUpdate(updated);
+      return updated;
+    });
+  };
+
+  const handleToggleStatus = (creatureId, effectId) => {
+    setCombat(prev => {
+      const updated = {
+        ...prev,
+        creatures: prev.creatures.map(c => {
+          if (c.id === creatureId) {
+            const effects = c.statusEffects || [];
+            const hasEffect = effects.includes(effectId);
+            return {
+              ...c,
+              statusEffects: hasEffect 
+                ? effects.filter(e => e !== effectId)
+                : [...effects, effectId]
+            };
+          }
+          return c;
+        }),
+        initiativeOrder: prev.initiativeOrder.map(c => {
+          if (c.id === creatureId) {
+            const effects = c.statusEffects || [];
+            const hasEffect = effects.includes(effectId);
+            return {
+              ...c,
+              statusEffects: hasEffect 
+                ? effects.filter(e => e !== effectId)
+                : [...effects, effectId]
+            };
+          }
+          return c;
+        })
+      };
+      onUpdate(updated);
+      return updated;
+    });
+  };
+
+  const handleRemoveStatus = (creatureId, effectId) => {
+    handleToggleStatus(creatureId, effectId);
   };
 
   const handleNextTurn = () => {
@@ -478,7 +708,34 @@ function ActiveCombat({ encounter, onUpdate, onEnd }) {
         nextRound += 1;
       }
       
-      const updated = { ...prev, turn: nextTurn, round: nextRound };
+      // Reset actions for the creature whose turn it now is
+      const nextCreature = prev.initiativeOrder[nextTurn];
+      const updatedCreatures = prev.creatures.map(c => {
+        if (c.id === nextCreature?.id) {
+          return {
+            ...c,
+            actions: { action: true, bonus: true, reaction: true, movement: c.speed || 30 }
+          };
+        }
+        return c;
+      });
+      const updatedInitOrder = prev.initiativeOrder.map(c => {
+        if (c.id === nextCreature?.id) {
+          return {
+            ...c,
+            actions: { action: true, bonus: true, reaction: true, movement: c.speed || 30 }
+          };
+        }
+        return c;
+      });
+      
+      const updated = { 
+        ...prev, 
+        turn: nextTurn, 
+        round: nextRound,
+        creatures: updatedCreatures,
+        initiativeOrder: updatedInitOrder
+      };
       onUpdate(updated);
       return updated;
     });
@@ -564,6 +821,17 @@ function ActiveCombat({ encounter, onUpdate, onEnd }) {
         </button>
       </div>
 
+      {/* Current Turn Action Economy */}
+      {currentTurnCreature && (
+        <div className="current-turn-actions">
+          <h4>Action Economy - {currentTurnCreature.name}</h4>
+          <ActionEconomy 
+            creature={currentTurnCreature}
+            onUpdate={handleCreatureUpdate}
+          />
+        </div>
+      )}
+
       {/* Initiative Order */}
       <div className="initiative-order">
         <h4>Initiative Order</h4>
@@ -581,6 +849,10 @@ function ActiveCombat({ encounter, onUpdate, onEnd }) {
                 {creature.name[0]}
               </div>
               <span className="init-name">{creature.name}</span>
+              <CreatureStatusEffects 
+                effects={creature.statusEffects} 
+                onRemove={(effectId) => handleRemoveStatus(creature.id, effectId)}
+              />
               <span className="init-hp">{creature.hp}/{creature.maxHp}</span>
             </div>
           ))}
@@ -592,12 +864,27 @@ function ActiveCombat({ encounter, onUpdate, onEnd }) {
         <h4>Combatants</h4>
         <div className="creatures-grid">
           {aliveCreatures.map(creature => (
-            <div key={creature.id} className="combat-creature-card">
+            <div key={creature.id} className={`combat-creature-card ${combat.initiativeOrder[combat.turn]?.id === creature.id ? 'current-turn' : ''}`}>
               <div className="creature-header" style={{ backgroundColor: creature.color || CREATURE_COLORS[creature.type] }}>
                 <span className="creature-name">{creature.name}</span>
                 <span className="creature-type-badge">{creature.type}</span>
               </div>
               <div className="creature-body">
+                {/* Status Effects */}
+                <div className="creature-status-row">
+                  <CreatureStatusEffects 
+                    effects={creature.statusEffects} 
+                    onRemove={(effectId) => handleRemoveStatus(creature.id, effectId)}
+                  />
+                  <button 
+                    className="btn-add-status"
+                    onClick={() => setShowStatusSelector(creature.id)}
+                    title="Add/Remove Status"
+                  >
+                    +
+                  </button>
+                </div>
+
                 <div className="hp-bar-container">
                   <div 
                     className="hp-bar" 
@@ -615,6 +902,7 @@ function ActiveCombat({ encounter, onUpdate, onEnd }) {
                   <span><ShieldIcon size={12} /> {creature.armor}</span>
                   <span>ATK +{creature.attack}</span>
                   <span>DMG {creature.damage}</span>
+                  <span>{creature.speed || 30}ft</span>
                 </div>
                 {creature.notes && (
                   <div className="creature-notes">{creature.notes}</div>
@@ -651,6 +939,15 @@ function ActiveCombat({ encounter, onUpdate, onEnd }) {
           End Combat
         </button>
       </div>
+
+      {/* Status Effect Selector Modal */}
+      {showStatusSelector && (
+        <StatusEffectSelector
+          currentEffects={combat.creatures.find(c => c.id === showStatusSelector)?.statusEffects || []}
+          onToggle={(effectId) => handleToggleStatus(showStatusSelector, effectId)}
+          onClose={() => setShowStatusSelector(null)}
+        />
+      )}
     </div>
   );
 }

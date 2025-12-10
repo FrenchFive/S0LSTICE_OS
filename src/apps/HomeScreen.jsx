@@ -16,6 +16,12 @@ import {
   NotesIcon,
   SettingsIcon,
   CrownIcon,
+  ActivityIcon,
+  AnchorIcon,
+  ScrollIcon,
+  DiceIcon,
+  GlobeIcon,
+  ShieldIcon,
 } from '../components/icons/Icons';
 import './HomeScreen.css';
 
@@ -34,12 +40,18 @@ const APPS = [
   { id: 'pets', name: 'Pets', icon: PawIcon, color: 'var(--app-color-6)' },
   { id: 'bank', name: 'Bank', icon: WalletIcon, color: 'var(--app-color-3)' },
   { id: 'notes', name: 'Notes', icon: NotesIcon, color: 'var(--app-color-2)' },
+  { id: 'conditions', name: 'Conditions', icon: ActivityIcon, color: 'var(--app-color-1)' },
+  { id: 'touchstones', name: 'Touchstones', icon: AnchorIcon, color: 'var(--app-color-5)' },
+  { id: 'chronicle', name: 'Chronicle', icon: ScrollIcon, color: 'var(--app-color-6)' },
+  { id: 'dice', name: 'Dice Roller', icon: DiceIcon, color: 'var(--app-color-4)' },
+  { id: 'edges', name: 'Edges', icon: ShieldIcon, color: 'var(--app-color-7)' },
   { id: 'settings', name: 'Settings', icon: SettingsIcon, color: 'var(--app-color-8)' }
 ];
 
 // DM-only apps
 const DM_APPS = [
-  { id: 'rewards', name: 'Rewards', icon: CrownIcon, color: 'linear-gradient(135deg, var(--color-warning) 0%, var(--color-primary) 100%)', dmOnly: true }
+  { id: 'rewards', name: 'Rewards', icon: CrownIcon, color: 'linear-gradient(135deg, var(--color-warning) 0%, var(--color-primary) 100%)', dmOnly: true },
+  { id: 'campaign', name: 'Campaign', icon: GlobeIcon, color: 'linear-gradient(135deg, var(--color-info) 0%, var(--color-primary) 100%)', dmOnly: true }
 ];
 
 // Helper to get greeting based on time
