@@ -100,6 +100,69 @@ export const database = {
     };
   },
 
+  // Award XP to a character
+  awardXP(id, amount, reason = 'Session reward') {
+    const character = this.getCharacter(id);
+    if (!character) return null;
+    
+    // Initialize experience if not present
+    if (!character.experience) {
+      character.experience = { total: 0, spent: 0, log: [] };
+    }
+    
+    character.experience.total += amount;
+    character.experience.log.unshift({
+      timestamp: new Date().toISOString(),
+      type: 'xp_award',
+      description: `Gained ${amount} XP: ${reason}`,
+      cost: -amount,
+      before: character.experience.total - amount,
+      after: character.experience.total
+    });
+    
+    // Keep log manageable
+    if (character.experience.log.length > 100) {
+      character.experience.log = character.experience.log.slice(0, 100);
+    }
+    
+    return this.saveCharacter(character);
+  },
+
+  // Spend XP on an upgrade
+  spendXP(id, amount, description, changeLog = {}) {
+    const character = this.getCharacter(id);
+    if (!character) return null;
+    
+    // Initialize experience if not present
+    if (!character.experience) {
+      character.experience = { total: 0, spent: 0, log: [] };
+    }
+    
+    // Check if enough XP available
+    const available = character.experience.total - character.experience.spent;
+    if (amount > available) {
+      return null; // Not enough XP
+    }
+    
+    character.experience.spent += amount;
+    character.experience.log.unshift({
+      timestamp: new Date().toISOString(),
+      type: 'xp_spend',
+      description: description,
+      cost: amount,
+      ...changeLog
+    });
+    
+    return this.saveCharacter(character);
+  },
+
+  // Get XP history for a character
+  getXPHistory(id, limit = 20) {
+    const character = this.getCharacter(id);
+    if (!character || !character.experience?.log) return [];
+    return character.experience.log.slice(0, limit);
+  },
+
   // Delete character
   deleteCharacter(id) {
     const characters = this.getAllCharacters();
@@ -214,6 +277,113 @@ export const secretIdentityDatabase = {
       i.active = false;
     });
     localStorage.setItem(SECRET_IDENTITIES_KEY + characterId, JSON.stringify(identities));
+  }
+};
+
+// Encounter Management (DM only)
+const ENCOUNTERS_KEY = 'hunters_encounters';
+const ACTIVE_ENCOUNTER_KEY = 'hunters_active_encounter';
+
+export const encounterDatabase = {
+  // Get all encounters
+  getAllEncounters() {
+    const data = localStorage.getItem(ENCOUNTERS_KEY);
+    return data ? JSON.parse(data) : [];
+  },
+
+  // Get encounter by ID
+  getEncounter(id) {
+    const encounters = this.getAllEncounters();
+    return encounters.find(e => e.id === id);
+  },
+
+  // Save encounter
+  saveEncounter(encounter) {
+    const encounters = this.getAllEncounters();
+    const newEncounter = {
+      ...encounter,
+      id: encounter.id || Date.now().toString(),
+      createdAt: encounter.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    
+    const existingIndex = encounters.findIndex(e => e.id === newEncounter.id);
+    if (existingIndex >= 0) {
+      encounters[existingIndex] = newEncounter;
+    } else {
+      encounters.push(newEncounter);
+    }
+    
+    localStorage.setItem(ENCOUNTERS_KEY, JSON.stringify(encounters));
+    return newEncounter;
+  },
+
+  // Delete encounter
+  deleteEncounter(id) {
+    const encounters = this.getAllEncounters();
+    const filtered = encounters.filter(e => e.id !== id);
+    localStorage.setItem(ENCOUNTERS_KEY, JSON.stringify(filtered));
+  },
+
+  // Get active encounter
+  getActiveEncounter() {
+    const data = localStorage.getItem(ACTIVE_ENCOUNTER_KEY);
+    return data ? JSON.parse(data) : null;
+  },
+
+  // Set active encounter
+  setActiveEncounter(encounter) {
+    if (encounter) {
+      localStorage.setItem(ACTIVE_ENCOUNTER_KEY, JSON.stringify(encounter));
+    } else {
+      localStorage.removeItem(ACTIVE_ENCOUNTER_KEY);
+    }
+  },
+
+  // Create default creature template
+  createCreature() {
+    return {
+      id: Date.now().toString(),
+      name: 'New Creature',
+      type: 'monster', // monster, npc, minion, boss
+      hp: 10,
+      maxHp: 10,
+      armor: 0,
+      initiative: 0,
+      // Combat stats
+      attack: 2,
+      damage: '1d6',
+      defense: 1,
+      // Special abilities
+      abilities: [],
+      // Status effects
+      conditions: [],
+      // Notes for DM
+      notes: '',
+      // Visual
+      color: '#6366f1',
+      token: null
+    };
+  },
+
+  // Create default encounter
+  createEncounter() {
+    return {
+      id: Date.now().toString(),
+      name: 'New Encounter',
+      description: '',
+      difficulty: 'medium', // easy, medium, hard, deadly
+      environment: 'urban', // urban, wilderness, underground, building
+      creatures: [],
+      players: [], // Will be populated when combat starts
+      round: 0,
+      turn: 0,
+      initiativeOrder: [],
+      status: 'planning', // planning, active, paused, completed
+      notes: '',
+      loot: '',
+      xpReward: 0
+    };
   }
 };
 

@@ -1,0 +1,515 @@
+/* ==========================================
+   CHARACTER EDITOR
+   Comprehensive character editing UI
+   ========================================== */
+
+.character-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--color-bg);
+  overflow: hidden;
+}
+
+/* ==========================================
+   HEADER
+   ========================================== */
+
+.editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-4) var(--spacing-5);
+  background-color: var(--color-surface);
+  border-bottom: var(--outline-width) solid var(--outline-color);
+  flex-shrink: 0;
+}
+
+.editor-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.editor-title h2 {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.editor-xp-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  background-color: var(--color-bg-sunken);
+  border: 2px solid var(--outline-color);
+  border-radius: var(--radius-lg);
+}
+
+.xp-level {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.xp-available {
+  font-size: var(--font-size-sm);
+  color: var(--color-success);
+}
+
+.editor-actions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+/* ==========================================
+   TABS
+   ========================================== */
+
+.editor-tabs {
+  display: flex;
+  background-color: var(--color-surface);
+  border-bottom: var(--outline-width) solid var(--outline-color);
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.editor-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4);
+  border: none;
+  background: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.editor-tab:hover {
+  color: var(--color-text);
+  background-color: var(--color-bg-sunken);
+}
+
+.editor-tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.tab-icon {
+  font-size: var(--font-size-lg);
+}
+
+/* ==========================================
+   CONTENT
+   ========================================== */
+
+.editor-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-4);
+}
+
+.editor-tab-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Info Bar */
+.editor-info-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  background-color: var(--color-info-light);
+  border: 2px solid var(--color-info);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-4);
+}
+
+.info-label {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+.info-value {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-info);
+}
+
+.info-hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* Traits Info Bar */
+.traits-info {
+  background-color: var(--color-bg-sunken);
+  border-color: var(--outline-color);
+  justify-content: center;
+}
+
+.trait-count-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: 0 var(--spacing-4);
+  border-right: 2px solid var(--color-border-light);
+}
+
+.trait-count-group:last-child {
+  border-right: none;
+}
+
+.trait-count {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-md);
+  color: white;
+}
+
+.trait-count.bg {
+  background-color: var(--color-primary);
+}
+
+.trait-count.merit {
+  background-color: var(--color-success);
+}
+
+.trait-count.flaw {
+  background-color: var(--color-danger);
+}
+
+.traits-hint {
+  padding: var(--spacing-3);
+  background-color: var(--color-bg-sunken);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-4);
+}
+
+.traits-hint p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.traits-hint strong {
+  color: var(--color-text);
+}
+
+/* ==========================================
+   AVATAR SECTION
+   ========================================== */
+
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-5);
+  background-color: var(--color-bg-sunken);
+  border: 2px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--spacing-5);
+}
+
+.avatar-preview-large {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-3);
+  color: var(--color-text-muted);
+}
+
+.avatar-preview-large img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-actions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+/* ==========================================
+   FORM SECTIONS
+   ========================================== */
+
+.form-section {
+  margin-bottom: var(--spacing-6);
+}
+
+.form-section h4 {
+  margin: 0 0 var(--spacing-3) 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  padding-bottom: var(--spacing-2);
+  border-bottom: 2px solid var(--color-border-light);
+}
+
+.form-group {
+  margin-bottom: var(--spacing-4);
+}
+
+.form-group label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-2);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-4);
+}
+
+/* ==========================================
+   ATTRIBUTES GRID
+   ========================================== */
+
+.attributes-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-5);
+}
+
+.attribute-edit-category {
+  padding: var(--spacing-4);
+  background-color: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.category-label {
+  margin: 0 0 var(--spacing-3) 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+  padding-bottom: var(--spacing-2);
+  border-bottom: 2px solid var(--color-border-light);
+}
+
+.attribute-edit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-2) 0;
+}
+
+.attribute-edit-row:not(:last-child) {
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.attr-name {
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+/* ==========================================
+   DERIVED STATS
+   ========================================== */
+
+.derived-stats-display {
+  display: flex;
+  gap: var(--spacing-4);
+  justify-content: center;
+}
+
+.derived-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-4) var(--spacing-6);
+  background-color: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.derived-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-1);
+}
+
+.derived-value {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.derived-calc {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-1);
+}
+
+/* ==========================================
+   SKILLS GRID
+   ========================================== */
+
+.skills-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-4);
+}
+
+.skill-edit-category {
+  padding: var(--spacing-4);
+  background-color: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.skill-edit-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-2) 0;
+}
+
+.skill-edit-row:not(:last-child) {
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.skill-name {
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+
+.editor-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-3) var(--spacing-5);
+  background-color: var(--color-surface);
+  border-top: var(--outline-width) solid var(--outline-color);
+  flex-shrink: 0;
+}
+
+.editor-nav-buttons {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.unsaved-indicator {
+  font-size: var(--font-size-sm);
+  color: var(--color-warning);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 900px) {
+  .attributes-edit-grid,
+  .skills-edit-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .derived-stats-display {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .derived-stat-card {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 640px) {
+  .editor-header {
+    flex-direction: column;
+    gap: var(--spacing-3);
+    align-items: flex-start;
+  }
+  
+  .editor-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  .editor-tabs {
+    padding: 0 var(--spacing-2);
+  }
+  
+  .editor-tab {
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+  
+  .tab-label {
+    display: none;
+  }
+  
+  .tab-icon {
+    font-size: var(--font-size-xl);
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .editor-info-bar {
+    flex-wrap: wrap;
+  }
+  
+  .traits-info {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+  
+  .trait-count-group {
+    border-right: none;
+    padding: var(--spacing-1) 0;
+  }
+  
+  .avatar-preview-large {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .editor-footer {
+    flex-direction: column;
+    gap: var(--spacing-2);
+    align-items: stretch;
+  }
+  
+  .editor-nav-buttons {
+    justify-content: space-between;
+  }
+  
+  .unsaved-indicator {
+    text-align: center;
+  }
+}

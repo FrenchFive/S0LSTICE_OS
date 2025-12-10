@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import PhoneLayout from './layouts/PhoneLayout';
 import HomeScreen from './apps/HomeScreen';
 
@@ -21,6 +21,11 @@ import InventoryApp from './apps/InventoryApp';
 import PetsApp from './apps/PetsApp';
 import NotesApp from './apps/NotesApp';
 import CombatApp from './apps/CombatApp';
+import DMRewardsApp from './apps/DMRewardsApp';
+
+// Utils
+import { database, dmMode } from './utils/database';
+import { wsClient } from './utils/websocket';
 
 // Icons
 import { UserIcon, WalletIcon } from './components/icons/Icons';
@@ -38,6 +43,7 @@ const SIMPLE_APPS = {
   pets: PetsApp,
   notes: NotesApp,
   combat: CombatApp,
+  rewards: DMRewardsApp,
 };
 
 // Placeholder for requiring character selection
@@ -66,6 +72,32 @@ function PhoneApp() {
   const [currentCharacter, setCurrentCharacter] = useState(null);
   const [isCreatingCharacter, setIsCreatingCharacter] = useState(false);
   const [isEditingCharacter, setIsEditingCharacter] = useState(false);
+  const [isDMMode, setIsDMMode] = useState(() => dmMode.isDM());
+  const [xpNotification, setXpNotification] = useState(null);
+
+  // Listen for XP awards from DM
+  useEffect(() => {
+    const handleXPAward = (data) => {
+      if (currentCharacter) {
+        // Award XP to local character
+        const updated = database.awardXP(currentCharacter.id, data.amount, data.reason);
+        if (updated) {
+          setCurrentCharacter(updated);
+          // Show notification
+          setXpNotification({
+            amount: data.amount,
+            reason: data.reason,
+            from: data.fromDM
+          });
+          // Clear notification after 5 seconds
+          setTimeout(() => setXpNotification(null), 5000);
+        }
+      }
+    };
+
+    wsClient.on('xp_award', handleXPAward);
+    return () => wsClient.off('xp_award', handleXPAward);
+  }, [currentCharacter]);
 
   const handleAppOpen = useCallback((appId) => {
     setCurrentApp(appId);
@@ -77,6 +109,15 @@ function PhoneApp() {
 
   const handleCharacterSelect = useCallback((char) => {
     setCurrentCharacter(char);
+    setIsDMMode(false);
+    handleBackToHome();
+  }, [handleBackToHome]);
+
+  const handleDMSelect = useCallback(() => {
+    setIsDMMode(true);
+    setCurrentCharacter(null); // DM doesn't need a character
+    dmMode.setDM(true);
+    wsClient.setDMMode(true);
     handleBackToHome();
   }, [handleBackToHome]);
 
@@ -107,20 +148,25 @@ function PhoneApp() {
           />
         );
       }
-      if (!currentCharacter) {
+      if (!currentCharacter && !isDMMode) {
         return (
           <CharacterSelect
             onSelectCharacter={handleCharacterSelect}
             onCreateNew={handleCreateCharacter}
+            onSelectDM={handleDMSelect}
           />
         );
       }
-      return (
-        <CharacterMain
-          character={currentCharacter}
-          onUpdate={setCurrentCharacter}
-        />
-      );
+      if (currentCharacter) {
+        return (
+          <CharacterMain
+            character={currentCharacter}
+            onUpdate={setCurrentCharacter}
+          />
+        );
+      }
+      // DM mode without character - go to home
+      return <HomeScreen onAppOpen={handleAppOpen} />;
     }
 
     // Bank requires character
@@ -160,6 +206,20 @@ function PhoneApp() {
   return (
     <PhoneLayout currentApp={currentApp} onAppChange={setCurrentApp}>
       {renderApp()}
+      
+      {/* XP Award Notification */}
+      {xpNotification && (
+        <div className="xp-notification">
+          <div className="xp-notification-content">
+            <div className="xp-notification-icon">⭐</div>
+            <div className="xp-notification-text">
+              <span className="xp-amount">+{xpNotification.amount} XP</span>
+              <span className="xp-reason">{xpNotification.reason}</span>
+              <span className="xp-from">from {xpNotification.from}</span>
+            </div>
+          </div>
+        </div>
+      )}
     </PhoneLayout>
   );
 }

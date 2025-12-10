@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { database } from '../utils/database';
+import { database, dmMode } from '../utils/database';
 import { wsClient } from '../utils/websocket';
 import {
   SettingsIcon,
   WifiIcon,
   UsersIcon,
   ArrowLeftIcon,
+  CrownIcon,
 } from '../components/icons/Icons';
 import './Settings.css';
 
@@ -37,10 +38,15 @@ const UserSwitchIcon = ({ size = 24 }) => (
 );
 
 function Settings({ currentCharacter, onClose, onSwitchCharacter }) {
-  const [serverUrl, setServerUrl] = useState('');
-  const [isConnected, setIsConnected] = useState(false);
+  // Initialize server URL from localStorage
+  const [serverUrl, setServerUrl] = useState(() => localStorage.getItem('server_url') || '');
+  // Initialize connection status from wsClient
+  const [isConnected, setIsConnected] = useState(() => wsClient.isConnected());
   const [connectionStatus, setConnectionStatus] = useState('');
   const [connectedUsers, setConnectedUsers] = useState([]);
+  
+  // DM Mode state - initialize from localStorage
+  const [isDM, setIsDM] = useState(() => dmMode.isDM());
   
   // Update states
   const [appVersion, setAppVersion] = useState('');
@@ -108,17 +114,9 @@ function Settings({ currentCharacter, onClose, onSwitchCharacter }) {
       return () => {
         if (cleanup) cleanup();
       };
-    } else {
-      // Web version - use localStorage
-      const savedUrl = localStorage.getItem('server_url');
-      if (savedUrl) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setServerUrl(savedUrl);
-      }
     }
-
-    // Check if already connected
-    setIsConnected(wsClient.isConnected());
+    // Web version localStorage URL is already initialized in useState
+    // Connection status is already initialized in useState
 
     // Set up WebSocket event listeners
     wsClient.on('connected', handleConnected);
@@ -206,6 +204,14 @@ function Settings({ currentCharacter, onClose, onSwitchCharacter }) {
     if (confirmed) {
       await window.electronAPI.installUpdate();
     }
+  };
+
+  const handleToggleDMMode = () => {
+    const newValue = !isDM;
+    dmMode.setDM(newValue);
+    setIsDM(newValue);
+    // Update WebSocket connection with DM status
+    wsClient.setDMMode(newValue);
   };
 
   const handleExportCharacter = async () => {
@@ -451,6 +457,41 @@ function Settings({ currentCharacter, onClose, onSwitchCharacter }) {
           ) : (
             <p className="help-text">No character selected</p>
           )}
+        </div>
+
+        {/* DM Mode */}
+        <div className="card card-static dm-mode-card">
+          <div className="card-header"><CrownIcon size={24} /> Game Master Mode</div>
+          
+          <div className="dm-mode-section">
+            <div className="dm-mode-info">
+              <p className="dm-mode-description">
+                Enable DM Mode to access the <strong>Rewards</strong> panel and award XP to players.
+              </p>
+              {isDM && (
+                <div className="dm-mode-badge">
+                  <CrownIcon size={16} />
+                  <span>DM Mode Active</span>
+                </div>
+              )}
+            </div>
+            
+            <div className="dm-mode-toggle">
+              <label className="toggle-switch">
+                <input 
+                  type="checkbox" 
+                  checked={isDM} 
+                  onChange={handleToggleDMMode}
+                />
+                <span className="toggle-slider"></span>
+              </label>
+              <span className="toggle-label">{isDM ? 'Enabled' : 'Disabled'}</span>
+            </div>
+          </div>
+          
+          <p className="help-text">
+            Only one person should have DM Mode enabled per game session.
+          </p>
         </div>
 
         {/* Server Connection */}

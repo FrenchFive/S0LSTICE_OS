@@ -64,6 +64,89 @@
 }
 
 /* ==========================================
+   XP NOTIFICATION
+   ========================================== */
+
+.xp-notification {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  animation: xpSlideIn 0.5s ease-out, xpPulse 0.5s ease-in-out 0.5s;
+}
+
+.xp-notification-content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4) var(--spacing-5);
+  background: linear-gradient(135deg, var(--color-success) 0%, var(--color-primary) 100%);
+  border: 3px solid white;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+.xp-notification-icon {
+  font-size: 2rem;
+  animation: xpSpin 1s ease-in-out;
+}
+
+.xp-notification-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.xp-amount {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.xp-reason {
+  font-size: var(--font-size-sm);
+  opacity: 0.9;
+}
+
+.xp-from {
+  font-size: var(--font-size-xs);
+  opacity: 0.7;
+}
+
+@keyframes xpSlideIn {
+  from {
+    transform: translateX(-50%) translateY(-100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes xpPulse {
+  0%, 100% {
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+@keyframes xpSpin {
+  0% {
+    transform: rotate(0deg) scale(0.5);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+/* ==========================================
    RESPONSIVE
    ========================================== */
 
@@ -85,5 +168,36 @@
 
   .container {
     padding: var(--spacing-4);
+  }
+  
+  .xp-notification {
+    top: 60px;
+    left: 10px;
+    right: 10px;
+    transform: none;
+  }
+  
+  .xp-notification-content {
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+  
+  @keyframes xpSlideIn {
+    from {
+      transform: translateY(-100px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes xpPulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02);
+    }
   }
 }

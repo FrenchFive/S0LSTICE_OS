@@ -2,23 +2,44 @@ import { useState, useEffect } from 'react';
 import './IDCardApp.css';
 import { database as db, secretIdentityDatabase } from '../utils/database';
 import { DotRating, DamageTrack, DesperationTracker } from '../components/DotRating';
+import { TraitsDisplay } from '../components/TraitSelector';
+import LevelUpModal, { XPProgressBar } from '../components/LevelUpModal';
+import CharacterEditor from '../components/CharacterEditor';
 import {
   ATTRIBUTES,
   ATTRIBUTE_LABELS,
-  getAttributeValue
+  getAttributeValue,
+  calculateHealth,
+  calculateWillpower
 } from '../utils/huntersData';
+import {
+  calculateLevel,
+  getAvailableXP,
+  getRecentChanges
+} from '../utils/levelUp';
 import {
   PlusIcon,
   TrashIcon,
   EditIcon,
   CheckIcon,
-  UserIcon
+  UserIcon,
+  StarIcon
 } from '../components/icons/Icons';
+
+// Arrow up icon for level up
+const ArrowUpIcon = ({ size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 19V5M5 12l7-7 7 7"/>
+  </svg>
+);
 
 export default function IDCardApp() {
   const [character, setCharacter] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [showLevelUp, setShowLevelUp] = useState(false);
+  const [showCharacterEditor, setShowCharacterEditor] = useState(false);
   const [history, setHistory] = useState('');
+  const [recentChanges, setRecentChanges] = useState([]);
   
   // Fake Identity State
   const [identities, setIdentities] = useState([]);
@@ -47,6 +68,9 @@ export default function IDCardApp() {
         // Find active identity
         const active = ids.find(i => i.active);
         setActiveIdentityId(active?.id || null);
+        
+        // Get recent changes for highlighting
+        setRecentChanges(getRecentChanges(char, 48)); // Last 48 hours
       }
     }
   };
@@ -55,6 +79,19 @@ export default function IDCardApp() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     loadCharacter();
   }, []);
+
+  const handleCharacterUpdate = (updated) => {
+    // Recalculate derived stats
+    const withDerived = {
+      ...updated,
+      health: { ...updated.health, max: calculateHealth(updated) },
+      willpower: { ...updated.willpower, max: calculateWillpower(updated) }
+    };
+    
+    db.saveCharacter(withDerived);
+    setCharacter(withDerived);
+    setRecentChanges(getRecentChanges(withDerived, 48));
+  };
 
   const handleSaveHistory = () => {
     if (character) {
@@ -69,6 +106,12 @@ export default function IDCardApp() {
       setCharacter(updated);
       setIsEditing(false);
     }
+  };
+
+  const handleEditorSave = (updated) => {
+    setCharacter(updated);
+    setShowCharacterEditor(false);
+    setRecentChanges(getRecentChanges(updated, 48));
   };
 
   // Identity Management
@@ -170,6 +213,18 @@ export default function IDCardApp() {
     };
   };
 
+  // Check if a field was recently changed
+  const isHighlighted = (fieldPath) => {
+    return recentChanges.some(change => change.field === fieldPath);
+  };
+
+  // Get XP info
+  const xpInfo = character?.experience ? {
+    level: calculateLevel(character.experience.total || 0),
+    available: getAvailableXP(character),
+    total: character.experience.total || 0
+  } : { level: { level: 1, title: 'Fledgling Hunter' }, available: 0, total: 0 };
+
   if (!character) {
     return (
       <div className="id-card-app">
@@ -181,10 +236,69 @@ export default function IDCardApp() {
     );
   }
 
+  // Show character editor if requested
+  if (showCharacterEditor) {
+    return (
+      <div className="id-card-app">
+        <CharacterEditor
+          character={character}
+          onSave={handleEditorSave}
+          onCancel={() => setShowCharacterEditor(false)}
+          isNew={false}
+        />
+      </div>
+    );
+  }
+
   const displayedIdentity = getDisplayedIdentity();
 
   return (
     <div className="id-card-app">
+      {/* Quick Action Bar */}
+      <div className="quick-action-bar">
+        <button 
+          className="btn btn-outline btn-sm"
+          onClick={() => setShowCharacterEditor(true)}
+        >
+          <EditIcon size={14} /> Edit Character
+        </button>
+        <button 
+          className={`btn btn-sm ${xpInfo.available > 0 ? 'btn-success level-up-pulse' : 'btn-outline'}`}
+          onClick={() => setShowLevelUp(true)}
+        >
+          <ArrowUpIcon size={14} /> 
+          Level Up
+          {xpInfo.available > 0 && <span className="xp-badge">{xpInfo.available} XP</span>}
+        </button>
+      </div>
+
+      {/* XP Progress Display */}
+      {character.experience && (
+        <div className="xp-display-card">
+          <div className="xp-level-info">
+            <span className="level-badge">Lvl {xpInfo.level.level}</span>
+            <span className="level-title">{xpInfo.level.title}</span>
+          </div>
+          <div className="xp-numbers">
+            <span className="available-xp">{xpInfo.available} XP available</span>
+            <span className="total-xp">{xpInfo.total} total</span>
+          </div>
+        </div>
+      )}
+
+      {/* Recent Changes Highlight */}
+      {recentChanges.length > 0 && (
+        <div className="recent-changes-banner">
+          <StarIcon size={16} />
+          <span>{recentChanges.length} recent upgrade{recentChanges.length > 1 ? 's' : ''}!</span>
+          <div className="recent-changes-list">
+            {recentChanges.slice(0, 3).map((change, i) => (
+              <span key={i} className="recent-change-item">{change.description}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="id-card">
         <div className="id-card-header">
           <h2>🪪 Hunter ID</h2>
@@ -260,16 +374,21 @@ export default function IDCardApp() {
               {Object.entries(ATTRIBUTES).map(([category, { label, attrs }]) => (
                 <div key={category} className="attr-category">
                   <h4>{label}</h4>
-                  {attrs.map(attr => (
-                    <div key={attr} className="attr-item">
-                      <span className="attr-name">{ATTRIBUTE_LABELS[attr]}</span>
-                      <DotRating 
-                        value={getAttributeValue(character, attr)} 
-                        max={5}
-                        size="sm"
-                      />
-                    </div>
-                  ))}
+                  {attrs.map(attr => {
+                    const fieldPath = `attributes.${category}.${attr}`;
+                    const highlighted = isHighlighted(fieldPath);
+                    return (
+                      <div key={attr} className={`attr-item ${highlighted ? 'highlighted' : ''}`}>
+                        <span className="attr-name">{ATTRIBUTE_LABELS[attr]}</span>
+                        <DotRating 
+                          value={getAttributeValue(character, attr)} 
+                          max={5}
+                          size="sm"
+                        />
+                        {highlighted && <span className="highlight-badge">NEW</span>}
+                      </div>
+                    );
+                  })}
                 </div>
               ))}
             </div>
@@ -309,6 +428,14 @@ export default function IDCardApp() {
               despair={character.desperation.despair || false}
               compact
             />
+          </div>
+        )}
+
+        {/* Traits Display */}
+        {character.traits && character.traits.length > 0 && !displayedIdentity.isFake && (
+          <div className="traits-section">
+            <h3>Traits</h3>
+            <TraitsDisplay traits={character.traits} />
           </div>
         )}
       </div>
@@ -476,6 +603,15 @@ export default function IDCardApp() {
           </div>
         )}
       </div>
+
+      {/* Level Up Modal */}
+      {showLevelUp && (
+        <LevelUpModal
+          character={character}
+          onUpdate={handleCharacterUpdate}
+          onClose={() => setShowLevelUp(false)}
+        />
+      )}
     </div>
   );
 }

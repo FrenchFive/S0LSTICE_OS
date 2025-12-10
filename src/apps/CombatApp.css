@@ -3,89 +3,790 @@
    ========================================== */
 
 .combat-app {
-  padding: var(--spacing-5);
-  max-width: 1000px;
-  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-base);
 }
 
 .combat-header {
-  margin-bottom: var(--spacing-6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-4) var(--spacing-5);
+  background: var(--color-surface);
+  border-bottom: var(--outline-width) solid var(--outline-color);
 }
 
 .combat-header h1 {
   margin: 0;
-  font-size: var(--font-size-2xl);
-  text-align: center;
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: var(--spacing-2);
+  font-size: var(--font-size-xl);
 }
 
-/* Placeholder */
-.combat-placeholder {
-  text-align: center;
-  padding: var(--spacing-10) var(--spacing-6);
-  background-color: var(--app-color-1);
-  border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg);
+.combat-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-4);
 }
 
-.placeholder-icon {
-  margin-bottom: var(--spacing-5);
+.section-title {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--spacing-4) 0;
+}
+
+/* Empty State */
+.combat-app .empty-state,
+.player-waiting {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: var(--spacing-8);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.combat-app .empty-state svg,
+.player-waiting .waiting-icon {
+  opacity: 0.4;
+  margin-bottom: var(--spacing-4);
+}
+
+.combat-app .empty-state h3,
+.player-waiting h2 {
+  margin: 0 0 var(--spacing-2) 0;
   color: var(--color-text);
 }
 
-.combat-placeholder h2 {
-  font-size: var(--font-size-2xl);
-  margin: 0 0 var(--spacing-5) 0;
-  font-weight: var(--font-weight-bold);
+.player-waiting .hint {
+  margin-top: var(--spacing-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-accent);
+  font-style: italic;
 }
 
-.placeholder-text {
+/* ==========================================
+   ENCOUNTERS LIST
+   ========================================== */
+
+.encounters-list {
+  display: grid;
+  gap: var(--spacing-4);
+}
+
+.encounter-card {
+  background: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.encounter-card .encounter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-2);
+}
+
+.encounter-card h3 {
+  margin: 0;
   font-size: var(--font-size-lg);
-  margin: var(--spacing-3) 0;
+}
+
+.difficulty-badge {
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: white;
+  text-transform: capitalize;
+}
+
+.encounter-desc {
+  margin: 0 0 var(--spacing-3) 0;
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
 }
 
-.feature-list {
-  list-style: none;
-  padding: 0;
-  margin: var(--spacing-6) auto 0;
-  text-align: left;
-  max-width: 400px;
+.encounter-meta {
+  display: flex;
+  gap: var(--spacing-3);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-3);
 }
 
-.feature-list li {
-  font-size: var(--font-size-lg);
-  padding: var(--spacing-3) 0;
-  border-bottom: 2px solid var(--color-border-light);
-  font-weight: var(--font-weight-medium);
+.encounter-actions {
   display: flex;
-  align-items: center;
   gap: var(--spacing-2);
 }
 
-.feature-list li:last-child {
-  border-bottom: none;
+.encounter-actions .btn.danger {
+  color: var(--color-danger);
 }
 
-.feature-list li::before {
-  content: "⚔️";
-  font-size: var(--font-size-base);
+/* ==========================================
+   ENCOUNTER EDITOR
+   ========================================== */
+
+.encounter-editor {
+  padding: var(--spacing-4);
+  height: 100%;
+  overflow-y: auto;
 }
 
-/* Responsive */
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-5);
+}
+
+.editor-header h2 {
+  margin: 0;
+}
+
+.editor-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5);
+}
+
+.form-section {
+  background: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-4);
+}
+
+.form-row {
+  display: flex;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-3);
+}
+
+.form-row .form-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.form-row .form-group.flex-2 {
+  flex: 2;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--spacing-1);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Creatures Section */
+.creatures-section {
+  background: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-4);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-3);
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: var(--font-size-md);
+}
+
+.empty-creatures {
+  padding: var(--spacing-6);
+  text-align: center;
+  color: var(--color-text-muted);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.creatures-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.creature-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3);
+  background: var(--color-bg-sunken);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-md);
+}
+
+.creature-token {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+.creature-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.creature-name {
+  font-weight: var(--font-weight-semibold);
+}
+
+.creature-type {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: capitalize;
+}
+
+.creature-stats {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.creature-stats .stat {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.creature-actions {
+  display: flex;
+  gap: var(--spacing-1);
+}
+
+.btn-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-base);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-icon:hover {
+  background: var(--color-primary-light);
+}
+
+.btn-icon.danger:hover {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+.editor-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-4);
+  border-top: var(--outline-width) solid var(--outline-color);
+}
+
+/* ==========================================
+   CREATURE EDITOR MODAL
+   ========================================== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-4);
+  z-index: 1000;
+}
+
+.creature-editor-modal {
+  width: 100%;
+  max-width: 500px;
+  background: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-4);
+  border-bottom: var(--outline-width) solid var(--outline-color);
+}
+
+.modal-header h3 {
+  margin: 0;
+}
+
+.btn-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+}
+
+.modal-body {
+  padding: var(--spacing-4);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  border-top: var(--outline-width) solid var(--outline-color);
+}
+
+/* Color Picker */
+.color-picker {
+  display: flex;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+}
+
+.color-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.color-btn:hover {
+  transform: scale(1.1);
+}
+
+.color-btn.active {
+  border-color: var(--color-text);
+  box-shadow: 0 0 0 2px var(--color-bg-base);
+}
+
+/* ==========================================
+   ACTIVE COMBAT
+   ========================================== */
+
+.active-combat {
+  padding: var(--spacing-4);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.combat-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-4);
+  padding: var(--spacing-4);
+  background: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+}
+
+.combat-status h2 {
+  margin: 0 0 var(--spacing-1) 0;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+.status-badge.active {
+  background: var(--color-success);
+  color: white;
+}
+
+.status-badge.paused {
+  background: var(--color-warning);
+  color: white;
+}
+
+.combat-round {
+  text-align: center;
+}
+
+.round-label {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.round-number {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+/* Turn Tracker */
+.turn-tracker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-4);
+  padding: var(--spacing-3);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-info) 100%);
+  border-radius: var(--radius-lg);
+  color: white;
+}
+
+.current-turn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  flex: 1;
+  justify-content: center;
+}
+
+.turn-token {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+  border: 3px solid white;
+}
+
+.turn-name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Initiative Order */
+.initiative-order {
+  margin-bottom: var(--spacing-4);
+  background: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-3);
+}
+
+.initiative-order h4 {
+  margin: 0 0 var(--spacing-2) 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.initiative-list {
+  display: flex;
+  gap: var(--spacing-2);
+  overflow-x: auto;
+  padding-bottom: var(--spacing-2);
+}
+
+.initiative-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  background: var(--color-bg-sunken);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.initiative-item.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.initiative-item.dead {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.init-order {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-text-muted);
+  color: var(--color-bg-base);
+  border-radius: 50%;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+.init-token {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+.init-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.init-hp {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* Combat Creatures */
+.combat-creatures {
+  margin-bottom: var(--spacing-4);
+}
+
+.combat-creatures h4 {
+  margin: 0 0 var(--spacing-3) 0;
+}
+
+.creatures-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-3);
+}
+
+.combat-creature-card {
+  background: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.combat-creature-card .creature-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-3);
+  color: white;
+}
+
+.combat-creature-card .creature-name {
+  font-weight: var(--font-weight-bold);
+}
+
+.creature-type-badge {
+  font-size: var(--font-size-xs);
+  opacity: 0.8;
+  text-transform: capitalize;
+}
+
+.creature-body {
+  padding: var(--spacing-3);
+}
+
+/* HP Bar */
+.hp-bar-container {
+  position: relative;
+  height: 24px;
+  background: var(--color-bg-sunken);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: var(--spacing-2);
+}
+
+.hp-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-success) 0%, var(--color-success-light) 100%);
+  transition: width 0.3s ease;
+}
+
+.hp-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+.hp-controls {
+  display: flex;
+  gap: var(--spacing-1);
+  margin-bottom: var(--spacing-2);
+}
+
+.btn-hp {
+  flex: 1;
+  padding: var(--spacing-1);
+  background: var(--color-danger-light);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-hp:hover {
+  background: var(--color-danger);
+  color: white;
+}
+
+.btn-hp.heal {
+  background: var(--color-success-light);
+}
+
+.btn-hp.heal:hover {
+  background: var(--color-success);
+}
+
+.creature-stats-row {
+  display: flex;
+  gap: var(--spacing-3);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-2);
+}
+
+.creature-stats-row span {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.creature-notes {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  padding: var(--spacing-2);
+  background: var(--color-bg-sunken);
+  border-radius: var(--radius-sm);
+}
+
+/* Dead Creatures */
+.dead-section-title {
+  margin: var(--spacing-4) 0 var(--spacing-2) 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.dead-creatures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+.dead-creature {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-3);
+  background: var(--color-bg-sunken);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-md);
+  opacity: 0.6;
+}
+
+.btn-revive {
+  font-size: var(--font-size-xs);
+  padding: var(--spacing-1) var(--spacing-2);
+  background: var(--color-success-light);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.btn-revive:hover {
+  background: var(--color-success);
+  color: white;
+}
+
+/* Combat Controls */
+.combat-controls {
+  display: flex;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  background: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  justify-content: center;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
 @media (max-width: 640px) {
-  .combat-app {
-    padding: var(--spacing-4);
+  .combat-header {
+    flex-direction: column;
+    gap: var(--spacing-3);
+    align-items: flex-start;
   }
-
-  .combat-placeholder {
-    padding: var(--spacing-6) var(--spacing-4);
+  
+  .form-row {
+    flex-direction: column;
+  }
+  
+  .turn-tracker {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+  
+  .initiative-list {
+    flex-direction: column;
+  }
+  
+  .creatures-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .combat-controls {
+    flex-direction: column;
+  }
+  
+  .combat-controls .btn {
+    width: 100%;
   }
 }

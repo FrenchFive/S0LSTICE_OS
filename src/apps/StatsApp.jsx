@@ -13,10 +13,19 @@ import {
   SKILLS,
   SKILL_LABELS,
   getAttributeValue,
-  getSkillValue
+  getSkillValue,
+  calculateHealth,
+  calculateWillpower
 } from '../utils/huntersData';
+import {
+  calculateLevel,
+  getAvailableXP,
+  getXPToNextLevel,
+  getRecentChanges
+} from '../utils/levelUp';
 import { DotRating, DesperationTracker } from '../components/DotRating';
-import { ChartIcon, DiceIcon } from '../components/icons/Icons';
+import { ChartIcon, DiceIcon, StarIcon } from '../components/icons/Icons';
+import LevelUpModal from '../components/LevelUpModal';
 
 export default function StatsApp() {
   const [character, setCharacter] = useState(null);
@@ -27,6 +36,8 @@ export default function StatsApp() {
   const [desperationDice, setDesperationDice] = useState(0);
   const [recentRolls, setRecentRolls] = useState([]);
   const [lastRoll, setLastRoll] = useState(null);
+  const [showLevelUp, setShowLevelUp] = useState(false);
+  const [recentChanges, setRecentChanges] = useState([]);
 
   const loadCharacter = () => {
     const currentCharId = db.getCurrentCharacterId();
@@ -34,6 +45,7 @@ export default function StatsApp() {
       const char = db.getCharacter(currentCharId);
       if (char) {
         setCharacter(char);
+        setRecentChanges(getRecentChanges(char, 48));
       }
     }
   };
@@ -43,6 +55,30 @@ export default function StatsApp() {
     loadCharacter();
     setRecentRolls(getRollHistory().slice(0, 10));
   }, []);
+
+  const handleCharacterUpdate = (updated) => {
+    const withDerived = {
+      ...updated,
+      health: { ...updated.health, max: calculateHealth(updated) },
+      willpower: { ...updated.willpower, max: calculateWillpower(updated) }
+    };
+    db.saveCharacter(withDerived);
+    setCharacter(withDerived);
+    setRecentChanges(getRecentChanges(withDerived, 48));
+  };
+
+  // Get XP info
+  const xpInfo = character?.experience ? {
+    level: calculateLevel(character.experience.total || 0),
+    available: getAvailableXP(character),
+    total: character.experience.total || 0,
+    progress: getXPToNextLevel(character.experience.total || 0)
+  } : { level: { level: 1, title: 'Fledgling Hunter' }, available: 0, total: 0, progress: { progress: 0 } };
+
+  // Check if a field was recently changed
+  const isHighlighted = (fieldPath) => {
+    return recentChanges.some(change => change.field === fieldPath);
+  };
 
   const handleAttributeClick = (attrName) => {
     setSelectedAttribute(selectedAttribute === attrName ? null : attrName);
@@ -106,9 +142,39 @@ export default function StatsApp() {
   return (
     <div className="stats-app hunters-mode">
       <div className="stats-header">
-        <h2><DiceIcon size={28} /> Dice Roller</h2>
-        <div className="character-name">{character.identity?.name || character.name}</div>
+        <div className="stats-title">
+          <h2><DiceIcon size={28} /> Dice Roller</h2>
+          <div className="character-name">{character.identity?.name || character.name}</div>
+        </div>
+        <div className="stats-xp-display">
+          <div className="xp-level-badge">
+            <span className="level-num">Lvl {xpInfo.level.level}</span>
+            <span className="level-title">{xpInfo.level.title}</span>
+          </div>
+          <button 
+            className={`btn btn-sm ${xpInfo.available > 0 ? 'btn-success level-up-btn' : 'btn-outline'}`}
+            onClick={() => setShowLevelUp(true)}
+          >
+            <StarIcon size={14} />
+            {xpInfo.available > 0 ? `${xpInfo.available} XP` : 'Level Up'}
+          </button>
+        </div>
       </div>
+
+      {/* XP Progress Bar */}
+      {character.experience && xpInfo.progress.nextLevel && (
+        <div className="stats-xp-bar">
+          <div className="xp-bar-track">
+            <div 
+              className="xp-bar-fill" 
+              style={{ width: `${xpInfo.progress.progress}%` }}
+            />
+          </div>
+          <div className="xp-bar-info">
+            <span>{xpInfo.progress.needed} XP to Level {xpInfo.progress.nextLevel.level}</span>
+          </div>
+        </div>
+      )}
 
       {/* Dice Pool Builder */}
       <div className="pool-builder-section">
@@ -221,21 +287,26 @@ export default function StatsApp() {
           {Object.entries(ATTRIBUTES).map(([category, { label, attrs }]) => (
             <div key={category} className="attribute-category">
               <h4>{label}</h4>
-              {attrs.map(attr => (
-                <div 
-                  key={attr} 
-                  className={`attr-row ${selectedAttribute === attr ? 'selected' : ''}`}
-                  onClick={() => handleAttributeClick(attr)}
-                >
-                  <span className="attr-name">{ATTRIBUTE_LABELS[attr]}</span>
-                  <DotRating 
-                    value={getAttrValue(attr)} 
-                    max={5} 
-                    min={1}
-                    size="sm"
-                  />
-                </div>
-              ))}
+              {attrs.map(attr => {
+                const fieldPath = `attributes.${category}.${attr}`;
+                const highlighted = isHighlighted(fieldPath);
+                return (
+                  <div 
+                    key={attr} 
+                    className={`attr-row ${selectedAttribute === attr ? 'selected' : ''} ${highlighted ? 'highlighted' : ''}`}
+                    onClick={() => handleAttributeClick(attr)}
+                  >
+                    <span className="attr-name">{ATTRIBUTE_LABELS[attr]}</span>
+                    <DotRating 
+                      value={getAttrValue(attr)} 
+                      max={5} 
+                      min={1}
+                      size="sm"
+                    />
+                    {highlighted && <span className="new-badge">↑</span>}
+                  </div>
+                );
+              })}
             </div>
           ))}
         </div>
@@ -250,10 +321,12 @@ export default function StatsApp() {
               <h4>{label}</h4>
               {skills.map(skill => {
                 const value = getSkillVal(skill);
+                const fieldPath = `skills.${category}.${skill}`;
+                const highlighted = isHighlighted(fieldPath);
                 return (
                   <div 
                     key={skill} 
-                    className={`skill-row ${selectedSkill === skill ? 'selected' : ''} ${value === 0 ? 'untrained' : ''}`}
+                    className={`skill-row ${selectedSkill === skill ? 'selected' : ''} ${value === 0 ? 'untrained' : ''} ${highlighted ? 'highlighted' : ''}`}
                     onClick={() => handleSkillClick(skill)}
                   >
                     <span className="skill-name">{SKILL_LABELS[skill]}</span>
@@ -263,6 +336,7 @@ export default function StatsApp() {
                       min={0}
                       size="sm"
                     />
+                    {highlighted && <span className="new-badge">↑</span>}
                   </div>
                 );
               })}
@@ -296,6 +370,15 @@ export default function StatsApp() {
           </div>
         )}
       </div>
+
+      {/* Level Up Modal */}
+      {showLevelUp && (
+        <LevelUpModal
+          character={character}
+          onUpdate={handleCharacterUpdate}
+          onClose={() => setShowLevelUp(false)}
+        />
+      )}
     </div>
   );
 }

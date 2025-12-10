@@ -495,6 +495,192 @@
   justify-content: flex-end;
 }
 
+/* ==========================================
+   TRAITS SECTION
+   ========================================== */
+
+.traits-section {
+  margin-top: var(--spacing-5);
+  padding-top: var(--spacing-4);
+  border-top: var(--outline-width) solid var(--outline-color);
+}
+
+.traits-section h3 {
+  margin: 0 0 var(--spacing-3) 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+/* ==========================================
+   QUICK ACTION BAR
+   ========================================== */
+
+.quick-action-bar {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+  padding: var(--spacing-3);
+  background-color: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.xp-badge {
+  padding: 2px 8px;
+  background-color: white;
+  color: var(--color-success);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  margin-left: var(--spacing-1);
+}
+
+.level-up-pulse {
+  animation: levelUpPulse 2s ease-in-out infinite;
+}
+
+@keyframes levelUpPulse {
+  0%, 100% { 
+    box-shadow: var(--shadow-md);
+  }
+  50% { 
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.5), var(--shadow-md);
+  }
+}
+
+/* ==========================================
+   XP DISPLAY CARD
+   ========================================== */
+
+.xp-display-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-3) var(--spacing-4);
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-info-light) 100%);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-4);
+}
+
+.xp-level-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.level-badge {
+  padding: var(--spacing-1) var(--spacing-3);
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+}
+
+.level-title {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+.xp-numbers {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.available-xp {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-success);
+}
+
+.total-xp {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* ==========================================
+   RECENT CHANGES BANNER
+   ========================================== */
+
+.recent-changes-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4);
+  background: linear-gradient(135deg, var(--color-success-light) 0%, var(--color-primary-light) 100%);
+  border: 2px solid var(--color-success);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
+.recent-changes-banner > span {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-success);
+}
+
+.recent-changes-banner svg {
+  color: var(--color-success);
+}
+
+.recent-changes-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  margin-left: auto;
+}
+
+.recent-change-item {
+  padding: var(--spacing-1) var(--spacing-2);
+  background-color: white;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+/* ==========================================
+   HIGHLIGHTED ATTRIBUTES
+   ========================================== */
+
+.attr-item.highlighted {
+  background: linear-gradient(90deg, transparent 0%, var(--color-success-light) 50%, transparent 100%);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-1) var(--spacing-2);
+  margin: 0 calc(-1 * var(--spacing-2));
+  animation: highlightPulse 2s ease-in-out infinite;
+}
+
+@keyframes highlightPulse {
+  0%, 100% { 
+    background: linear-gradient(90deg, transparent 0%, var(--color-success-light) 50%, transparent 100%);
+  }
+  50% { 
+    background: linear-gradient(90deg, transparent 0%, rgba(16, 185, 129, 0.3) 50%, transparent 100%);
+  }
+}
+
+.highlight-badge {
+  padding: 2px 6px;
+  background-color: var(--color-success);
+  color: white;
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-sm);
+  margin-left: var(--spacing-1);
+  animation: badgeBounce 1s ease-in-out infinite;
+}
+
+@keyframes badgeBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .attributes-display {
@@ -524,5 +710,30 @@
 
   .id-card-app .stats-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .quick-action-bar {
+    flex-direction: column;
+  }
+  
+  .xp-display-card {
+    flex-direction: column;
+    gap: var(--spacing-2);
+    text-align: center;
+  }
+  
+  .xp-numbers {
+    align-items: center;
+  }
+  
+  .recent-changes-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .recent-changes-list {
+    margin-left: 0;
+    margin-top: var(--spacing-2);
+    width: 100%;
   }
 }

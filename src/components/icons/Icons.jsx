@@ -321,3 +321,68 @@ export const EditIcon = (props) => (
     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
   </IconWrapper>
 );
+
+// Save icon
+export const SaveIcon = (props) => (
+  <IconWrapper {...props}>
+    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+    <polyline points="17 21 17 13 7 13 7 21" />
+    <polyline points="7 3 7 8 15 8" />
+  </IconWrapper>
+);
+
+// Star icon
+export const StarIcon = (props) => (
+  <IconWrapper {...props}>
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor" />
+  </IconWrapper>
+);
+
+// Arrow Up icon
+export const ArrowUpIcon = (props) => (
+  <IconWrapper {...props}>
+    <line x1="12" y1="19" x2="12" y2="5" />
+    <polyline points="5 12 12 5 19 12" />
+  </IconWrapper>
+);
+
+// Shield icon (for combat)
+export const ShieldIcon = (props) => (
+  <IconWrapper {...props}>
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+  </IconWrapper>
+);
+
+// Heart icon (for health)
+export const HeartIcon = (props) => (
+  <IconWrapper {...props}>
+    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="currentColor" />
+  </IconWrapper>
+);
+
+// Clock icon (for time tracking)
+export const ClockIcon = (props) => (
+  <IconWrapper {...props}>
+    <circle cx="12" cy="12" r="10" />
+    <polyline points="12 6 12 12 16 14" />
+  </IconWrapper>
+);
+
+// Trophy icon (for achievements)
+export const TrophyIcon = (props) => (
+  <IconWrapper {...props}>
+    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+    <path d="M4 22h16" />
+    <path d="M10 22V8a2 2 0 1 1 4 0v14" />
+    <path d="M8 14h8" />
+    <path d="M10 5h4" />
+  </IconWrapper>
+);
+
+// Zap icon (for energy/power)
+export const ZapIcon = (props) => (
+  <IconWrapper {...props}>
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="currentColor" />
+  </IconWrapper>
+);
