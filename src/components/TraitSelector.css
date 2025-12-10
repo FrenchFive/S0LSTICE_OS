@@ -1,0 +1,521 @@
+/* ==========================================
+   TRAIT SELECTOR COMPONENT
+   For managing Backgrounds, Merits, and Flaws
+   ========================================== */
+
+.trait-selector {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+/* Tabs */
+.trait-tabs {
+  display: flex;
+  gap: var(--spacing-2);
+  border-bottom: var(--outline-width) solid var(--outline-color);
+  padding-bottom: var(--spacing-2);
+}
+
+.trait-tab {
+  padding: var(--spacing-2) var(--spacing-4);
+  border: none;
+  background: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.trait-tab:hover {
+  color: var(--color-text);
+}
+
+.trait-tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* Content */
+.trait-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.empty-traits {
+  padding: var(--spacing-6);
+  text-align: center;
+  background-color: var(--color-bg-sunken);
+  border: 2px dashed var(--color-border-light);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-muted);
+}
+
+.empty-traits p {
+  margin: 0 0 var(--spacing-3) 0;
+}
+
+.add-more-btn {
+  align-self: flex-start;
+}
+
+/* ==========================================
+   SELECTED TRAIT CARD
+   ========================================== */
+
+.selected-trait-card {
+  background-color: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all var(--transition-fast);
+}
+
+.selected-trait-card.background {
+  border-left: 4px solid var(--color-primary);
+}
+
+.selected-trait-card.merit {
+  border-left: 4px solid var(--color-success);
+}
+
+.selected-trait-card.flaw {
+  border-left: 4px solid var(--color-error);
+}
+
+.trait-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-3);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.trait-card-header:hover {
+  background-color: var(--color-bg-sunken);
+}
+
+.trait-title-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.trait-type-badge {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: white;
+}
+
+.trait-type-badge.background {
+  background-color: var(--color-primary);
+}
+
+.trait-type-badge.merit {
+  background-color: var(--color-success);
+}
+
+.trait-type-badge.flaw {
+  background-color: var(--color-error);
+}
+
+.trait-name {
+  margin: 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+.trait-level-badge {
+  padding: var(--spacing-1) var(--spacing-2);
+  background-color: var(--color-bg-sunken);
+  border: 2px solid var(--outline-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+.trait-card-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.btn-remove-trait {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--outline-color);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: all var(--transition-fast);
+}
+
+.btn-remove-trait:hover {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+.expand-icon {
+  transition: transform var(--transition-fast);
+}
+
+.expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* Card Content (expanded) */
+.trait-card-content {
+  padding: var(--spacing-3);
+  border-top: 1px solid var(--color-border-light);
+  background-color: var(--color-bg-sunken);
+}
+
+.trait-description {
+  margin: 0 0 var(--spacing-3) 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.trait-level-selector {
+  margin-bottom: var(--spacing-3);
+}
+
+.trait-level-selector label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-2);
+}
+
+.trait-level-info {
+  padding: var(--spacing-3);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-3);
+}
+
+.level-label {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  display: block;
+  margin-bottom: var(--spacing-1);
+}
+
+.level-description {
+  font-size: var(--font-size-sm);
+  margin: 0 0 var(--spacing-2) 0;
+}
+
+.level-effect {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.trait-detail-input {
+  margin-bottom: var(--spacing-3);
+}
+
+.trait-detail-input label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-2);
+}
+
+.trait-detail-input .input {
+  width: 100%;
+}
+
+.multi-select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+.multi-option {
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 2px solid var(--outline-color);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.multi-option:hover {
+  background-color: var(--color-primary-light);
+}
+
+.multi-option.selected {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.trait-notes {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* ==========================================
+   TRAIT BROWSER MODAL
+   ========================================== */
+
+.trait-browser-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-5);
+  z-index: 1000;
+}
+
+.trait-browser-content {
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+  background-color: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.browser-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-4);
+  border-bottom: var(--outline-width) solid var(--outline-color);
+}
+
+.browser-header h3 {
+  margin: 0;
+  font-size: var(--font-size-lg);
+}
+
+.btn-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--outline-color);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+  transition: all var(--transition-fast);
+}
+
+.btn-close:hover {
+  background-color: var(--color-danger-light);
+}
+
+/* Browser Content */
+.trait-browser {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.browser-filters {
+  display: flex;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.search-input {
+  flex: 1;
+}
+
+.category-select {
+  width: 160px;
+}
+
+.trait-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-3);
+}
+
+.trait-option {
+  padding: var(--spacing-3);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-2);
+  background-color: var(--color-bg);
+}
+
+.trait-option-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-2);
+}
+
+.trait-option-name {
+  font-weight: var(--font-weight-semibold);
+}
+
+.trait-option-levels {
+  font-size: var(--font-size-xs);
+  padding: var(--spacing-1);
+  background-color: var(--color-bg-sunken);
+  border-radius: var(--radius-sm);
+}
+
+.trait-option-category {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: capitalize;
+}
+
+.trait-option-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--spacing-2) 0;
+  line-height: var(--line-height-relaxed);
+}
+
+.no-traits {
+  padding: var(--spacing-6);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================
+   TRAITS DISPLAY
+   ========================================== */
+
+.traits-display {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.traits-display.empty {
+  padding: var(--spacing-4);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.traits-display.compact {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+}
+
+.trait-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.trait-group h4 {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+}
+
+.compact-trait {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-2);
+  background-color: var(--color-bg-sunken);
+  border: 2px solid var(--outline-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+}
+
+.compact-trait.background {
+  border-left: 3px solid var(--color-primary);
+}
+
+.compact-trait.merit {
+  border-left: 3px solid var(--color-success);
+}
+
+.compact-trait.flaw {
+  border-left: 3px solid var(--color-error);
+}
+
+.compact-trait-name {
+  font-weight: var(--font-weight-semibold);
+}
+
+.compact-trait-dots {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.compact-trait-detail {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 640px) {
+  .trait-tabs {
+    flex-wrap: wrap;
+  }
+  
+  .trait-tab {
+    flex: 1;
+    text-align: center;
+    padding: var(--spacing-2);
+  }
+  
+  .browser-filters {
+    flex-direction: column;
+  }
+  
+  .category-select {
+    width: 100%;
+  }
+  
+  .trait-browser-modal {
+    padding: var(--spacing-3);
+  }
+  
+  .trait-browser-content {
+    max-height: 90vh;
+  }
+}

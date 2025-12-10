@@ -11,6 +11,7 @@ import {
   CREEDS
 } from '../utils/huntersData';
 import { DotRating } from './DotRating';
+import { TraitSelector, TraitsDisplay } from './TraitSelector';
 import {
   UserIcon,
   PlusIcon,
@@ -126,7 +127,7 @@ function SelectCharacterStep({ characters, onSelect, onCreate, onDelete }) {
 
 function CreateCharacterStep({ onBack, onCreate, hasCharacters }) {
   const [character, setCharacter] = useState(() => createDefaultCharacter());
-  const [step, setStep] = useState(1); // 1: Identity, 2: Attributes, 3: Skills, 4: Review
+  const [step, setStep] = useState(1); // 1: Identity, 2: Attributes, 3: Skills, 4: Traits, 5: Review
 
   const updateIdentity = (field, value) => {
     setCharacter(prev => ({
@@ -220,6 +221,7 @@ function CreateCharacterStep({ onBack, onCreate, hasCharacters }) {
           <span className={step >= 2 ? 'active' : ''}>2</span>
           <span className={step >= 3 ? 'active' : ''}>3</span>
           <span className={step >= 4 ? 'active' : ''}>4</span>
+          <span className={step >= 5 ? 'active' : ''}>5</span>
         </div>
       </div>
 
@@ -434,8 +436,25 @@ function CreateCharacterStep({ onBack, onCreate, hasCharacters }) {
         </div>
       )}
 
-      {/* Step 4: Review */}
+      {/* Step 4: Traits (Backgrounds, Merits, Flaws) */}
       {step === 4 && (
+        <div className="create-form">
+          <h3>Traits</h3>
+          <p className="form-hint">
+            Add Backgrounds, Merits, and Flaws to define your character. 
+            Backgrounds represent your resources and connections. 
+            Merits are advantages. Flaws are disadvantages that add depth.
+          </p>
+          
+          <TraitSelector
+            selectedTraits={character.traits || []}
+            onChange={(traits) => setCharacter(prev => ({ ...prev, traits }))}
+          />
+        </div>
+      )}
+
+      {/* Step 5: Review */}
+      {step === 5 && (
         <div className="create-form review-form">
           <h3>Review Your Hunter</h3>
           
@@ -499,6 +518,13 @@ function CreateCharacterStep({ onBack, onCreate, hasCharacters }) {
               {totalSkillDots === 0 && <span className="no-skills">No skills assigned</span>}
             </div>
           </div>
+
+          {character.traits && character.traits.length > 0 && (
+            <div className="review-section">
+              <h5>Traits ({character.traits.length})</h5>
+              <TraitsDisplay traits={character.traits} compact />
+            </div>
+          )}
         </div>
       )}
 
@@ -509,7 +535,7 @@ function CreateCharacterStep({ onBack, onCreate, hasCharacters }) {
             <ArrowLeftIcon size={16} /> Back
           </button>
         )}
-        {step < 4 ? (
+        {step < 5 ? (
           <button 
             className="btn btn-primary" 
             onClick={() => setStep(step + 1)}

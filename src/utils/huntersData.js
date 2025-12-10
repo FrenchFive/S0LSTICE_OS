@@ -191,7 +191,11 @@ export function createDefaultCharacter() {
     edges: [],
     perks: [],
     
-    // Advantages
+    // Traits (Backgrounds, Merits, Flaws)
+    // Format: [{ id: 'trait_id', level: 1-5, detail: 'optional detail' }]
+    traits: [],
+    
+    // Legacy - kept for compatibility
     advantages: {
       backgrounds: [],
       merits: [],
