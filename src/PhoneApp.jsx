@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import PhoneLayout from './layouts/PhoneLayout';
 import HomeScreen from './apps/HomeScreen';
 
-// Import existing pages
+// Pages
 import CharacterSelect from './pages/CharacterSelect';
 import CharacterCreator from './pages/CharacterCreator';
 import CharacterMain from './pages/CharacterMain';
 import BankPage from './pages/BankPage';
 import Settings from './pages/Settings';
 
-// Import new apps
+// Apps
 import FriendsApp from './apps/FriendsApp';
 import CodexApp from './apps/CodexApp';
 import MapApp from './apps/MapApp';
@@ -22,130 +22,139 @@ import PetsApp from './apps/PetsApp';
 import NotesApp from './apps/NotesApp';
 import CombatApp from './apps/CombatApp';
 
-// Import icons
-import { UserIcon, WalletIcon, ArrowLeftIcon } from './components/icons/Icons';
+// Icons
+import { UserIcon, WalletIcon } from './components/icons/Icons';
 
-// Placeholder for new apps (to be implemented)
-const PlaceholderApp = ({ appName, onBack }) => (
-  <div style={{ padding: '20px', textAlign: 'center' }}>
-    <h2>{appName}</h2>
-    <p>This app is coming soon!</p>
-    <button className="btn btn-secondary" onClick={onBack}>
-      <ArrowLeftIcon size={16} /> Back to Home
-    </button>
-  </div>
-);
+// Simple app components mapping
+const SIMPLE_APPS = {
+  friends: FriendsApp,
+  codex: CodexApp,
+  map: MapApp,
+  id: IDCardApp,
+  contacts: ContactsApp,
+  stats: StatsApp,
+  quest: QuestApp,
+  inventory: InventoryApp,
+  pets: PetsApp,
+  notes: NotesApp,
+  combat: CombatApp,
+};
+
+// Placeholder for requiring character selection
+function RequireCharacter({ icon, title, onSelectCharacter }) {
+  const Icon = icon;
+  return (
+    <div className="app-content">
+      <div className="section" style={{ textAlign: 'center', padding: 'var(--spacing-8)' }}>
+        <div style={{ marginBottom: 'var(--spacing-4)', color: 'var(--color-text-muted)' }}>
+          <Icon size={48} />
+        </div>
+        <h2 style={{ marginBottom: 'var(--spacing-2)' }}>{title}</h2>
+        <p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--spacing-5)' }}>
+          Please select a character first
+        </p>
+        <button className="btn btn-primary" onClick={onSelectCharacter}>
+          <UserIcon size={16} /> Select Character
+        </button>
+      </div>
+    </div>
+  );
+}
 
 function PhoneApp() {
   const [currentApp, setCurrentApp] = useState('home');
   const [currentCharacter, setCurrentCharacter] = useState(null);
-  const [appState, setAppState] = useState({ creatingCharacter: false, editingCharacter: false });
+  const [isCreatingCharacter, setIsCreatingCharacter] = useState(false);
+  const [isEditingCharacter, setIsEditingCharacter] = useState(false);
 
-  const handleAppOpen = (appId) => {
+  const handleAppOpen = useCallback((appId) => {
     setCurrentApp(appId);
-  };
+  }, []);
 
-  const handleBackToHome = () => {
+  const handleBackToHome = useCallback(() => {
     setCurrentApp('home');
-  };
+  }, []);
+
+  const handleCharacterSelect = useCallback((char) => {
+    setCurrentCharacter(char);
+    handleBackToHome();
+  }, [handleBackToHome]);
+
+  const handleCreateCharacter = useCallback(() => {
+    setIsCreatingCharacter(true);
+  }, []);
+
+  const handleCharacterCreated = useCallback((char) => {
+    if (char) setCurrentCharacter(char);
+    setIsCreatingCharacter(false);
+    setIsEditingCharacter(false);
+    handleBackToHome();
+  }, [handleBackToHome]);
 
   const renderApp = () => {
-    switch (currentApp) {
-      case 'home':
-        return <HomeScreen onAppOpen={handleAppOpen} />;
+    // Home screen
+    if (currentApp === 'home') {
+      return <HomeScreen onAppOpen={handleAppOpen} />;
+    }
 
-      case 'character':
-        if (!currentCharacter) {
-          return (
-            <CharacterSelect
-              onSelectCharacter={(char) => {
-                setCurrentCharacter(char);
-                handleBackToHome();
-              }}
-              onCreateNew={() => setAppState({ ...appState, creatingCharacter: true })}
-            />
-          );
-        } else if (appState.creatingCharacter) {
-          return (
-            <CharacterCreator
-              editCharacter={appState.editingCharacter ? currentCharacter : null}
-              onComplete={(char) => {
-                if (char) setCurrentCharacter(char);
-                setAppState({ ...appState, creatingCharacter: false, editingCharacter: false });
-                handleBackToHome();
-              }}
-            />
-          );
-        } else {
-          return (
-            <CharacterMain
-              character={currentCharacter}
-              onUpdate={setCurrentCharacter}
-            />
-          );
-        }
-
-      case 'bank':
-        if (!currentCharacter) {
-          return (
-            <div style={{ padding: '20px', textAlign: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '16px' }}>
-                <WalletIcon size={28} />
-                <h2 style={{ margin: 0 }}>Bank</h2>
-              </div>
-              <p>Please select a character first</p>
-              <button className="btn btn-primary" onClick={() => handleAppOpen('character')}>
-                <UserIcon size={16} /> Select Character
-              </button>
-            </div>
-          );
-        }
-        return <BankPage character={currentCharacter} />;
-
-      case 'settings':
+    // Character app with special flow
+    if (currentApp === 'character') {
+      if (isCreatingCharacter) {
         return (
-          <Settings
-            currentCharacter={currentCharacter}
-            onClose={handleBackToHome}
+          <CharacterCreator
+            editCharacter={isEditingCharacter ? currentCharacter : null}
+            onComplete={handleCharacterCreated}
           />
         );
-
-      case 'friends':
-        return <FriendsApp />;
-
-      case 'codex':
-        return <CodexApp />;
-
-      case 'map':
-        return <MapApp />;
-
-      case 'id':
-        return <IDCardApp />;
-      
-      case 'contacts':
-        return <ContactsApp />;
-      
-      case 'stats':
-        return <StatsApp />;
-      
-      case 'quest':
-        return <QuestApp />;
-      
-      case 'inventory':
-        return <InventoryApp />;
-      
-      case 'combat':
-        return <CombatApp />;
-      
-      case 'pets':
-        return <PetsApp />;
-      
-      case 'notes':
-        return <NotesApp />;
-
-      default:
-        return <HomeScreen onAppOpen={handleAppOpen} />;
+      }
+      if (!currentCharacter) {
+        return (
+          <CharacterSelect
+            onSelectCharacter={handleCharacterSelect}
+            onCreateNew={handleCreateCharacter}
+          />
+        );
+      }
+      return (
+        <CharacterMain
+          character={currentCharacter}
+          onUpdate={setCurrentCharacter}
+        />
+      );
     }
+
+    // Bank requires character
+    if (currentApp === 'bank') {
+      if (!currentCharacter) {
+        return (
+          <RequireCharacter
+            icon={WalletIcon}
+            title="Bank"
+            onSelectCharacter={() => handleAppOpen('character')}
+          />
+        );
+      }
+      return <BankPage character={currentCharacter} />;
+    }
+
+    // Settings
+    if (currentApp === 'settings') {
+      return (
+        <Settings
+          currentCharacter={currentCharacter}
+          onClose={handleBackToHome}
+        />
+      );
+    }
+
+    // Simple apps that don't require special handling
+    const SimpleApp = SIMPLE_APPS[currentApp];
+    if (SimpleApp) {
+      return <SimpleApp />;
+    }
+
+    // Fallback to home
+    return <HomeScreen onAppOpen={handleAppOpen} />;
   };
 
   return (

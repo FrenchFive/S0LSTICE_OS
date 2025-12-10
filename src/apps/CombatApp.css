@@ -1,34 +1,39 @@
+/* ==========================================
+   COMBAT APP
+   ========================================== */
+
 .combat-app {
-  padding: var(--spacing-xl);
-  max-width: 1200px;
+  padding: var(--spacing-5);
+  max-width: 1000px;
   margin: 0 auto;
 }
 
 .combat-header {
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-6);
 }
 
 .combat-header h1 {
   margin: 0;
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-2xl);
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-2);
 }
 
+/* Placeholder */
 .combat-placeholder {
   text-align: center;
-  padding: var(--spacing-3xl) var(--spacing-2xl);
-  background: var(--pastel-blush);
+  padding: var(--spacing-10) var(--spacing-6);
+  background-color: var(--app-color-1);
   border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-offset-lg);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
 }
 
 .placeholder-icon {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,29 +42,32 @@
 
 .combat-placeholder h2 {
   font-size: var(--font-size-2xl);
-  margin: 0 0 var(--spacing-xl) 0;
+  margin: 0 0 var(--spacing-5) 0;
   font-weight: var(--font-weight-bold);
 }
 
 .placeholder-text {
   font-size: var(--font-size-lg);
-  margin: var(--spacing-md) 0;
+  margin: var(--spacing-3) 0;
   color: var(--color-text-secondary);
 }
 
 .feature-list {
   list-style: none;
   padding: 0;
-  margin: var(--spacing-2xl) 0 0 0;
+  margin: var(--spacing-6) auto 0;
   text-align: left;
-  display: inline-block;
+  max-width: 400px;
 }
 
 .feature-list li {
   font-size: var(--font-size-lg);
-  padding: var(--spacing-md) 0;
+  padding: var(--spacing-3) 0;
   border-bottom: 2px solid var(--color-border-light);
   font-weight: var(--font-weight-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
 }
 
 .feature-list li:last-child {
@@ -67,8 +75,17 @@
 }
 
 .feature-list li::before {
-  content: "•";
-  color: var(--color-primary);
-  font-weight: var(--font-weight-bold);
-  margin-right: var(--spacing-sm);
+  content: "⚔️";
+  font-size: var(--font-size-base);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .combat-app {
+    padding: var(--spacing-4);
+  }
+
+  .combat-placeholder {
+    padding: var(--spacing-6) var(--spacing-4);
+  }
 }

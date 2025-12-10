@@ -18,21 +18,22 @@ import {
 } from '../components/icons/Icons';
 import './HomeScreen.css';
 
+// App definitions with harmonious color assignments
 const APPS = [
-  { id: 'character', name: 'Character', icon: UserIcon, color: 'var(--pastel-blush)' },
-  { id: 'friends', name: 'Friends', icon: UsersIcon, color: 'var(--pastel-mint)' },
-  { id: 'codex', name: 'Codex', icon: BookIcon, color: 'var(--pastel-lavender)' },
-  { id: 'id', name: 'ID Card', icon: IdCardIcon, color: 'var(--pastel-sky)' },
-  { id: 'contacts', name: 'Contacts', icon: PhoneIcon, color: 'var(--pastel-sage)' },
-  { id: 'stats', name: 'Stats', icon: ChartIcon, color: 'var(--pastel-peach)' },
-  { id: 'quest', name: 'Quests', icon: ChecklistIcon, color: 'var(--pastel-cream)' },
-  { id: 'map', name: 'Map', icon: MapIcon, color: 'var(--pastel-lavender)' },
-  { id: 'inventory', name: 'Inventory', icon: BackpackIcon, color: 'var(--pastel-peach)' },
-  { id: 'combat', name: 'Combat', icon: SwordsIcon, color: 'var(--pastel-blush)' },
-  { id: 'pets', name: 'Pets', icon: PawIcon, color: 'var(--pastel-sky)' },
-  { id: 'bank', name: 'Bank', icon: WalletIcon, color: 'var(--pastel-mint)' },
-  { id: 'notes', name: 'Notes', icon: NotesIcon, color: 'var(--pastel-cream)' },
-  { id: 'settings', name: 'Settings', icon: SettingsIcon, color: 'var(--pastel-slate)' }
+  { id: 'character', name: 'Character', icon: UserIcon, color: 'var(--app-color-1)' },
+  { id: 'friends', name: 'Friends', icon: UsersIcon, color: 'var(--app-color-3)' },
+  { id: 'codex', name: 'Codex', icon: BookIcon, color: 'var(--app-color-5)' },
+  { id: 'id', name: 'ID Card', icon: IdCardIcon, color: 'var(--app-color-4)' },
+  { id: 'contacts', name: 'Contacts', icon: PhoneIcon, color: 'var(--app-color-7)' },
+  { id: 'stats', name: 'Stats', icon: ChartIcon, color: 'var(--app-color-2)' },
+  { id: 'quest', name: 'Quests', icon: ChecklistIcon, color: 'var(--app-color-3)' },
+  { id: 'map', name: 'Map', icon: MapIcon, color: 'var(--app-color-4)' },
+  { id: 'inventory', name: 'Inventory', icon: BackpackIcon, color: 'var(--app-color-2)' },
+  { id: 'combat', name: 'Combat', icon: SwordsIcon, color: 'var(--app-color-1)' },
+  { id: 'pets', name: 'Pets', icon: PawIcon, color: 'var(--app-color-6)' },
+  { id: 'bank', name: 'Bank', icon: WalletIcon, color: 'var(--app-color-3)' },
+  { id: 'notes', name: 'Notes', icon: NotesIcon, color: 'var(--app-color-2)' },
+  { id: 'settings', name: 'Settings', icon: SettingsIcon, color: 'var(--app-color-8)' }
 ];
 
 function HomeScreen({ onAppOpen }) {
@@ -52,7 +53,6 @@ function HomeScreen({ onAppOpen }) {
 
   return (
     <div className="home-screen">
-      {/* Wallpaper/Background */}
       <div className="home-wallpaper">
         {/* Character Widget */}
         {character && (
@@ -94,7 +94,7 @@ function HomeScreen({ onAppOpen }) {
           })}
         </div>
 
-        {/* Quick Actions */}
+        {/* No Character Prompt */}
         {!character && (
           <div className="no-character-prompt">
             <div className="prompt-icon">
@@ -102,7 +102,7 @@ function HomeScreen({ onAppOpen }) {
             </div>
             <p>No character selected</p>
             <button 
-              className="btn btn-success"
+              className="btn btn-primary"
               onClick={() => onAppOpen('character')}
             >
               Select Character

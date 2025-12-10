@@ -1,3 +1,7 @@
+/* ==========================================
+   HOME SCREEN
+   ========================================== */
+
 .home-screen {
   height: 100%;
   width: 100%;
@@ -6,35 +10,38 @@
 
 .home-wallpaper {
   min-height: 100%;
-  padding: var(--spacing-xl);
-  background: var(--color-bg);
+  padding: var(--spacing-5);
+  background-color: var(--color-bg);
 }
 
-/* Character Widget */
+/* ==========================================
+   CHARACTER WIDGET
+   ========================================== */
+
 .character-widget {
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
-  padding: var(--spacing-xl);
+  gap: var(--spacing-4);
+  padding: var(--spacing-5);
   background-color: var(--color-surface);
   border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-offset-md);
-  margin-bottom: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--spacing-6);
 }
 
 .widget-avatar {
-  width: 80px;
-  height: 80px;
+  width: 72px;
+  height: 72px;
   border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  background-color: var(--pastel-lavender);
+  background-color: var(--color-primary-light);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: var(--shadow-offset-sm);
+  box-shadow: var(--shadow-sm);
 }
 
 .widget-avatar img {
@@ -44,41 +51,47 @@
 }
 
 .widget-avatar-placeholder {
-  font-size: 36px;
-  font-weight: var(--font-weight-black);
-  color: var(--color-text);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-primary);
 }
 
 .widget-info {
   flex: 1;
+  min-width: 0;
 }
 
 .widget-greeting {
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
-  margin-bottom: 4px;
 }
 
 .widget-name {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
-  margin-bottom: 4px;
+  line-height: 1.2;
+  margin: var(--spacing-1) 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .widget-level {
-  font-size: var(--font-size-base);
-  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
   font-weight: var(--font-weight-semibold);
 }
 
-/* App Grid */
+/* ==========================================
+   APP GRID
+   ========================================== */
+
 .app-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: var(--spacing-lg);
-  padding: var(--spacing-md) 0;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-4);
 }
 
 .app-icon {
@@ -87,30 +100,33 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-2);
+  padding: var(--spacing-3);
   border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-lg);
-  background-color: var(--pastel-lavender);
+  border-radius: var(--radius-xl);
+  background-color: var(--color-surface);
   cursor: pointer;
-  box-shadow: var(--shadow-offset-md);
+  box-shadow: var(--shadow-md);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-  padding: var(--spacing-md);
 }
 
 .app-icon:hover {
   transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-offset-hover);
+  box-shadow: var(--shadow-hover);
 }
 
 .app-icon:active {
   transform: translate(2px, 2px);
-  box-shadow: var(--shadow-offset-active);
+  box-shadow: var(--shadow-active);
 }
 
 .app-icon-graphic {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
   color: var(--color-text);
 }
 
@@ -122,43 +138,91 @@
   line-height: 1.2;
 }
 
-/* No Character Prompt */
+/* ==========================================
+   NO CHARACTER PROMPT
+   ========================================== */
+
 .no-character-prompt {
   text-align: center;
-  padding: var(--spacing-2xl);
+  padding: var(--spacing-8);
   background-color: var(--color-surface);
   border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-offset-md);
-  margin-top: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  margin-top: var(--spacing-6);
 }
 
 .prompt-icon {
-  margin-bottom: var(--spacing-lg);
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-4);
+  color: var(--color-text-muted);
 }
 
 .no-character-prompt p {
   font-size: var(--font-size-lg);
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-5);
 }
 
-@media (max-width: 768px) {
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 900px) {
+  .app-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-3);
+  }
+}
+
+@media (max-width: 640px) {
+  .home-wallpaper {
+    padding: var(--spacing-4);
+  }
+
+  .character-widget {
+    padding: var(--spacing-4);
+  }
+
+  .widget-avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .widget-name {
+    font-size: var(--font-size-xl);
+  }
+
   .app-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-3);
   }
-  
+
+  .app-icon {
+    padding: var(--spacing-2);
+  }
+
+  .app-icon-graphic {
+    width: 36px;
+    height: 36px;
+  }
+
   .app-icon-graphic svg {
     width: 28px;
     height: 28px;
   }
-  
+
   .app-icon-name {
     font-size: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  .app-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-2);
   }
 }

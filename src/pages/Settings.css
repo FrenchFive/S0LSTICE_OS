@@ -1,5 +1,9 @@
+/* ==========================================
+   SETTINGS PAGE
+   ========================================== */
+
 .settings-page {
-  padding: var(--spacing-xl);
+  padding: var(--spacing-5);
   max-width: 800px;
   margin: 0 auto;
 }
@@ -8,42 +12,68 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-6);
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
 }
 
 .settings-header h1 {
   margin: 0;
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-2);
 }
 
+/* Settings Content */
 .settings-content {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-5);
 }
 
+/* Settings Sections (using .section from PhoneLayout) */
+.settings-page .section {
+  background-color: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-5);
+  box-shadow: var(--shadow-md);
+}
+
+.settings-page .section-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-4);
+  padding-bottom: var(--spacing-3);
+  border-bottom: var(--outline-width) solid var(--outline-color);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+/* Form Elements */
 .help-text {
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
-  margin-top: var(--spacing-sm);
+  margin-top: var(--spacing-2);
 }
 
+/* Connection Section */
 .connection-actions {
   display: flex;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-lg);
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-4);
+  flex-wrap: wrap;
 }
 
 .connection-status {
-  margin-top: var(--spacing-lg);
-  padding: var(--spacing-md) var(--spacing-lg);
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-3) var(--spacing-4);
   background-color: var(--color-warning-light);
   border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   font-weight: var(--font-weight-semibold);
 }
 
@@ -52,18 +82,18 @@
 }
 
 .connected-users {
-  margin-top: var(--spacing-lg);
-  padding: var(--spacing-lg);
-  background-color: var(--pastel-sky);
+  margin-top: var(--spacing-4);
+  padding: var(--spacing-4);
+  background-color: var(--color-secondary-light);
   border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
 }
 
 .connected-users h4 {
-  margin: 0 0 var(--spacing-md) 0;
+  margin: 0 0 var(--spacing-3) 0;
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-2);
 }
 
 .connected-users ul {
@@ -73,7 +103,7 @@
 }
 
 .connected-users li {
-  padding: var(--spacing-sm) 0;
+  padding: var(--spacing-2) 0;
   font-weight: var(--font-weight-semibold);
   border-bottom: 1px solid var(--color-border-light);
 }
@@ -82,24 +112,34 @@
   border-bottom: none;
 }
 
+/* Import/Export Section */
 .import-export-actions {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-4);
 }
 
 .import-export-actions .btn {
   width: 100%;
 }
 
-.form-group {
-  margin-bottom: var(--spacing-lg);
-}
+/* Responsive */
+@media (max-width: 640px) {
+  .settings-page {
+    padding: var(--spacing-4);
+  }
 
-.form-group label {
-  display: block;
-  margin-bottom: var(--spacing-sm);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-sm);
+  .settings-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .connection-actions {
+    flex-direction: column;
+  }
+
+  .connection-actions .btn {
+    width: 100%;
+  }
 }
