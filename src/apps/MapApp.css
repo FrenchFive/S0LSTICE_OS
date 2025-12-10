@@ -1,0 +1,348 @@
+.map-app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg, #FFF9E3);
+}
+
+.map-header {
+  background: linear-gradient(135deg, #FFB3D9 0%, #FFE4E1 100%);
+  border-bottom: var(--outline-width, 4px) solid black;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.map-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-family: 'Comic Sans MS', cursive;
+}
+
+.map-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-add-pin {
+  padding: 0.75rem 1.5rem;
+  background: #BAFFC9;
+  border: var(--outline-width, 4px) solid black;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: var(--shadow-offset, 4px) var(--shadow-offset, 4px) 0 black;
+  transition: all 0.2s;
+}
+
+.btn-add-pin:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: calc(var(--shadow-offset, 4px) + 2px) calc(var(--shadow-offset, 4px) + 2px) 0 black;
+}
+
+.btn-add-pin:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 black;
+}
+
+.adding-mode {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #FFF3CD;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 3px solid black;
+}
+
+.adding-mode span {
+  font-weight: bold;
+  color: #F59E0B;
+}
+
+.btn-cancel-add {
+  padding: 0.5rem 1rem;
+  background: #FFB3BA;
+  border: 3px solid black;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 black;
+}
+
+.btn-cancel-add:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 black;
+}
+
+.map-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.map-container {
+  flex: 1;
+  position: relative;
+  border-right: var(--outline-width, 4px) solid black;
+}
+
+.leaflet-container {
+  font-family: 'Comic Sans MS', cursive;
+}
+
+.map-sidebar {
+  width: 350px;
+  background: white;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.map-info h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  font-family: 'Comic Sans MS', cursive;
+}
+
+.map-info p {
+  line-height: 1.6;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.map-stats {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-item {
+  background: linear-gradient(135deg, #BAE1FF 0%, #E0F2FE 100%);
+  border: var(--outline-width, 4px) solid black;
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  box-shadow: var(--shadow-offset, 4px) var(--shadow-offset, 4px) 0 black;
+}
+
+.stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #0369A1;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.pin-list h4 {
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  font-family: 'Comic Sans MS', cursive;
+}
+
+.pin-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pin-list-item {
+  padding: 0.75rem;
+  background: #F8F9FA;
+  border: 3px solid #DEE2E6;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pin-list-item:hover {
+  background: #E9ECEF;
+  transform: translateX(4px);
+}
+
+.pin-name {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.pin-author {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.empty-state {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  padding: 2rem 0;
+}
+
+.pin-form,
+.pin-details {
+  background: white;
+}
+
+.pin-form h3,
+.pin-details h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+  font-family: 'Comic Sans MS', cursive;
+}
+
+.pin-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid #DEE2E6;
+}
+
+.btn-close {
+  background: #FFB3BA;
+  border: 3px solid black;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 3px 3px 0 black;
+}
+
+.btn-close:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 black;
+}
+
+.form-field {
+  margin-bottom: 1.5rem;
+}
+
+.form-field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: var(--outline-width, 4px) solid black;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-field textarea {
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.btn-save,
+.btn-cancel,
+.btn-edit,
+.btn-delete {
+  flex: 1;
+  padding: 0.75rem;
+  border: var(--outline-width, 4px) solid black;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: var(--shadow-offset, 4px) var(--shadow-offset, 4px) 0 black;
+  transition: all 0.2s;
+}
+
+.btn-save,
+.btn-edit {
+  background: #BAFFC9;
+}
+
+.btn-cancel,
+.btn-delete {
+  background: #FFB3BA;
+}
+
+.btn-save:hover,
+.btn-cancel:hover,
+.btn-edit:hover,
+.btn-delete:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: calc(var(--shadow-offset, 4px) + 2px) calc(var(--shadow-offset, 4px) + 2px) 0 black;
+}
+
+.btn-save:active,
+.btn-cancel:active,
+.btn-edit:active,
+.btn-delete:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 black;
+}
+
+.pin-meta {
+  background: #F8F9FA;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 2px solid #DEE2E6;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.pin-description {
+  margin-bottom: 1.5rem;
+}
+
+.pin-description strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.pin-description p {
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.pin-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* Leaflet popup customization */
+.leaflet-popup-content-wrapper {
+  border: 3px solid black !important;
+  border-radius: 8px !important;
+  box-shadow: 4px 4px 0 black !important;
+  font-family: 'Comic Sans MS', cursive !important;
+}
+
+.leaflet-popup-tip {
+  border-left: 3px solid black !important;
+  border-bottom: 3px solid black !important;
+}

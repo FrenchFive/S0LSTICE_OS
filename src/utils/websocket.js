@@ -207,16 +207,16 @@ class WebSocketClient {
     });
   }
 
-  // Sync codex page
-  syncCodex(page) {
+  // Sync codex pages
+  syncCodex(pages) {
     if (!this.connected) return;
-    this.send({ type: 'codex_update', page });
+    this.send({ type: 'codex_sync', pages });
   }
 
-  // Sync bestiary entry
-  syncBestiary(entry) {
+  // Sync bestiary entries
+  syncBestiary(creatures) {
     if (!this.connected) return;
-    this.send({ type: 'bestiary_update', entry });
+    this.send({ type: 'bestiary_sync', creatures });
   }
 
   // Sync quest
@@ -225,10 +225,10 @@ class WebSocketClient {
     this.send({ type: 'quest_update', quest });
   }
 
-  // Sync map pin
-  syncMap(pin) {
+  // Sync map pins
+  syncMap(pins) {
     if (!this.connected) return;
-    this.send({ type: 'map_update', pin });
+    this.send({ type: 'map_sync', pins });
   }
 
   // Send message to NPC (goes to DM)

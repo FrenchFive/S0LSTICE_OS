@@ -11,6 +11,8 @@ import Settings from './pages/Settings';
 
 // Import new apps
 import FriendsApp from './apps/FriendsApp';
+import CodexApp from './apps/CodexApp';
+import MapApp from './apps/MapApp';
 
 // Placeholder for new apps (to be implemented)
 const PlaceholderApp = ({ appName, onBack }) => (
@@ -98,7 +100,10 @@ function PhoneApp() {
         return <FriendsApp />;
 
       case 'codex':
-        return <PlaceholderApp appName="Codex & Bestiary" onBack={handleBackToHome} />;
+        return <CodexApp />;
+
+      case 'map':
+        return <MapApp />;
 
       case 'id':
         return <PlaceholderApp appName="ID Card" onBack={handleBackToHome} />;
@@ -111,9 +116,6 @@ function PhoneApp() {
       
       case 'quest':
         return <PlaceholderApp appName="Quests" onBack={handleBackToHome} />;
-      
-      case 'map':
-        return <PlaceholderApp appName="Map" onBack={handleBackToHome} />;
       
       case 'inventory':
         return <PlaceholderApp appName="Inventory" onBack={handleBackToHome} />;

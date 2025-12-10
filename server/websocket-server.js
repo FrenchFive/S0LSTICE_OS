@@ -120,22 +120,22 @@ function handleMessage(ws, data) {
       }, ws);
       break;
 
-    case 'codex_update':
+    case 'codex_sync':
       broadcast({
-        type: 'codex_update',
+        type: 'codex_sync',
         clientId: client.id,
-        page: data.page,
+        pages: data.pages,
         timestamp: new Date().toISOString()
-      });
+      }, ws);
       break;
 
-    case 'bestiary_update':
+    case 'bestiary_sync':
       broadcast({
-        type: 'bestiary_update',
+        type: 'bestiary_sync',
         clientId: client.id,
-        entry: data.entry,
+        creatures: data.creatures,
         timestamp: new Date().toISOString()
-      });
+      }, ws);
       break;
 
     case 'quest_update':
@@ -145,6 +145,15 @@ function handleMessage(ws, data) {
         quest: data.quest,
         timestamp: new Date().toISOString()
       });
+      break;
+
+    case 'map_sync':
+      broadcast({
+        type: 'map_sync',
+        clientId: client.id,
+        pins: data.pins,
+        timestamp: new Date().toISOString()
+      }, ws);
       break;
 
     case 'map_update':
