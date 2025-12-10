@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { codexDatabase, bestiaryDatabase } from '../utils/sharedData';
 import { wsClient } from '../utils/websocket';
 import { database, dmMode } from '../utils/database';
+import { BookIcon, PlusIcon, EditIcon, TrashIcon, CheckIcon, XIcon } from '../components/icons/Icons';
 import './CodexApp.css';
 
 export default function CodexApp() {
@@ -152,7 +153,7 @@ export default function CodexApp() {
   return (
     <div className="codex-app">
       <div className="codex-header">
-        <h1>📖 Codex</h1>
+        <h1><BookIcon size={32} /> Codex</h1>
         <div className="codex-tabs">
           <button
             className={`codex-tab ${activeTab === 'lore' ? 'active' : ''}`}
@@ -162,7 +163,7 @@ export default function CodexApp() {
               setIsEditing(false);
             }}
           >
-            📜 Lore
+            Lore
           </button>
           <button
             className={`codex-tab ${activeTab === 'bestiary' ? 'active' : ''}`}
@@ -172,7 +173,7 @@ export default function CodexApp() {
               setIsEditing(false);
             }}
           >
-            🐉 Bestiary
+            Bestiary
           </button>
         </div>
       </div>
@@ -183,7 +184,7 @@ export default function CodexApp() {
             <div className="sidebar-header">
               <h3>Pages</h3>
               <button className="btn-create" onClick={handleCreatePage}>
-                ➕ New Page
+                <PlusIcon size={14} /> New Page
               </button>
             </div>
             {isDM && (
@@ -215,7 +216,7 @@ export default function CodexApp() {
                     }}
                   >
                     <div className="page-title">
-                      {page.isPrivate && '🔒 '}
+                      {page.isPrivate && '[Private] '}
                       {page.title}
                     </div>
                     <div className="page-author">by {page.author}</div>
@@ -256,7 +257,7 @@ export default function CodexApp() {
             <div className="sidebar-header">
               <h3>Creatures</h3>
               <button className="btn-create" onClick={handleCreateCreature}>
-                ➕ New Creature
+                <PlusIcon size={14} /> New Creature
               </button>
             </div>
             <div className="page-list">
@@ -319,21 +320,21 @@ function PageViewer({ page, onEdit, onDelete, onTogglePrivate, isDM }) {
               onClick={() => onTogglePrivate(page)}
               title={page.isPrivate ? 'Make Public' : 'Make Private (DM Only)'}
             >
-              {page.isPrivate ? '🔓' : '🔒'}
+              {page.isPrivate ? 'Public' : 'Private'}
             </button>
           )}
           <button className="btn-edit" onClick={onEdit}>
-            ✏️ Edit
+            <EditIcon size={14} /> Edit
           </button>
           <button className="btn-delete" onClick={() => onDelete(page.id)}>
-            🗑️ Delete
+            <TrashIcon size={14} /> Delete
           </button>
         </div>
       </div>
       <div className="page-meta">
         <span>Author: {page.author}</span>
         <span>Updated: {new Date(page.updatedAt).toLocaleString()}</span>
-        {page.isPrivate && <span className="private-badge">🔒 DM Private</span>}
+        {page.isPrivate && <span className="private-badge">DM Private</span>}
       </div>
       <div className="page-content">
         {page.content || <em>No content yet</em>}
@@ -375,7 +376,7 @@ function PageEditor({ page, onSave, onCancel, isDM }) {
               checked={isPrivate}
               onChange={(e) => setIsPrivate(e.target.checked)}
             />
-            🔒 Private (DM Only) - Only visible to DM until shared
+            Private (DM Only) - Only visible to DM until shared
           </label>
         </div>
       )}
@@ -390,10 +391,10 @@ function PageEditor({ page, onSave, onCancel, isDM }) {
       </div>
       <div className="editor-actions">
         <button className="btn-save" onClick={handleSubmit}>
-          💾 Save Page
+          <CheckIcon size={14} /> Save Page
         </button>
         <button className="btn-cancel" onClick={onCancel}>
-          ❌ Cancel
+          <XIcon size={14} /> Cancel
         </button>
       </div>
     </div>
@@ -404,13 +405,13 @@ function CreatureViewer({ creature, onEdit, onDelete }) {
   return (
     <div className="page-viewer">
       <div className="page-viewer-header">
-        <h2>🐉 {creature.name}</h2>
+        <h2>{creature.name}</h2>
         <div className="page-actions">
           <button className="btn-edit" onClick={onEdit}>
-            ✏️ Edit
+            <EditIcon size={14} /> Edit
           </button>
           <button className="btn-delete" onClick={() => onDelete(creature.id)}>
-            🗑️ Delete
+            <TrashIcon size={14} /> Delete
           </button>
         </div>
       </div>
@@ -497,10 +498,10 @@ function CreatureEditor({ creature, onSave, onCancel }) {
       </div>
       <div className="editor-actions">
         <button className="btn-save" onClick={handleSubmit}>
-          💾 Save Creature
+          <CheckIcon size={14} /> Save Creature
         </button>
         <button className="btn-cancel" onClick={onCancel}>
-          ❌ Cancel
+          <XIcon size={14} /> Cancel
         </button>
       </div>
     </div>

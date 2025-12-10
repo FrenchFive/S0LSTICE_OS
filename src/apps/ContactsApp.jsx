@@ -3,6 +3,7 @@ import './ContactsApp.css';
 import * as contactsDb from '../utils/sharedData';
 import { database as db, dmMode } from '../utils/database';
 import { wsClient } from '../utils/websocket';
+import { PhoneIcon, MessageIcon, PlusIcon, TrashIcon, SendIcon } from '../components/icons/Icons';
 
 export default function ContactsApp() {
   const [activeTab, setActiveTab] = useState('contacts');
@@ -143,19 +144,19 @@ export default function ContactsApp() {
           className={`tab ${activeTab === 'contacts' ? 'active' : ''}`}
           onClick={() => setActiveTab('contacts')}
         >
-          📇 Contacts
+          <PhoneIcon size={16} /> Contacts
         </button>
         <button 
           className={`tab ${activeTab === 'messages' ? 'active' : ''}`}
           onClick={() => setActiveTab('messages')}
         >
-          💬 Messages
+          <MessageIcon size={16} /> Messages
         </button>
         <button 
           className={`tab ${activeTab === 'add' ? 'active' : ''}`}
           onClick={() => setActiveTab('add')}
         >
-          ➕ Add Contact
+          <PlusIcon size={16} /> Add Contact
         </button>
       </div>
 
@@ -173,21 +174,21 @@ export default function ContactsApp() {
                 <div key={contact.id} className="contact-card">
                   <div className="contact-header">
                     <div className="contact-name">
-                      {contact.type === 'npc' ? '🎭' : contact.type === 'dm' ? '👑' : '👤'} {contact.name}
+                      {contact.name}
                     </div>
                     <div className="contact-actions">
                       <button 
                         onClick={() => { setSelectedContact(contact); setActiveTab('messages'); }}
                         className="btn-message"
                       >
-                        💬
+                        <MessageIcon size={16} />
                       </button>
                       {contact.characterId === db.getCurrentCharacterId() && (
                         <button 
                           onClick={() => handleDeleteContact(contact.id)}
                           className="btn-delete"
                         >
-                          🗑️
+                          <TrashIcon size={16} />
                         </button>
                       )}
                     </div>
@@ -270,7 +271,7 @@ export default function ContactsApp() {
                     placeholder="Type a message..."
                   />
                   <button onClick={handleSendMessage} className="btn-send">
-                    📤 Send
+                    <SendIcon size={16} /> Send
                   </button>
                 </div>
               </>
