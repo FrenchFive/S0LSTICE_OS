@@ -1,0 +1,203 @@
+.bank-page {
+  padding: var(--spacing-lg);
+}
+
+.bank-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.bank-header h1 {
+  margin: 0 0 var(--spacing-sm) 0;
+  font-size: 36px;
+}
+
+.account-name {
+  font-size: 20px;
+  color: var(--color-text-light);
+  font-weight: bold;
+}
+
+.bank-layout {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+}
+
+@media (max-width: 968px) {
+  .bank-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Balance Card */
+.balance-card {
+  background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
+  text-align: center;
+  padding: var(--spacing-xl);
+  grid-column: 1 / -1;
+}
+
+.balance-label {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text-light);
+}
+
+.balance-amount {
+  font-size: 56px;
+  font-weight: bold;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.balance-subtext {
+  font-size: 16px;
+  color: var(--color-text-light);
+}
+
+/* Transaction Form */
+.transaction-form {
+  background-color: var(--color-success);
+}
+
+.transaction-type-selector {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.amount-input-wrapper {
+  position: relative;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--color-text);
+}
+
+.amount-input {
+  padding-left: calc(var(--spacing-md) + 20px);
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.submit-btn {
+  width: 100%;
+  font-size: 18px;
+  padding: var(--spacing-md);
+}
+
+/* Transaction History */
+.transaction-history {
+  background-color: var(--color-surface);
+  grid-column: 1 / -1;
+}
+
+.empty-transactions {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--color-text-light);
+}
+
+.empty-subtext {
+  font-size: 14px;
+  margin-top: var(--spacing-sm);
+}
+
+.transactions-list {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.transaction-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: var(--spacing-md);
+  align-items: center;
+  padding: var(--spacing-md);
+  border: 3px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--spacing-sm);
+  background-color: var(--color-bg);
+}
+
+.transaction-icon {
+  font-size: 24px;
+}
+
+.transaction-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.transaction-description {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.transaction-date {
+  font-size: 12px;
+  color: var(--color-text-light);
+}
+
+.transaction-amount {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.transaction-amount.positive {
+  color: #2E7D32;
+}
+
+.transaction-amount.negative {
+  color: #C62828;
+}
+
+.transaction-balance {
+  font-size: 14px;
+  color: var(--color-text-light);
+  text-align: right;
+  min-width: 120px;
+}
+
+/* Quick Actions */
+.quick-actions {
+  background-color: var(--color-warning);
+}
+
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+}
+
+/* Scrollbar Styling */
+.transactions-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.transactions-list::-webkit-scrollbar-track {
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+}
+
+.transactions-list::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--color-bg);
+}
+
+.transactions-list::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text);
+}

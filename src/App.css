@@ -1,0 +1,82 @@
+.app {
+  min-height: 100vh;
+  background-color: var(--color-bg);
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-brand {
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.connection-indicator {
+  font-size: 14px;
+  padding: 2px 8px;
+  background-color: var(--color-success);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.nav-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .nav-buttons {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .nav-button {
+    font-size: 14px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+}
+
+.main-content {
+  min-height: calc(100vh - 80px);
+}
+
+/* Form utilities */
+.form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-weight: bold;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-md);
+  }
+}

@@ -1,0 +1,151 @@
+name: Build and Release S0LSTICE_OS
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.calc_version.outputs.version }}
+      should_release: ${{ steps.calc_version.outputs.should_release }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Calculate version based on commit size
+        id: calc_version
+        run: |
+          # Get the latest tag or default to v1.0.0
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
+          echo "Latest tag: $LATEST_TAG"
+          
+          # Remove 'v' prefix and split into components
+          VERSION=${LATEST_TAG#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          
+          # Get lines changed in this commit
+          if [ "${{ github.event_name }}" == "push" ] && [ "${{ startsWith(github.ref, 'refs/tags/') }}" == "false" ]; then
+            LINES_CHANGED=$(git diff --shortstat HEAD~1 HEAD | awk '{print $4+$6}')
+            echo "Lines changed: $LINES_CHANGED"
+            
+            # Determine version increment based on lines changed
+            if [ "$LINES_CHANGED" -lt 100 ]; then
+              # Patch increment for < 100 lines
+              PATCH=$((PATCH + 1))
+              echo "Incrementing patch version"
+            elif [ "$LINES_CHANGED" -lt 5000 ]; then
+              # Minor increment for 100-4999 lines
+              MINOR=$((MINOR + 1))
+              PATCH=0
+              echo "Incrementing minor version"
+            else
+              # Major increment for 5000+ lines
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+              echo "Incrementing major version"
+            fi
+            
+            NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+            echo "New version: v$NEW_VERSION"
+            echo "version=v$NEW_VERSION" >> $GITHUB_OUTPUT
+            echo "should_release=true" >> $GITHUB_OUTPUT
+            
+            # Create and push new tag
+            git config user.name "GitHub Actions"
+            git config user.email "actions@github.com"
+            git tag "v$NEW_VERSION"
+            git push origin "v$NEW_VERSION"
+          else
+            echo "version=$LATEST_TAG" >> $GITHUB_OUTPUT
+            echo "should_release=true" >> $GITHUB_OUTPUT
+          fi
+
+  release:
+    needs: version
+    if: needs.version.outputs.should_release == 'true'
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Update version in package.json
+        run: |
+          VERSION="${{ needs.version.outputs.version }}"
+          VERSION=${VERSION#v}
+          npm version $VERSION --no-git-tag-version
+      
+      - name: Build and Release (macOS)
+        if: matrix.os == 'macos-latest'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run electron:build:mac
+      
+      - name: Build and Release (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run electron:build:linux
+      
+      - name: Build and Release (Windows)
+        if: matrix.os == 'windows-latest'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run electron:build:win
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.os }}
+          path: release/**/*
+
+  create-release:
+    needs: [version, release]
+    runs-on: ubuntu-latest
+    if: needs.version.outputs.should_release == 'true'
+    
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.version.outputs.version }}
+          name: S0LSTICE_OS ${{ needs.version.outputs.version }}
+          files: |
+            release-*/**/*
+          draft: false
+          prerelease: false
+          body: |
+            ## S0LSTICE_OS ${{ needs.version.outputs.version }}
+            
+            Auto-generated release based on commit size.
+            
+            ### Downloads
+            - **Windows**: NSIS Installer, Portable
+            - **macOS**: DMG, ZIP
+            - **Linux**: AppImage, DEB
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

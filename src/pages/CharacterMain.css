@@ -1,0 +1,300 @@
+.character-main {
+  padding: var(--spacing-lg);
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: var(--spacing-lg);
+}
+
+@media (max-width: 968px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Character Display */
+.character-display {
+  text-align: center;
+}
+
+.character-portrait {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto var(--spacing-lg) auto;
+  border: var(--outline-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.character-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.default-portrait {
+  font-size: 80px;
+  font-weight: bold;
+  color: var(--color-text);
+}
+
+.character-name {
+  margin: 0 0 var(--spacing-sm) 0;
+  font-size: 32px;
+}
+
+.character-level {
+  font-size: 18px;
+  color: var(--color-text-light);
+  font-weight: bold;
+}
+
+/* HP Card */
+.hp-card {
+  background-color: var(--color-primary);
+}
+
+.hp-display {
+  text-align: center;
+  margin: var(--spacing-lg) 0;
+}
+
+.hp-value {
+  font-size: 48px;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+
+.hp-current {
+  color: var(--color-text);
+}
+
+.hp-separator {
+  color: var(--color-text-light);
+  margin: 0 var(--spacing-sm);
+}
+
+.hp-max {
+  color: var(--color-text-light);
+}
+
+.hp-edit {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.hp-edit .input {
+  max-width: 150px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.hp-buttons {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.hp-bar {
+  height: 30px;
+  background-color: var(--color-surface);
+  border: var(--outline-width) solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: var(--spacing-md);
+}
+
+.hp-bar-fill {
+  height: 100%;
+  transition: width 0.3s, background-color 0.3s;
+  border-right: 2px solid var(--color-border);
+}
+
+.hp-quick-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+}
+
+/* Stats Card */
+.stats-card {
+  background-color: var(--color-purple);
+}
+
+.stats-display {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: var(--spacing-md);
+  align-items: center;
+  padding: var(--spacing-sm);
+  background-color: var(--color-surface);
+  border: 3px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.stat-name {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--color-secondary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  min-width: 50px;
+  text-align: center;
+}
+
+.stat-modifier {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--color-text-light);
+  min-width: 40px;
+  text-align: center;
+}
+
+/* Dice Roller */
+.dice-roller {
+  background-color: var(--color-accent);
+}
+
+.dice-roller .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-small {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 12px;
+  font-weight: bold;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-secondary);
+  cursor: pointer;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.btn-small:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.dice-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.dice-type-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-sm);
+}
+
+.roll-button {
+  font-size: 20px;
+  padding: var(--spacing-md);
+}
+
+.dice-results {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: var(--outline-width) solid var(--color-border);
+}
+
+.dice-results h3 {
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.dice-result {
+  background-color: var(--color-surface);
+  border: 3px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+  font-weight: bold;
+}
+
+.result-type {
+  color: var(--color-text);
+}
+
+.result-time {
+  color: var(--color-text-light);
+  font-size: 14px;
+}
+
+.result-rolls {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-sm);
+}
+
+.roll-value {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--color-secondary);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-weight: bold;
+  min-width: 35px;
+  text-align: center;
+}
+
+.result-total {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--color-text);
+  text-align: right;
+}
+
+.dice-result.remote-roll {
+  background-color: var(--color-purple);
+}
+
+.remote-badge {
+  display: inline-block;
+  animation: fadeIn 0.5s;
+}
+
+.player-name {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--color-text-light);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

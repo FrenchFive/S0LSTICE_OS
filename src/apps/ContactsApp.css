@@ -1,0 +1,386 @@
+.contacts-app {
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 3px solid black;
+  padding-bottom: 10px;
+}
+
+.tab {
+  padding: 10px 20px;
+  border: 3px solid black;
+  border-radius: 8px 8px 0 0;
+  background: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  background: #F0F0F0;
+}
+
+.tab.active {
+  background: #BAFFC9;
+  transform: translateY(3px);
+}
+
+.contacts-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.contacts-list h3 {
+  margin: 0 0 16px 0;
+  font-size: 20px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border: 4px solid black;
+  border-radius: 12px;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
+}
+
+.empty-state p {
+  font-size: 16px;
+  margin: 8px 0;
+}
+
+.contact-cards {
+  display: grid;
+  gap: 16px;
+}
+
+.contact-card {
+  background: white;
+  border: 4px solid black;
+  border-radius: 12px;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  transition: transform 0.2s;
+}
+
+.contact-card:hover {
+  transform: translateY(-2px);
+}
+
+.contact-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid black;
+}
+
+.contact-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.contact-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-message,
+.btn-delete {
+  padding: 6px 12px;
+  border: 3px solid black;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  background: white;
+  transition: transform 0.1s;
+}
+
+.btn-message {
+  background: #BAE1FF;
+}
+
+.btn-delete {
+  background: #FFB3BA;
+}
+
+.btn-message:hover,
+.btn-delete:hover {
+  transform: scale(1.1);
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.contact-type,
+.contact-visibility {
+  display: flex;
+  gap: 8px;
+}
+
+.contact-type span,
+.contact-visibility span {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.contact-notes {
+  padding: 8px;
+  background: #F5F5F5;
+  border: 2px solid black;
+  border-radius: 6px;
+  font-style: italic;
+}
+
+.contact-meta {
+  font-size: 12px;
+  color: #666;
+}
+
+.messages-view {
+  flex: 1;
+  display: flex;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.messages-sidebar {
+  width: 250px;
+  background: white;
+  border: 4px solid black;
+  border-radius: 12px;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.messages-sidebar h4 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid black;
+}
+
+.conversation-item {
+  padding: 12px;
+  border: 3px solid black;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  background: white;
+  transition: all 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.conversation-item:hover {
+  background: #F0F0F0;
+}
+
+.conversation-item.active {
+  background: #BAFFC9;
+  transform: scale(1.02);
+}
+
+.conversation-name {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.message-count {
+  background: #FFB3BA;
+  border: 2px solid black;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.messages-content {
+  flex: 1;
+  background: white;
+  border: 4px solid black;
+  border-radius: 12px;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages-header {
+  padding-bottom: 12px;
+  border-bottom: 3px solid black;
+  margin-bottom: 16px;
+}
+
+.messages-header h3 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+}
+
+.npc-notice {
+  font-size: 12px;
+  color: #666;
+  font-style: italic;
+}
+
+.messages-thread {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.message-bubble {
+  background: #F5F5F5;
+  border: 3px solid black;
+  border-radius: 12px;
+  padding: 12px;
+  max-width: 70%;
+  align-self: flex-start;
+}
+
+.message-sender {
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 4px;
+  color: #666;
+}
+
+.message-text {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.message-time {
+  font-size: 11px;
+  color: #999;
+  text-align: right;
+}
+
+.message-input {
+  display: flex;
+  gap: 12px;
+}
+
+.message-input input {
+  flex: 1;
+  padding: 12px;
+  border: 3px solid black;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.btn-send {
+  padding: 12px 24px;
+  background: #BAFFC9;
+  border: 3px solid black;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.btn-send:hover {
+  transform: translateY(-2px);
+}
+
+.no-conversation {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #666;
+}
+
+.add-contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  border: 4px solid black;
+  border-radius: 12px;
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
+  padding: 24px;
+}
+
+.add-contact-form h3 {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid black;
+}
+
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-field label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  padding: 12px;
+  border: 3px solid black;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.form-field textarea {
+  resize: vertical;
+}
+
+.btn-add {
+  width: 100%;
+  padding: 14px;
+  background: #BAFFC9;
+  border: 3px solid black;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.btn-add:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .messages-view {
+    flex-direction: column;
+  }
+
+  .messages-sidebar {
+    width: 100%;
+    height: 200px;
+  }
+}
