@@ -213,9 +213,47 @@ function handleMessage(ws, data) {
       });
       break;
 
+    case 'xp_award':
+      // DM awarding XP to a specific player
+      if (client.isDM && data.targetClientId) {
+        sendToClient(data.targetClientId, {
+          type: 'xp_award',
+          fromDM: client.character?.name || 'Game Master',
+          amount: data.amount,
+          reason: data.reason,
+          timestamp: new Date().toISOString()
+        });
+        console.log(`DM awarded ${data.amount} XP to ${data.targetClientId}: ${data.reason}`);
+      }
+      break;
+
+    case 'encounter_sync':
+      // DM syncing encounter to all players
+      if (client.isDM) {
+        broadcast({
+          type: 'encounter_sync',
+          clientId: client.id,
+          encounter: data.encounter,
+          action: data.action, // 'start', 'update', 'end'
+          timestamp: new Date().toISOString()
+        });
+      }
+      break;
+
     default:
       console.log('Unknown message type:', data.type);
   }
+}
+
+function sendToClient(targetClientId, message) {
+  const messageStr = JSON.stringify(message);
+  
+  wss.clients.forEach((client) => {
+    const clientInfo = clients.get(client);
+    if (clientInfo && clientInfo.id === targetClientId && client.readyState === WebSocket.OPEN) {
+      client.send(messageStr);
+    }
+  });
 }
 
 function broadcast(message, excludeWs = null) {

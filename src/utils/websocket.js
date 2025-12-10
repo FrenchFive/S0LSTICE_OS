@@ -164,6 +164,16 @@ class WebSocketClient {
         this.emit('combat_update', data);
         break;
       
+      case 'xp_award':
+        // Player received XP from DM
+        this.emit('xp_award', data);
+        break;
+      
+      case 'encounter_sync':
+        // DM synced encounter state
+        this.emit('encounter_sync', data);
+        break;
+      
       case 'error':
         console.error('Server error:', data.message);
         this.emit('server_error', data);
@@ -253,6 +263,27 @@ class WebSocketClient {
   syncCombat(state) {
     if (!this.connected) return;
     this.send({ type: 'combat_update', state });
+  }
+
+  // Award XP to a specific player (DM only)
+  awardXPToPlayer(targetClientId, amount, reason) {
+    if (!this.connected || !this.isDM) return;
+    this.send({
+      type: 'xp_award',
+      targetClientId,
+      amount,
+      reason
+    });
+  }
+
+  // Sync encounter to all players (DM only)
+  syncEncounter(encounter, action = 'update') {
+    if (!this.connected || !this.isDM) return;
+    this.send({
+      type: 'encounter_sync',
+      encounter,
+      action
+    });
   }
 
   send(data) {

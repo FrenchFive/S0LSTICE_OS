@@ -1,15 +1,43 @@
 import { useState, useEffect } from 'react';
 import './StatsApp.css';
 import { database as db } from '../utils/database';
-import * as dice from '../utils/dice';
-import { wsClient } from '../utils/websocket';
-import { ChartIcon, DiceIcon } from '../components/icons/Icons';
+import {
+  rollHuntersPool,
+  formatOutcome,
+  saveRollToHistory,
+  getRollHistory
+} from '../utils/dice';
+import {
+  ATTRIBUTES,
+  ATTRIBUTE_LABELS,
+  SKILLS,
+  SKILL_LABELS,
+  getAttributeValue,
+  getSkillValue,
+  calculateHealth,
+  calculateWillpower
+} from '../utils/huntersData';
+import {
+  calculateLevel,
+  getAvailableXP,
+  getXPToNextLevel,
+  getRecentChanges
+} from '../utils/levelUp';
+import { DotRating, DesperationTracker } from '../components/DotRating';
+import { ChartIcon, DiceIcon, StarIcon } from '../components/icons/Icons';
+import LevelUpModal from '../components/LevelUpModal';
 
 export default function StatsApp() {
   const [character, setCharacter] = useState(null);
-  const [selectedDice, setSelectedDice] = useState([]);
-  const [selectedBonuses, setSelectedBonuses] = useState([]);
+  const [selectedAttribute, setSelectedAttribute] = useState(null);
+  const [selectedSkill, setSelectedSkill] = useState(null);
+  const [modifier, setModifier] = useState(0);
+  const [difficulty, setDifficulty] = useState(1);
+  const [desperationDice, setDesperationDice] = useState(0);
   const [recentRolls, setRecentRolls] = useState([]);
+  const [lastRoll, setLastRoll] = useState(null);
+  const [showLevelUp, setShowLevelUp] = useState(false);
+  const [recentChanges, setRecentChanges] = useState([]);
 
   const loadCharacter = () => {
     const currentCharId = db.getCurrentCharacterId();
@@ -17,283 +45,340 @@ export default function StatsApp() {
       const char = db.getCharacter(currentCharId);
       if (char) {
         setCharacter(char);
+        setRecentChanges(getRecentChanges(char, 48));
       }
-    }
-  };
-
-  const loadRecentRolls = () => {
-    const saved = localStorage.getItem('statsapp_recent_rolls');
-    if (saved) {
-      setRecentRolls(JSON.parse(saved).slice(0, 10));
     }
   };
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     loadCharacter();
-    loadRecentRolls();
+    setRecentRolls(getRollHistory().slice(0, 10));
   }, []);
 
-  const saveRecentRoll = (roll) => {
-    const updated = [roll, ...recentRolls].slice(0, 10);
-    setRecentRolls(updated);
-    localStorage.setItem('statsapp_recent_rolls', JSON.stringify(updated));
+  const handleCharacterUpdate = (updated) => {
+    const withDerived = {
+      ...updated,
+      health: { ...updated.health, max: calculateHealth(updated) },
+      willpower: { ...updated.willpower, max: calculateWillpower(updated) }
+    };
+    db.saveCharacter(withDerived);
+    setCharacter(withDerived);
+    setRecentChanges(getRecentChanges(withDerived, 48));
   };
 
-  const getModifier = (stat) => {
-    return Math.floor((stat - 10) / 2);
+  // Get XP info
+  const xpInfo = character?.experience ? {
+    level: calculateLevel(character.experience.total || 0),
+    available: getAvailableXP(character),
+    total: character.experience.total || 0,
+    progress: getXPToNextLevel(character.experience.total || 0)
+  } : { level: { level: 1, title: 'Fledgling Hunter' }, available: 0, total: 0, progress: { progress: 0 } };
+
+  // Check if a field was recently changed
+  const isHighlighted = (fieldPath) => {
+    return recentChanges.some(change => change.field === fieldPath);
   };
 
-  const formatModifier = (mod) => {
-    return mod >= 0 ? `+${mod}` : `${mod}`;
+  const handleAttributeClick = (attrName) => {
+    setSelectedAttribute(selectedAttribute === attrName ? null : attrName);
   };
 
-  const handleStatClick = (statName, statValue) => {
-    const modifier = getModifier(statValue);
-    const bonus = { stat: statName, value: modifier };
-    
-    // Add to bonuses if not already there
-    if (!selectedBonuses.find(b => b.stat === statName)) {
-      setSelectedBonuses([...selectedBonuses, bonus]);
+  const handleSkillClick = (skillName) => {
+    setSelectedSkill(selectedSkill === skillName ? null : skillName);
+  };
+
+  const calculatePool = () => {
+    let pool = modifier;
+    if (selectedAttribute && character) {
+      pool += getAttributeValue(character, selectedAttribute);
     }
-  };
-
-  const handleStatRightClick = (e, statName) => {
-    e.preventDefault();
-    // Remove bonus
-    setSelectedBonuses(selectedBonuses.filter(b => b.stat !== statName));
-  };
-
-  const handleDiceClick = (diceType) => {
-    setSelectedDice([...selectedDice, diceType]);
-  };
-
-  const handleDiceRightClick = (e, index) => {
-    e.preventDefault();
-    const newDice = [...selectedDice];
-    newDice.splice(index, 1);
-    setSelectedDice(newDice);
+    if (selectedSkill && character) {
+      pool += getSkillValue(character, selectedSkill);
+    }
+    return Math.max(1, pool);
   };
 
   const handleRoll = () => {
-    if (selectedDice.length === 0) {
-      alert('Please select at least one die to roll');
-      return;
-    }
-
-    const results = [];
-    let total = 0;
-
-    // Roll each die
-    selectedDice.forEach(diceType => {
-      const result = dice.rollDice(diceType, 1);
-      results.push({ dice: diceType, value: result.values[0] });
-      total += result.total;
-    });
-
-    // Add bonuses
-    const bonusTotal = selectedBonuses.reduce((sum, b) => sum + b.value, 0);
-    total += bonusTotal;
-
-    const roll = {
-      id: Date.now(),
-      timestamp: Date.now(),
-      dice: selectedDice,
-      bonuses: selectedBonuses,
-      results,
-      bonusTotal,
-      total,
-      character: character?.name || 'Unknown'
-    };
-
-    saveRecentRoll(roll);
-
-    // Send to server
-    if (wsClient && wsClient.isConnected()) {
-      wsClient.sendDiceRoll({
-        ...roll,
-        player: character?.name || 'Unknown'
-      });
-    }
-
+    const poolSize = calculatePool();
+    const result = rollHuntersPool(poolSize, desperationDice, difficulty);
+    
+    setLastRoll(result);
+    
+    // Save to history
+    saveRollToHistory(result, character?.identity?.name || 'Unknown');
+    setRecentRolls(getRollHistory().slice(0, 10));
+    
     // Clear selection
-    setSelectedDice([]);
-    setSelectedBonuses([]);
+    setSelectedAttribute(null);
+    setSelectedSkill(null);
+    setModifier(0);
   };
 
-  const getTotalBonus = () => {
-    return selectedBonuses.reduce((sum, b) => sum + b.value, 0);
+  const getAttrValue = (attrName) => {
+    if (!character) return 1;
+    return getAttributeValue(character, attrName);
+  };
+
+  const getSkillVal = (skillName) => {
+    if (!character) return 0;
+    return getSkillValue(character, skillName);
   };
 
   if (!character) {
     return (
       <div className="stats-app">
         <div className="no-character">
-          <p>No character selected</p>
+          <p>No Hunter selected</p>
           <p>Go to Character app to select or create one</p>
         </div>
       </div>
     );
   }
 
+  const poolSize = calculatePool();
+  const outcome = lastRoll ? formatOutcome(lastRoll.outcome) : null;
+
   return (
-    <div className="stats-app">
+    <div className="stats-app hunters-mode">
       <div className="stats-header">
-        <h2><ChartIcon size={28} /> Stats & Dice Roller</h2>
-        <div className="character-name">{character.name}</div>
+        <div className="stats-title">
+          <h2><DiceIcon size={28} /> Dice Roller</h2>
+          <div className="character-name">{character.identity?.name || character.name}</div>
+        </div>
+        <div className="stats-xp-display">
+          <div className="xp-level-badge">
+            <span className="level-num">Lvl {xpInfo.level.level}</span>
+            <span className="level-title">{xpInfo.level.title}</span>
+          </div>
+          <button 
+            className={`btn btn-sm ${xpInfo.available > 0 ? 'btn-success level-up-btn' : 'btn-outline'}`}
+            onClick={() => setShowLevelUp(true)}
+          >
+            <StarIcon size={14} />
+            {xpInfo.available > 0 ? `${xpInfo.available} XP` : 'Level Up'}
+          </button>
+        </div>
       </div>
 
-      <div className="stats-section">
-        <h3>Character Stats (Click to add bonus)</h3>
-        <div className="stats-grid">
-          <div 
-            className={`stat-box ${selectedBonuses.find(b => b.stat === 'STR') ? 'selected' : ''}`}
-            onClick={() => handleStatClick('STR', character.stats.str)}
-            onContextMenu={(e) => handleStatRightClick(e, 'STR')}
-          >
-            <div className="stat-label">STR</div>
-            <div className="stat-value">{character.stats.str}</div>
-            <div className="stat-modifier">{formatModifier(getModifier(character.stats.str))}</div>
+      {/* XP Progress Bar */}
+      {character.experience && xpInfo.progress.nextLevel && (
+        <div className="stats-xp-bar">
+          <div className="xp-bar-track">
+            <div 
+              className="xp-bar-fill" 
+              style={{ width: `${xpInfo.progress.progress}%` }}
+            />
           </div>
-
-          <div 
-            className={`stat-box ${selectedBonuses.find(b => b.stat === 'DEX') ? 'selected' : ''}`}
-            onClick={() => handleStatClick('DEX', character.stats.dex)}
-            onContextMenu={(e) => handleStatRightClick(e, 'DEX')}
-          >
-            <div className="stat-label">DEX</div>
-            <div className="stat-value">{character.stats.dex}</div>
-            <div className="stat-modifier">{formatModifier(getModifier(character.stats.dex))}</div>
-          </div>
-
-          <div 
-            className={`stat-box ${selectedBonuses.find(b => b.stat === 'CON') ? 'selected' : ''}`}
-            onClick={() => handleStatClick('CON', character.stats.con)}
-            onContextMenu={(e) => handleStatRightClick(e, 'CON')}
-          >
-            <div className="stat-label">CON</div>
-            <div className="stat-value">{character.stats.con}</div>
-            <div className="stat-modifier">{formatModifier(getModifier(character.stats.con))}</div>
-          </div>
-
-          <div 
-            className={`stat-box ${selectedBonuses.find(b => b.stat === 'INT') ? 'selected' : ''}`}
-            onClick={() => handleStatClick('INT', character.stats.int)}
-            onContextMenu={(e) => handleStatRightClick(e, 'INT')}
-          >
-            <div className="stat-label">INT</div>
-            <div className="stat-value">{character.stats.int}</div>
-            <div className="stat-modifier">{formatModifier(getModifier(character.stats.int))}</div>
-          </div>
-
-          <div 
-            className={`stat-box ${selectedBonuses.find(b => b.stat === 'WIS') ? 'selected' : ''}`}
-            onClick={() => handleStatClick('WIS', character.stats.wis)}
-            onContextMenu={(e) => handleStatRightClick(e, 'WIS')}
-          >
-            <div className="stat-label">WIS</div>
-            <div className="stat-value">{character.stats.wis}</div>
-            <div className="stat-modifier">{formatModifier(getModifier(character.stats.wis))}</div>
-          </div>
-
-          <div 
-            className={`stat-box ${selectedBonuses.find(b => b.stat === 'CHA') ? 'selected' : ''}`}
-            onClick={() => handleStatClick('CHA', character.stats.cha)}
-            onContextMenu={(e) => handleStatRightClick(e, 'CHA')}
-          >
-            <div className="stat-label">CHA</div>
-            <div className="stat-value">{character.stats.cha}</div>
-            <div className="stat-modifier">{formatModifier(getModifier(character.stats.cha))}</div>
+          <div className="xp-bar-info">
+            <span>{xpInfo.progress.needed} XP to Level {xpInfo.progress.nextLevel.level}</span>
           </div>
         </div>
-        <div className="stats-hint">Right-click stat boxes to remove bonus</div>
-      </div>
+      )}
 
-      <div className="dice-section">
-        <h3>Dice Selection (Click to add, Right-click to remove)</h3>
-        <div className="dice-buttons">
-          <button onClick={() => handleDiceClick(6)} className="btn-dice"><DiceIcon size={18} /> D6</button>
-          <button onClick={() => handleDiceClick(10)} className="btn-dice"><DiceIcon size={18} /> D10</button>
-          <button onClick={() => handleDiceClick(20)} className="btn-dice"><DiceIcon size={18} /> D20</button>
-          <button onClick={() => handleDiceClick(100)} className="btn-dice"><DiceIcon size={18} /> D100</button>
+      {/* Dice Pool Builder */}
+      <div className="pool-builder-section">
+        <h3>Build Your Pool</h3>
+        
+        <div className="pool-config">
+          <div className="pool-display">
+            <span className="pool-label">Dice Pool</span>
+            <span className="pool-value">{poolSize}d10</span>
+            {desperationDice > 0 && (
+              <span className="desperation-badge">+{desperationDice} Desperation</span>
+            )}
+          </div>
+          
+          <div className="pool-breakdown">
+            {selectedAttribute && (
+              <span className="pool-part">{ATTRIBUTE_LABELS[selectedAttribute]} ({getAttrValue(selectedAttribute)})</span>
+            )}
+            {selectedSkill && (
+              <span className="pool-part">+ {SKILL_LABELS[selectedSkill]} ({getSkillVal(selectedSkill)})</span>
+            )}
+            {modifier !== 0 && (
+              <span className="pool-part modifier">{modifier > 0 ? '+' : ''}{modifier} Mod</span>
+            )}
+          </div>
         </div>
 
-        <div className="selected-dice">
-          <h4>Selected Dice:</h4>
-          {selectedDice.length === 0 ? (
-            <div className="empty-selection">No dice selected</div>
-          ) : (
-            <div className="dice-queue">
-              {selectedDice.map((d, index) => (
-                <div 
-                  key={index} 
-                  className="dice-chip"
-                  onContextMenu={(e) => handleDiceRightClick(e, index)}
-                >
-                  D{d}
-                </div>
-              ))}
+        <div className="pool-controls">
+          <div className="control-group">
+            <label>Difficulty</label>
+            <div className="number-input">
+              <button onClick={() => setDifficulty(Math.max(1, difficulty - 1))}>−</button>
+              <span>{difficulty}</span>
+              <button onClick={() => setDifficulty(Math.min(10, difficulty + 1))}>+</button>
             </div>
-          )}
-        </div>
-
-        <div className="selected-bonuses">
-          <h4>Selected Bonuses:</h4>
-          {selectedBonuses.length === 0 ? (
-            <div className="empty-selection">No bonuses selected</div>
-          ) : (
-            <div className="bonus-list">
-              {selectedBonuses.map((bonus, index) => (
-                <div key={index} className="bonus-chip">
-                  {bonus.stat}: {formatModifier(bonus.value)}
-                </div>
-              ))}
-              <div className="bonus-total">
-                Total Bonus: {formatModifier(getTotalBonus())}
-              </div>
+          </div>
+          
+          <div className="control-group">
+            <label>Modifier</label>
+            <div className="number-input">
+              <button onClick={() => setModifier(modifier - 1)}>−</button>
+              <span>{modifier > 0 ? '+' : ''}{modifier}</span>
+              <button onClick={() => setModifier(modifier + 1)}>+</button>
             </div>
-          )}
+          </div>
+          
+          <div className="control-group">
+            <label>Desperation</label>
+            <div className="number-input desperation">
+              <button onClick={() => setDesperationDice(Math.max(0, desperationDice - 1))}>−</button>
+              <span>{desperationDice}</span>
+              <button onClick={() => setDesperationDice(Math.min(5, desperationDice + 1))}>+</button>
+            </div>
+          </div>
         </div>
 
         <button 
           onClick={handleRoll} 
           className="btn-roll"
-          disabled={selectedDice.length === 0}
         >
-          <DiceIcon size={20} /> Roll Dice
+          <DiceIcon size={20} /> Roll {poolSize + desperationDice}d10
         </button>
       </div>
 
+      {/* Last Roll Result */}
+      {lastRoll && (
+        <div className={`roll-result ${outcome.class}`}>
+          <div className="result-header">
+            <span className="result-outcome">{outcome.text}</span>
+            <span className="result-successes">{lastRoll.successes} / {lastRoll.difficulty} Successes</span>
+          </div>
+          
+          <div className="dice-results">
+            <div className="regular-dice">
+              {lastRoll.regularResults.map((die, i) => (
+                <span 
+                  key={i} 
+                  className={`die ${die >= 6 ? 'success' : 'fail'} ${die === 10 ? 'crit' : ''}`}
+                >
+                  {die}
+                </span>
+              ))}
+            </div>
+            {lastRoll.desperationResults.length > 0 && (
+              <div className="desperation-dice">
+                {lastRoll.desperationResults.map((die, i) => (
+                  <span 
+                    key={i} 
+                    className={`die desperation ${die >= 6 ? 'success' : 'fail'} ${die === 10 ? 'crit' : ''}`}
+                  >
+                    {die}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+          
+          {lastRoll.criticalPairs > 0 && (
+            <div className="crit-info">
+              {lastRoll.criticalPairs} Critical Pair{lastRoll.criticalPairs > 1 ? 's' : ''} (+{lastRoll.criticalPairs * 2} successes)
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Attributes Section */}
+      <div className="attributes-section">
+        <h3><ChartIcon size={20} /> Attributes (Click to add to pool)</h3>
+        <div className="attributes-grid">
+          {Object.entries(ATTRIBUTES).map(([category, { label, attrs }]) => (
+            <div key={category} className="attribute-category">
+              <h4>{label}</h4>
+              {attrs.map(attr => {
+                const fieldPath = `attributes.${category}.${attr}`;
+                const highlighted = isHighlighted(fieldPath);
+                return (
+                  <div 
+                    key={attr} 
+                    className={`attr-row ${selectedAttribute === attr ? 'selected' : ''} ${highlighted ? 'highlighted' : ''}`}
+                    onClick={() => handleAttributeClick(attr)}
+                  >
+                    <span className="attr-name">{ATTRIBUTE_LABELS[attr]}</span>
+                    <DotRating 
+                      value={getAttrValue(attr)} 
+                      max={5} 
+                      min={1}
+                      size="sm"
+                    />
+                    {highlighted && <span className="new-badge">↑</span>}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Skills Section */}
+      <div className="skills-section">
+        <h3>Skills (Click to add to pool)</h3>
+        <div className="skills-grid">
+          {Object.entries(SKILLS).map(([category, { label, skills }]) => (
+            <div key={category} className="skill-category">
+              <h4>{label}</h4>
+              {skills.map(skill => {
+                const value = getSkillVal(skill);
+                const fieldPath = `skills.${category}.${skill}`;
+                const highlighted = isHighlighted(fieldPath);
+                return (
+                  <div 
+                    key={skill} 
+                    className={`skill-row ${selectedSkill === skill ? 'selected' : ''} ${value === 0 ? 'untrained' : ''} ${highlighted ? 'highlighted' : ''}`}
+                    onClick={() => handleSkillClick(skill)}
+                  >
+                    <span className="skill-name">{SKILL_LABELS[skill]}</span>
+                    <DotRating 
+                      value={value} 
+                      max={5} 
+                      min={0}
+                      size="sm"
+                    />
+                    {highlighted && <span className="new-badge">↑</span>}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Recent Rolls */}
       <div className="recent-rolls-section">
         <h3>Recent Rolls</h3>
         {recentRolls.length === 0 ? (
           <div className="empty-state">No rolls yet</div>
         ) : (
           <div className="rolls-list">
-            {recentRolls.map(roll => (
-              <div key={roll.id} className="roll-card">
-                <div className="roll-header">
-                  <span className="roll-time">{new Date(roll.timestamp).toLocaleTimeString()}</span>
-                  <span className="roll-total">Total: {roll.total}</span>
-                </div>
-                <div className="roll-details">
-                  <div className="roll-dice">
-                    {roll.results.map((r, i) => (
-                      <span key={i} className="dice-result">D{r.dice}: {r.value}</span>
-                    ))}
+            {recentRolls.map(roll => {
+              const rollOutcome = formatOutcome(roll.outcome);
+              return (
+                <div key={roll.id} className={`roll-card ${rollOutcome.class}`}>
+                  <div className="roll-header">
+                    <span className="roll-time">{new Date(roll.timestamp).toLocaleTimeString()}</span>
+                    <span className={`roll-outcome-badge ${rollOutcome.class}`}>{rollOutcome.text}</span>
                   </div>
-                  {roll.bonuses.length > 0 && (
-                    <div className="roll-bonuses">
-                      Bonuses: {roll.bonuses.map(b => `${b.stat}(${formatModifier(b.value)})`).join(', ')}
-                      {' = '}{formatModifier(roll.bonusTotal)}
-                    </div>
-                  )}
+                  <div className="roll-details">
+                    <span className="roll-pool">{roll.poolSize + (roll.desperationDice || 0)}d10</span>
+                    <span className="roll-result">{roll.successes}/{roll.difficulty} successes</span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
+
+      {/* Level Up Modal */}
+      {showLevelUp && (
+        <LevelUpModal
+          character={character}
+          onUpdate={handleCharacterUpdate}
+          onClose={() => setShowLevelUp(false)}
+        />
+      )}
     </div>
   );
 }

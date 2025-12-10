@@ -16,8 +16,8 @@ function PhoneLayout({ children, currentApp, onAppChange }) {
   const [battery, setBattery] = useState(100);
   const [isConnected, setIsConnected] = useState(false);
   const [time, setTime] = useState(new Date());
-  const [showNotification, _setShowNotification] = useState(false);
-  const [notification, _setNotification] = useState('');
+  const [showNotification, setShowNotification] = useState(false);
+  const [notification, setNotification] = useState('');
   const [ping, setPing] = useState(null);
   const [dmOnline, setDmOnline] = useState(false);
 
@@ -27,7 +27,7 @@ function PhoneLayout({ children, currentApp, onAppChange }) {
       setTime(new Date());
     }, 60000);
 
-    // Connection status
+    // Connection status handlers
     const handleConnected = () => setIsConnected(true);
     const handleDisconnected = () => setIsConnected(false);
     const handlePingUpdate = (newPing) => setPing(newPing);
@@ -37,7 +37,6 @@ function PhoneLayout({ children, currentApp, onAppChange }) {
     };
     const handleUserUpdated = (data) => {
       if (data.isDM !== undefined) {
-        // Check all users for DM
         const users = wsClient.getConnectedUsers();
         const hasDM = users.some(u => u.isDM);
         setDmOnline(hasDM);
@@ -74,12 +73,20 @@ function PhoneLayout({ children, currentApp, onAppChange }) {
     };
   }, []);
 
-  // Notification system for future use
-  // const showTempNotification = (message) => {
-  //   setNotification(message);
-  //   setShowNotification(true);
-  //   setTimeout(() => setShowNotification(false), 3000);
-  // };
+  // Notification system
+  const showTempNotification = (message) => {
+    setNotification(message);
+    setShowNotification(true);
+    setTimeout(() => setShowNotification(false), 3000);
+  };
+
+  // Expose notification function globally for other components
+  useEffect(() => {
+    window.showNotification = showTempNotification;
+    return () => {
+      delete window.showNotification;
+    };
+  }, []);
 
   const formatTime = () => {
     return time.toLocaleTimeString('en-US', { 
@@ -90,16 +97,15 @@ function PhoneLayout({ children, currentApp, onAppChange }) {
   };
 
   const getBatteryIcon = () => {
-    if (battery > 75) return <BatteryFullIcon size={18} />;
-    if (battery > 50) return <BatteryMediumIcon size={18} />;
-    if (battery > 25) return <BatteryMediumIcon size={18} />;
-    return <BatteryLowIcon size={18} />;
+    if (battery > 50) return <BatteryFullIcon size={16} />;
+    if (battery > 25) return <BatteryMediumIcon size={16} />;
+    return <BatteryLowIcon size={16} />;
   };
 
-  const getBatteryColor = () => {
-    if (battery > 50) return '#BAFFC9';
-    if (battery > 25) return '#FFDFBA';
-    return '#FF9AA2';
+  const getBatteryClass = () => {
+    if (battery > 50) return 'battery-high';
+    if (battery > 25) return 'battery-medium';
+    return 'battery-low';
   };
 
   return (
@@ -111,20 +117,22 @@ function PhoneLayout({ children, currentApp, onAppChange }) {
         </div>
         <div className="status-right">
           {dmOnline && isConnected && (
-            <div className="status-dm" title="DM Online">
+            <div 
+              className="status-icon dm-online" 
+              title="DM Online"
+            >
               <CrownIcon size={18} />
             </div>
           )}
-          <div className="status-wifi" title={isConnected && ping ? `Ping: ${ping}ms` : 'Not connected'}>
-            {isConnected ? (
-              <span className="wifi-connected"><WifiIcon size={18} /></span>
-            ) : (
-              <span className="wifi-disconnected"><WifiOffIcon size={18} /></span>
-            )}
+          <div 
+            className={`status-icon ${isConnected ? 'connected' : 'disconnected'}`}
+            title={isConnected && ping ? `Ping: ${ping}ms` : 'Not connected'}
+          >
+            {isConnected ? <WifiIcon size={18} /> : <WifiOffIcon size={18} />}
           </div>
-          <div className="status-battery" style={{ color: getBatteryColor() }}>
+          <div className={`status-battery ${getBatteryClass()}`}>
             <span className="battery-icon">{getBatteryIcon()}</span>
-            <span className="battery-percent">{battery}%</span>
+            <span>{battery}%</span>
           </div>
         </div>
       </div>
@@ -141,7 +149,7 @@ function PhoneLayout({ children, currentApp, onAppChange }) {
         {children}
       </div>
 
-      {/* Home Button (if not on home screen) */}
+      {/* Home Button */}
       {currentApp !== 'home' && (
         <div className="phone-home-bar">
           <button 

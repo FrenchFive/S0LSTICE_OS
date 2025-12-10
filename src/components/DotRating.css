@@ -1,0 +1,323 @@
+/* ==========================================
+   DOT RATING COMPONENTS
+   Hunters RPG Style Dot Ratings
+   ========================================== */
+
+/* Base Dot Rating */
+.dot-rating {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.dot-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  min-width: 100px;
+  text-transform: capitalize;
+}
+
+.dots-container {
+  display: flex;
+  gap: var(--spacing-1);
+}
+
+/* Individual Dot */
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--outline-color);
+  background-color: var(--color-bg);
+  padding: 0;
+  cursor: default;
+  transition: all var(--transition-fast);
+}
+
+.dot.filled {
+  background-color: var(--outline-color);
+}
+
+.dot.editable {
+  cursor: pointer;
+}
+
+.dot.editable:hover {
+  transform: scale(1.2);
+  border-color: var(--color-primary);
+}
+
+.dot.editable:hover.empty {
+  background-color: var(--color-primary-light);
+}
+
+/* Size Variants */
+.dot-rating.size-sm .dot {
+  width: 12px;
+  height: 12px;
+}
+
+.dot-rating.size-sm .dot-label {
+  font-size: var(--font-size-xs);
+  min-width: 80px;
+}
+
+.dot-rating.size-lg .dot {
+  width: 20px;
+  height: 20px;
+}
+
+.dot-rating.size-lg .dot-label {
+  font-size: var(--font-size-base);
+  min-width: 120px;
+}
+
+/* Variant Colors */
+.dot-rating.variant-desperation .dot.filled {
+  background-color: var(--color-warning);
+  border-color: var(--color-warning);
+}
+
+.dot-rating.variant-danger .dot.filled {
+  background-color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+.dot-rating.variant-primary .dot.filled {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* ==========================================
+   DAMAGE TRACK
+   Health and Willpower Boxes
+   ========================================== */
+
+.damage-track {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.track-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text);
+}
+
+.boxes-container {
+  display: flex;
+  gap: var(--spacing-1);
+  flex-wrap: wrap;
+}
+
+.damage-box {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--outline-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: default;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.damage-box.small {
+  width: 16px;
+  height: 16px;
+  font-size: var(--font-size-xs);
+}
+
+.damage-box.editable {
+  cursor: pointer;
+}
+
+.damage-box.editable:hover {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+.damage-box.superficial {
+  background-color: var(--color-warning-light);
+}
+
+.damage-box.superficial .slash {
+  color: var(--color-warning);
+}
+
+.damage-box.aggravated {
+  background-color: var(--color-error-light);
+}
+
+.damage-box.aggravated .cross {
+  color: var(--color-error);
+}
+
+/* Health variant */
+.damage-track.variant-health .track-label {
+  color: var(--color-error);
+}
+
+/* Willpower variant */
+.damage-track.variant-willpower .track-label {
+  color: var(--color-primary);
+}
+
+.track-legend {
+  display: flex;
+  gap: var(--spacing-4);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+
+/* ==========================================
+   DESPERATION TRACKER
+   ========================================== */
+
+.desperation-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  background-color: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+}
+
+.desperation-tracker.compact {
+  padding: var(--spacing-2);
+  gap: var(--spacing-2);
+}
+
+.desperation-row {
+  display: flex;
+  align-items: center;
+}
+
+.despair-row {
+  padding-top: var(--spacing-2);
+  border-top: 1px solid var(--color-border-light);
+  justify-content: space-between;
+}
+
+.despair-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.despair-toggle {
+  padding: var(--spacing-2) var(--spacing-4);
+  border: 2px solid var(--outline-color);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.despair-toggle:hover:not(:disabled) {
+  background-color: var(--color-error-light);
+}
+
+.despair-toggle.active {
+  background-color: var(--color-error);
+  color: white;
+  border-color: var(--color-error);
+  animation: pulse-despair 1.5s infinite;
+}
+
+@keyframes pulse-despair {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+}
+
+/* ==========================================
+   ATTRIBUTE/SKILL ROW COMPONENT
+   For use in character sheets
+   ========================================== */
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-2) var(--spacing-3);
+  background-color: var(--color-bg);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.stat-row:hover {
+  background-color: var(--color-bg-sunken);
+}
+
+.stat-row.clickable {
+  cursor: pointer;
+}
+
+.stat-row.clickable:hover {
+  background-color: var(--color-primary-light);
+}
+
+.stat-row .stat-name {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.stat-row .stat-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.stat-category {
+  margin-bottom: var(--spacing-4);
+}
+
+.stat-category-header {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-secondary);
+  padding-bottom: var(--spacing-2);
+  margin-bottom: var(--spacing-2);
+  border-bottom: 2px solid var(--outline-color);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .dot-label {
+    min-width: 80px;
+    font-size: var(--font-size-xs);
+  }
+  
+  .damage-box {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .track-legend {
+    flex-direction: column;
+    gap: var(--spacing-1);
+  }
+}

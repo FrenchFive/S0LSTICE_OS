@@ -1,0 +1,183 @@
+/* ==========================================
+   SPLASH SCREEN
+   Boot animation with logo
+   ========================================== */
+
+.splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-info) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.splash-screen.exiting {
+  opacity: 0;
+  transform: scale(1.1);
+}
+
+.splash-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+
+/* ==========================================
+   TITLE
+   ========================================== */
+
+.splash-title {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: titleEnter 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes titleEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.splash-title.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.splash-title h1 {
+  font-family: var(--font-display);
+  font-size: 56px;
+  font-weight: 900;
+  color: white;
+  margin: 0;
+  letter-spacing: 6px;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Slashed zero to distinguish from O */
+.splash-title h1 .zero-slash {
+  position: relative;
+  display: inline-block;
+}
+
+.splash-title h1 .zero-slash::before {
+  content: '';
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  width: 6px;
+  height: 76%;
+  background: white;
+  border-radius: 3px;
+  transform: translateX(-50%) rotate(-20deg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.splash-subtitle {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.splash-tagline {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.5s ease 0.2s;
+}
+
+.splash-tagline.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================
+   LOADER
+   ========================================== */
+
+.splash-loader {
+  position: absolute;
+  bottom: 60px;
+}
+
+.loader-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.loader-dots span {
+  width: 12px;
+  height: 12px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  animation: dotBounce 1.4s ease-in-out infinite;
+}
+
+.loader-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loader-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loader-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 640px) {
+  .splash-title h1 {
+    font-size: 40px;
+    letter-spacing: 3px;
+  }
+
+  .splash-title h1 .zero-slash::before {
+    width: 5px;
+  }
+
+  .splash-subtitle {
+    font-size: 24px;
+  }
+
+  .splash-tagline {
+    font-size: var(--font-size-base);
+  }
+}

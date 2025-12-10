@@ -151,11 +151,29 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run electron:build:linux
       
+      - name: Decode Windows Certificate
+        if: matrix.os == 'windows-latest' && env.WINDOWS_CERTIFICATE_BASE64 != ''
+        env:
+          WINDOWS_CERTIFICATE_BASE64: ${{ secrets.WINDOWS_CERTIFICATE_BASE64 }}
+        shell: powershell
+        run: |
+          $certBytes = [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE_BASE64)
+          $certPath = "$pwd\certificate.pfx"
+          [IO.File]::WriteAllBytes($certPath, $certBytes)
+          echo "CSC_LINK=$certPath" >> $env:GITHUB_ENV
+
       - name: Build and Release (Windows)
         if: matrix.os == 'windows-latest'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
         run: npm run electron:build:win
+      
+      - name: Clean up certificate
+        if: matrix.os == 'windows-latest' && always()
+        shell: powershell
+        run: |
+          if (Test-Path "certificate.pfx") { Remove-Item "certificate.pfx" -Force }
       
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

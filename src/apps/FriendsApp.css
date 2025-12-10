@@ -1,5 +1,9 @@
+/* ==========================================
+   FRIENDS APP
+   ========================================== */
+
 .friends-app {
-  padding: 20px;
+  padding: var(--spacing-5);
   max-width: 800px;
   margin: 0 auto;
 }
@@ -8,194 +12,219 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: var(--spacing-6);
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
 }
 
 .friends-header h2 {
-  font-size: 2rem;
+  font-size: var(--font-size-2xl);
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
 }
 
 .my-ping {
-  background: var(--color-bg-light);
-  padding: 8px 16px;
-  border-radius: 12px;
-  border: var(--outline-width) solid #000;
-  box-shadow: var(--shadow-offset) var(--shadow-offset) var(--shadow-blur) rgba(0, 0, 0, 0.3);
-  font-weight: bold;
+  background-color: var(--color-bg-sunken);
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--radius-lg);
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: var(--shadow-sm);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
 }
 
+/* Offline Message */
 .offline-message {
   text-align: center;
-  padding: 60px 20px;
-  background: var(--color-bg-light);
-  border-radius: 20px;
-  border: var(--outline-width) solid #000;
-  box-shadow: var(--shadow-offset) var(--shadow-offset) var(--shadow-blur) rgba(0, 0, 0, 0.3);
+  padding: var(--spacing-10) var(--spacing-5);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-xl);
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: var(--shadow-md);
 }
 
 .offline-message p:first-child {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 10px;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-2);
 }
 
+.offline-message p:last-child {
+  color: var(--color-text-secondary);
+}
+
+/* Friends Section */
 .friends-section {
-  margin-bottom: 30px;
+  margin-bottom: var(--spacing-6);
 }
 
 .friends-section h3 {
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: var(--outline-width) solid #000;
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-4);
+  padding-bottom: var(--spacing-3);
+  border-bottom: var(--outline-width) solid var(--outline-color);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
 }
 
+/* Friends List */
 .friends-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: var(--spacing-3);
 }
 
 .friend-card {
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 20px;
-  background: var(--color-bg-light);
-  border-radius: 16px;
-  border: var(--outline-width) solid #000;
-  box-shadow: var(--shadow-offset) var(--shadow-offset) var(--shadow-blur) rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
+  gap: var(--spacing-4);
+  padding: var(--spacing-5);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-xl);
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   cursor: pointer;
 }
 
 .friend-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.3);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hover);
 }
 
 .dm-card {
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  background: linear-gradient(135deg, var(--color-warning-light) 0%, var(--app-color-2) 100%);
 }
 
 .me-card {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
 }
 
+/* Avatar */
 .friend-avatar {
   position: relative;
-  width: 60px;
-  height: 60px;
+  width: 56px;
+  height: 56px;
   flex-shrink: 0;
 }
 
 .avatar-icon {
   width: 100%;
   height: 100%;
-  background: #fff;
-  border: var(--outline-width) solid #000;
-  border-radius: 50%;
+  background-color: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
 }
 
 .status-indicator {
   position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 3px solid #fff;
-  box-shadow: 0 0 0 var(--outline-width) #000;
+  bottom: -2px;
+  right: -2px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  border: 3px solid var(--color-surface);
+  box-shadow: 0 0 0 2px var(--outline-color);
 }
 
 .status-indicator.online {
-  background: #00ff00;
-  animation: pulse 2s infinite;
+  background-color: var(--color-success);
+  animation: statusPulse 2s infinite;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }
 
+/* Friend Info */
 .friend-info {
   flex: 1;
+  min-width: 0;
 }
 
 .friend-name {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-1);
 }
 
 .friend-role {
-  font-size: 0.9rem;
-  opacity: 0.8;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
 
 .friend-ping {
-  font-size: 0.9rem;
-  font-weight: bold;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
   white-space: nowrap;
+  padding: var(--spacing-1) var(--spacing-3);
+  background-color: var(--color-bg-sunken);
+  border: 2px solid var(--outline-color);
+  border-radius: var(--radius-md);
 }
 
+/* No Friends State */
 .no-friends {
   text-align: center;
-  padding: 40px;
-  opacity: 0.6;
+  padding: var(--spacing-8);
+  color: var(--color-text-muted);
 }
 
 .no-friends p:first-child {
-  font-size: 1.1rem;
-  margin-bottom: 10px;
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-2);
 }
 
 .no-friends p:last-child {
-  font-size: 3rem;
+  font-size: var(--font-size-4xl);
 }
 
+/* Stats Grid */
 .friends-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  margin-top: 30px;
+  gap: var(--spacing-4);
+  margin-top: var(--spacing-6);
 }
 
 .stat-card {
   text-align: center;
-  padding: 20px;
-  background: var(--color-bg-light);
-  border-radius: 16px;
-  border: var(--outline-width) solid #000;
-  box-shadow: var(--shadow-offset) var(--shadow-offset) var(--shadow-blur) rgba(0, 0, 0, 0.3);
+  padding: var(--spacing-5);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-xl);
+  border: var(--outline-width) solid var(--outline-color);
+  box-shadow: var(--shadow-md);
 }
 
-.stat-value {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 5px;
+.friends-app .stat-value {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-1);
 }
 
-.stat-label {
-  font-size: 0.9rem;
-  opacity: 0.7;
+.friends-app .stat-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
 
-@media (max-width: 600px) {
+/* Responsive */
+@media (max-width: 640px) {
+  .friends-app {
+    padding: var(--spacing-4);
+  }
+
   .friends-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 15px;
   }
 
   .friends-stats {
@@ -205,6 +234,11 @@
   .friend-card {
     flex-direction: column;
     text-align: center;
+    gap: var(--spacing-3);
+  }
+
+  .friend-info {
+    width: 100%;
   }
 
   .friend-ping {
