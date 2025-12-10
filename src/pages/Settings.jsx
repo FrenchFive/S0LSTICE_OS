@@ -55,7 +55,6 @@ function Settings({ currentCharacter, onClose }) {
     }
 
     // Check if already connected
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsConnected(wsClient.isConnected());
 
     // Set up WebSocket event listeners
