@@ -27,7 +27,16 @@ const RefreshIcon = ({ size = 24 }) => (
   </svg>
 );
 
-function Settings({ currentCharacter, onClose }) {
+// User icon component
+const UserSwitchIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <polyline points="16 11 18 13 22 9" />
+  </svg>
+);
+
+function Settings({ currentCharacter, onClose, onSwitchCharacter }) {
   const [serverUrl, setServerUrl] = useState('');
   const [isConnected, setIsConnected] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState('');
@@ -412,6 +421,37 @@ function Settings({ currentCharacter, onClose }) {
             </p>
           </div>
         )}
+
+        {/* Character Management */}
+        <div className="card card-static">
+          <div className="card-header"><UserSwitchIcon size={24} /> Character</div>
+          
+          {currentCharacter ? (
+            <div className="current-character-info">
+              <div className="character-preview">
+                <div className="character-preview-avatar">
+                  {currentCharacter.image ? (
+                    <img src={currentCharacter.image} alt={currentCharacter.name} />
+                  ) : (
+                    <span>{currentCharacter.name?.[0]?.toUpperCase() || '?'}</span>
+                  )}
+                </div>
+                <div className="character-preview-info">
+                  <h4>{currentCharacter.name}</h4>
+                  <p>Level {currentCharacter.level} Hunter</p>
+                </div>
+              </div>
+              
+              {onSwitchCharacter && (
+                <button className="btn btn-outline" onClick={onSwitchCharacter}>
+                  <UserSwitchIcon size={16} /> Switch Character
+                </button>
+              )}
+            </div>
+          ) : (
+            <p className="help-text">No character selected</p>
+          )}
+        </div>
 
         {/* Server Connection */}
         <div className="card card-static">
