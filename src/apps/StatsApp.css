@@ -1,5 +1,6 @@
 /* ==========================================
-   STATS APP
+   STATS APP - HUNTERS DICE ROLLER
+   d10 Pool System Interface
    ========================================== */
 
 .stats-app {
@@ -37,10 +38,11 @@
   box-shadow: var(--shadow-md);
 }
 
-/* Sections */
-.stats-section,
-.dice-section,
-.recent-rolls-section {
+/* ==========================================
+   POOL BUILDER SECTION
+   ========================================== */
+
+.pool-builder-section {
   background-color: var(--color-surface);
   border: var(--outline-width) solid var(--outline-color);
   border-radius: var(--radius-xl);
@@ -49,9 +51,288 @@
   margin-bottom: var(--spacing-5);
 }
 
-.stats-section h3,
-.dice-section h3,
-.recent-rolls-section h3 {
+.pool-builder-section h3 {
+  margin: 0 0 var(--spacing-4) 0;
+  font-size: var(--font-size-lg);
+  padding-bottom: var(--spacing-3);
+  border-bottom: var(--outline-width) solid var(--outline-color);
+}
+
+.pool-config {
+  margin-bottom: var(--spacing-4);
+}
+
+.pool-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-3);
+}
+
+.pool-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pool-value {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-primary);
+}
+
+.desperation-badge {
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-1) var(--spacing-2);
+  background-color: var(--color-warning-light);
+  border: 2px solid var(--color-warning);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.pool-breakdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+  min-height: 32px;
+}
+
+.pool-part {
+  padding: var(--spacing-1) var(--spacing-2);
+  background-color: var(--color-primary-light);
+  border: 2px solid var(--outline-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.pool-part.modifier {
+  background-color: var(--color-secondary-light);
+}
+
+/* Pool Controls */
+.pool-controls {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-5);
+  margin-bottom: var(--spacing-4);
+  flex-wrap: wrap;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.control-group label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.number-input {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  background-color: var(--color-bg-sunken);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-1);
+}
+
+.number-input button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background-color: transparent;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  transition: all var(--transition-fast);
+}
+
+.number-input button:hover {
+  background-color: var(--color-primary-light);
+}
+
+.number-input span {
+  min-width: 40px;
+  text-align: center;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+.number-input.desperation {
+  background-color: var(--color-warning-light);
+}
+
+/* Roll Button */
+.btn-roll {
+  width: 100%;
+  padding: var(--spacing-4);
+  background-color: var(--color-primary-light);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-roll:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ==========================================
+   ROLL RESULT
+   ========================================== */
+
+.roll-result {
+  background-color: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-5);
+  margin-bottom: var(--spacing-5);
+  text-align: center;
+}
+
+.roll-result.success {
+  background-color: var(--color-success-light);
+}
+
+.roll-result.failure {
+  background-color: var(--color-bg-sunken);
+}
+
+.roll-result.critical {
+  background: linear-gradient(135deg, var(--color-success-light), var(--color-primary-light));
+}
+
+.roll-result.messy {
+  background: linear-gradient(135deg, var(--color-warning-light), var(--color-error-light));
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-4);
+  padding-bottom: var(--spacing-3);
+  border-bottom: var(--outline-width) solid var(--outline-color);
+}
+
+.result-outcome {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-extrabold);
+}
+
+.result-successes {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+}
+
+.dice-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-3);
+}
+
+.regular-dice,
+.desperation-dice {
+  display: flex;
+  gap: var(--spacing-2);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.die {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg);
+}
+
+.die.success {
+  background-color: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.die.fail {
+  background-color: var(--color-bg-sunken);
+  color: var(--color-text-muted);
+}
+
+.die.crit {
+  background-color: var(--color-primary);
+  color: white;
+  animation: pulse-crit 1s infinite;
+}
+
+.die.desperation {
+  border-color: var(--color-warning);
+}
+
+.die.desperation.crit {
+  background-color: var(--color-warning);
+}
+
+@keyframes pulse-crit {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.crit-info {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+/* ==========================================
+   ATTRIBUTES SECTION
+   ========================================== */
+
+.attributes-section,
+.skills-section {
+  background-color: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-5);
+  margin-bottom: var(--spacing-5);
+}
+
+.attributes-section h3,
+.skills-section h3 {
   margin: 0 0 var(--spacing-4) 0;
   font-size: var(--font-size-lg);
   padding-bottom: var(--spacing-3);
@@ -61,199 +342,106 @@
   gap: var(--spacing-2);
 }
 
-/* Stats Grid */
-.stats-grid {
+.attributes-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-3);
-  margin-bottom: var(--spacing-3);
+  gap: var(--spacing-4);
 }
 
-.stats-app .stat-box {
+.attribute-category,
+.skill-category {
   background-color: var(--color-bg-sunken);
   border: var(--outline-width) solid var(--outline-color);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-4);
-  text-align: center;
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  user-select: none;
-}
-
-.stats-app .stat-box:hover {
-  background-color: var(--color-primary-light);
-  transform: translateY(-2px);
-}
-
-.stats-app .stat-box.selected {
-  background-color: var(--color-success-light);
-  box-shadow: var(--shadow-sm);
-}
-
-.stats-app .stat-label {
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-xs);
-  margin-bottom: var(--spacing-1);
-  color: var(--color-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.stats-app .stat-value {
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--spacing-1);
-}
-
-.stats-app .stat-modifier {
-  font-size: var(--font-size-base);
-  color: var(--color-text-secondary);
-}
-
-.stats-hint {
-  text-align: center;
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-  font-style: italic;
-}
-
-/* Dice Buttons */
-.dice-buttons {
-  display: flex;
-  gap: var(--spacing-3);
-  margin-bottom: var(--spacing-5);
-  flex-wrap: wrap;
-}
-
-.btn-dice {
-  flex: 1;
-  min-width: 90px;
   padding: var(--spacing-3);
-  background-color: var(--color-secondary-light);
-  border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-2);
-  box-shadow: var(--shadow-sm);
 }
 
-.btn-dice:hover {
-  background-color: var(--color-secondary);
-  color: var(--color-text-inverse);
-  transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-md);
-}
-
-/* Selected Dice/Bonuses */
-.selected-dice,
-.selected-bonuses {
-  margin-bottom: var(--spacing-4);
-}
-
-.selected-dice h4,
-.selected-bonuses h4 {
+.attribute-category h4,
+.skill-category h4 {
   margin: 0 0 var(--spacing-2) 0;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-secondary);
+  padding-bottom: var(--spacing-2);
+  border-bottom: 2px solid var(--outline-color);
 }
 
-.empty-selection {
-  padding: var(--spacing-3);
-  background-color: var(--color-bg-sunken);
-  border: 2px dashed var(--color-border-light);
-  border-radius: var(--radius-lg);
-  text-align: center;
-  color: var(--color-text-muted);
-  font-style: italic;
-}
-
-.dice-queue {
+.attr-row,
+.skill-row {
   display: flex;
-  gap: var(--spacing-2);
-  flex-wrap: wrap;
-}
-
-.dice-chip {
-  padding: var(--spacing-2) var(--spacing-3);
-  background-color: var(--color-warning-light);
-  border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-2);
+  margin: var(--spacing-1) 0;
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
-.dice-chip:hover {
-  background-color: var(--color-warning);
-  color: var(--color-text-inverse);
-  transform: scale(1.05);
-}
-
-.bonus-list {
-  display: flex;
-  gap: var(--spacing-2);
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.bonus-chip {
-  padding: var(--spacing-2) var(--spacing-3);
-  background-color: var(--color-success-light);
-  border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
-}
-
-.bonus-total {
-  padding: var(--spacing-2) var(--spacing-3);
+.attr-row:hover,
+.skill-row:hover {
   background-color: var(--color-primary-light);
-  border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-lg);
+}
+
+.attr-row.selected,
+.skill-row.selected {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.attr-row.selected .dot-rating .dot,
+.skill-row.selected .dot-rating .dot {
+  border-color: white;
+}
+
+.attr-row.selected .dot-rating .dot.filled,
+.skill-row.selected .dot-rating .dot.filled {
+  background-color: white;
+}
+
+.attr-name,
+.skill-name {
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-medium);
 }
 
-/* Roll Button */
-.btn-roll {
-  width: 100%;
-  padding: var(--spacing-4);
-  background-color: var(--color-success-light);
+.skill-row.untrained {
+  opacity: 0.6;
+}
+
+/* ==========================================
+   SKILLS SECTION
+   ========================================== */
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-4);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* ==========================================
+   RECENT ROLLS
+   ========================================== */
+
+.recent-rolls-section {
+  background-color: var(--color-surface);
   border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-2);
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
+  padding: var(--spacing-5);
 }
 
-.btn-roll:hover:not(:disabled) {
-  background-color: var(--color-success);
-  color: var(--color-text-inverse);
-  transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-hover);
+.recent-rolls-section h3 {
+  margin: 0 0 var(--spacing-4) 0;
+  font-size: var(--font-size-lg);
+  padding-bottom: var(--spacing-3);
+  border-bottom: var(--outline-width) solid var(--outline-color);
 }
 
-.btn-roll:disabled {
-  background-color: var(--color-bg-sunken);
-  color: var(--color-text-muted);
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-/* Recent Rolls */
 .stats-app .empty-state {
   padding: var(--spacing-6);
   text-align: center;
@@ -264,80 +452,102 @@
 .rolls-list {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-3);
+  gap: var(--spacing-2);
 }
 
 .roll-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-3);
   background-color: var(--color-bg-sunken);
   border: var(--outline-width) solid var(--outline-color);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-3);
 }
 
 .roll-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-2);
-  padding-bottom: var(--spacing-2);
-  border-bottom: 2px solid var(--outline-color);
+  flex-direction: column;
+  gap: var(--spacing-1);
 }
 
 .roll-time {
   font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
+  color: var(--color-text-muted);
 }
 
-.roll-total {
-  font-size: var(--font-size-base);
+.roll-outcome-badge {
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
-  background-color: var(--color-warning-light);
   padding: var(--spacing-1) var(--spacing-2);
-  border: 2px solid var(--outline-color);
   border-radius: var(--radius-md);
+  border: 2px solid var(--outline-color);
+}
+
+.roll-outcome-badge.success {
+  background-color: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.roll-outcome-badge.failure {
+  background-color: var(--color-bg-sunken);
+  color: var(--color-text-muted);
+}
+
+.roll-outcome-badge.critical {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.roll-outcome-badge.messy {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning);
 }
 
 .roll-details {
-  font-size: var(--font-size-sm);
+  text-align: right;
 }
 
-.roll-dice {
-  display: flex;
-  gap: var(--spacing-2);
-  flex-wrap: wrap;
-  margin-bottom: var(--spacing-1);
-}
-
-.dice-result {
-  padding: var(--spacing-1) var(--spacing-2);
-  background-color: var(--color-secondary-light);
-  border: 2px solid var(--outline-color);
-  border-radius: var(--radius-md);
+.roll-pool {
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-xs);
+  display: block;
 }
 
-.roll-bonuses {
-  font-size: var(--font-size-xs);
+.roll-result {
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
-  font-style: italic;
 }
 
-/* Responsive */
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 768px) {
+  .attributes-grid,
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .pool-controls {
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+}
+
 @media (max-width: 640px) {
   .stats-app {
     padding: var(--spacing-4);
   }
-
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .dice-buttons {
+  
+  .pool-display {
     flex-direction: column;
+    gap: var(--spacing-1);
   }
-
-  .btn-dice {
-    width: 100%;
+  
+  .result-header {
+    flex-direction: column;
+    gap: var(--spacing-2);
+    text-align: center;
   }
 }

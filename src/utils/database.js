@@ -1,9 +1,37 @@
 // Local Storage Database for Hunters Character Management
+import { 
+  createDefaultCharacter, 
+  migrateCharacter, 
+  calculateHealth, 
+  calculateWillpower,
+  SCHEMA_VERSION 
+} from './huntersData';
 
 const DB_KEY = 'hunters_characters';
 const CURRENT_CHARACTER_KEY = 'hunters_current_character';
+const SCHEMA_VERSION_KEY = 'hunters_schema_version';
+
+// Run migration on app load
+function migrateStorage() {
+  const storedVersion = parseInt(localStorage.getItem(SCHEMA_VERSION_KEY) || '1', 10);
+  
+  if (storedVersion < SCHEMA_VERSION) {
+    const characters = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+    const migratedCharacters = characters.map(char => migrateCharacter(char));
+    localStorage.setItem(DB_KEY, JSON.stringify(migratedCharacters));
+    localStorage.setItem(SCHEMA_VERSION_KEY, SCHEMA_VERSION.toString());
+  }
+}
+
+// Run migration on module load
+migrateStorage();
 
 export const database = {
+  // Create a new default character
+  createCharacter() {
+    return createDefaultCharacter();
+  },
+
   // Get all characters
   getAllCharacters() {
     const data = localStorage.getItem(DB_KEY);
@@ -52,6 +80,24 @@ export const database = {
       return characters[index];
     }
     return null;
+  },
+
+  // Recalculate derived stats for a character
+  recalculateDerivedStats(character) {
+    const healthMax = calculateHealth(character);
+    const willpowerMax = calculateWillpower(character);
+    
+    return {
+      ...character,
+      health: {
+        ...character.health,
+        max: healthMax
+      },
+      willpower: {
+        ...character.willpower,
+        max: willpowerMax
+      }
+    };
   },
 
   // Delete character

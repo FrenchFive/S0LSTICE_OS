@@ -1,6 +1,17 @@
 import { useState, useEffect } from 'react';
 import { database } from '../utils/database';
 import {
+  createDefaultCharacter,
+  calculateHealth,
+  calculateWillpower,
+  ATTRIBUTES,
+  ATTRIBUTE_LABELS,
+  SKILLS,
+  SKILL_LABELS,
+  CREEDS
+} from '../utils/huntersData';
+import { DotRating } from './DotRating';
+import {
   UserIcon,
   PlusIcon,
   ArrowRightIcon,
@@ -23,12 +34,12 @@ function WelcomeStep({ onNext, hasCharacters }) {
       <p className="welcome-subtitle">Your Hunter&apos;s Digital Companion</p>
       <p className="welcome-description">
         {hasCharacters 
-          ? 'Select a character to continue your adventure or create a new one.'
-          : 'Create your first character to begin your journey as a Hunter.'
+          ? 'Select a character to continue your chronicle or create a new Hunter.'
+          : 'Create your first Hunter to begin your journey into the darkness.'
         }
       </p>
       <button className="btn btn-primary btn-lg" onClick={onNext}>
-        {hasCharacters ? 'Choose Character' : 'Create Character'}
+        {hasCharacters ? 'Choose Hunter' : 'Create Hunter'}
         <ArrowRightIcon size={20} />
       </button>
     </div>
@@ -50,44 +61,63 @@ function SelectCharacterStep({ characters, onSelect, onCreate, onDelete }) {
     }
   };
 
+  const getCharacterInfo = (char) => {
+    // Handle both old and new character formats
+    if (char.identity) {
+      return {
+        name: char.identity.name || 'Unnamed',
+        image: char.identity.portraitUrl,
+        subtitle: char.identity.creed || char.identity.concept || 'Hunter'
+      };
+    }
+    return {
+      name: char.name || 'Unnamed',
+      image: char.image,
+      subtitle: `Level ${char.level || 1} Hunter`
+    };
+  };
+
   return (
     <div className="onboarding-step select-step">
-      <h2>Select Your Character</h2>
-      <p className="step-description">Choose a character to continue or create a new one.</p>
+      <h2>Select Your Hunter</h2>
+      <p className="step-description">Choose a Hunter to continue or create a new one.</p>
       
       <div className="character-list">
-        {characters.map(char => (
-          <div 
-            key={char.id} 
-            className="character-card-select"
-            onClick={() => onSelect(char)}
-          >
-            <div className="character-avatar-select">
-              {char.image ? (
-                <img src={char.image} alt={char.name} />
-              ) : (
-                <span>{char.name?.[0]?.toUpperCase() || '?'}</span>
-              )}
-            </div>
-            <div className="character-info-select">
-              <h3>{char.name}</h3>
-              <p>Level {char.level} Hunter</p>
-            </div>
-            <button 
-              className={`btn-delete-char ${confirmDelete === char.id ? 'confirm' : ''}`}
-              onClick={(e) => handleDelete(e, char.id)}
-              title={confirmDelete === char.id ? 'Click again to confirm' : 'Delete character'}
+        {characters.map(char => {
+          const info = getCharacterInfo(char);
+          return (
+            <div 
+              key={char.id} 
+              className="character-card-select"
+              onClick={() => onSelect(char)}
             >
-              <TrashIcon size={16} />
-            </button>
-          </div>
-        ))}
+              <div className="character-avatar-select">
+                {info.image ? (
+                  <img src={info.image} alt={info.name} />
+                ) : (
+                  <span>{info.name?.[0]?.toUpperCase() || '?'}</span>
+                )}
+              </div>
+              <div className="character-info-select">
+                <h3>{info.name}</h3>
+                <p>{info.subtitle}</p>
+              </div>
+              <button 
+                className={`btn-delete-char ${confirmDelete === char.id ? 'confirm' : ''}`}
+                onClick={(e) => handleDelete(e, char.id)}
+                title={confirmDelete === char.id ? 'Click again to confirm' : 'Delete character'}
+              >
+                <TrashIcon size={16} />
+              </button>
+            </div>
+          );
+        })}
         
         <button className="create-new-card" onClick={onCreate}>
           <div className="create-icon">
             <PlusIcon size={32} />
           </div>
-          <span>Create New Character</span>
+          <span>Create New Hunter</span>
         </button>
       </div>
     </div>
@@ -95,24 +125,46 @@ function SelectCharacterStep({ characters, onSelect, onCreate, onDelete }) {
 }
 
 function CreateCharacterStep({ onBack, onCreate, hasCharacters }) {
-  const [name, setName] = useState('');
-  const [level, setLevel] = useState(1);
-  const [hp, setHp] = useState(10);
-  const [maxHp, setMaxHp] = useState(10);
-  const [stats, setStats] = useState({
-    strength: 10,
-    dexterity: 10,
-    constitution: 10,
-    intelligence: 10,
-    wisdom: 10,
-    charisma: 10
-  });
-  const [image, setImage] = useState('');
-  const [step, setStep] = useState(1); // 1: Basic Info, 2: Stats, 3: Finish
+  const [character, setCharacter] = useState(() => createDefaultCharacter());
+  const [step, setStep] = useState(1); // 1: Identity, 2: Attributes, 3: Skills, 4: Review
 
-  const handleStatChange = (stat, value) => {
-    const numValue = Math.max(1, Math.min(30, parseInt(value) || 1));
-    setStats(prev => ({ ...prev, [stat]: numValue }));
+  const updateIdentity = (field, value) => {
+    setCharacter(prev => ({
+      ...prev,
+      identity: { ...prev.identity, [field]: value }
+    }));
+  };
+
+  const updateAttribute = (category, attr, value) => {
+    setCharacter(prev => {
+      const newChar = {
+        ...prev,
+        attributes: {
+          ...prev.attributes,
+          [category]: {
+            ...prev.attributes[category],
+            [attr]: value
+          }
+        }
+      };
+      // Recalculate derived stats
+      newChar.health = { ...newChar.health, max: calculateHealth(newChar) };
+      newChar.willpower = { ...newChar.willpower, max: calculateWillpower(newChar) };
+      return newChar;
+    });
+  };
+
+  const updateSkill = (category, skill, value) => {
+    setCharacter(prev => ({
+      ...prev,
+      skills: {
+        ...prev.skills,
+        [category]: {
+          ...prev.skills[category],
+          [skill]: value
+        }
+      }
+    }));
   };
 
   const handleImageUpload = (e) => {
@@ -120,61 +172,66 @@ function CreateCharacterStep({ onBack, onCreate, hasCharacters }) {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImage(reader.result);
+        updateIdentity('portraitUrl', reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
   const handleCreate = () => {
-    if (!name.trim()) return;
-
-    const character = {
-      id: Date.now().toString(),
-      name: name.trim(),
-      level,
-      hp,
-      maxHp,
-      ...stats,
-      image,
-      backstory: '',
-      createdAt: new Date().toISOString()
+    if (!character.identity.name.trim()) return;
+    
+    const finalCharacter = {
+      ...character,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
-    database.saveCharacter(character);
-    onCreate(character);
+    database.saveCharacter(finalCharacter);
+    onCreate(finalCharacter);
   };
 
   const canProceed = () => {
-    if (step === 1) return name.trim().length > 0;
+    if (step === 1) return character.identity.name.trim().length > 0;
     return true;
   };
+
+  // Count total attribute dots
+  const totalAttributeDots = Object.values(character.attributes).reduce((sum, category) => {
+    return sum + Object.values(category).reduce((s, v) => s + v, 0);
+  }, 0);
+
+  // Count total skill dots
+  const totalSkillDots = Object.values(character.skills).reduce((sum, category) => {
+    return sum + Object.values(category).reduce((s, v) => s + v, 0);
+  }, 0);
 
   return (
     <div className="onboarding-step create-step">
       <div className="create-header">
-        {hasCharacters && (
+        {hasCharacters && step === 1 && (
           <button className="btn btn-ghost" onClick={onBack}>
             <ArrowLeftIcon size={16} /> Back
           </button>
         )}
-        <h2>Create Your Character</h2>
+        <h2>Create Your Hunter</h2>
         <div className="step-indicator">
           <span className={step >= 1 ? 'active' : ''}>1</span>
           <span className={step >= 2 ? 'active' : ''}>2</span>
           <span className={step >= 3 ? 'active' : ''}>3</span>
+          <span className={step >= 4 ? 'active' : ''}>4</span>
         </div>
       </div>
 
-      {/* Step 1: Basic Info */}
+      {/* Step 1: Identity */}
       {step === 1 && (
         <div className="create-form">
-          <h3>Basic Information</h3>
+          <h3>Identity</h3>
           
           <div className="avatar-upload">
             <div className="avatar-preview">
-              {image ? (
-                <img src={image} alt="Character" />
+              {character.identity.portraitUrl ? (
+                <img src={character.identity.portraitUrl} alt="Character" />
               ) : (
                 <UserIcon size={48} />
               )}
@@ -191,12 +248,12 @@ function CreateCharacterStep({ onBack, onCreate, hasCharacters }) {
           </div>
 
           <div className="form-group">
-            <label>Character Name</label>
+            <label>Hunter Name *</label>
             <input
               type="text"
               className="input"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={character.identity.name}
+              onChange={(e) => updateIdentity('name', e.target.value)}
               placeholder="Enter your hunter's name"
               autoFocus
             />
@@ -204,87 +261,213 @@ function CreateCharacterStep({ onBack, onCreate, hasCharacters }) {
 
           <div className="form-row">
             <div className="form-group">
-              <label>Level</label>
+              <label>Concept</label>
               <input
-                type="number"
+                type="text"
                 className="input"
-                value={level}
-                onChange={(e) => setLevel(Math.max(1, parseInt(e.target.value) || 1))}
-                min="1"
+                value={character.identity.concept}
+                onChange={(e) => updateIdentity('concept', e.target.value)}
+                placeholder="e.g., Paranoid Journalist"
               />
             </div>
             <div className="form-group">
-              <label>Max HP</label>
-              <input
-                type="number"
+              <label>Creed</label>
+              <select
                 className="input"
-                value={maxHp}
-                onChange={(e) => {
-                  const val = Math.max(1, parseInt(e.target.value) || 1);
-                  setMaxHp(val);
-                  setHp(val);
-                }}
-                min="1"
+                value={character.identity.creed}
+                onChange={(e) => updateIdentity('creed', e.target.value)}
+              >
+                <option value="">Select Creed...</option>
+                {CREEDS.map(creed => (
+                  <option key={creed.id} value={creed.name}>{creed.name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>Drive</label>
+              <input
+                type="text"
+                className="input"
+                value={character.identity.drive}
+                onChange={(e) => updateIdentity('drive', e.target.value)}
+                placeholder="What drives you?"
+              />
+            </div>
+            <div className="form-group">
+              <label>Cell</label>
+              <input
+                type="text"
+                className="input"
+                value={character.identity.cell}
+                onChange={(e) => updateIdentity('cell', e.target.value)}
+                placeholder="Your hunting group"
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>Ambition</label>
+              <input
+                type="text"
+                className="input"
+                value={character.identity.ambition}
+                onChange={(e) => updateIdentity('ambition', e.target.value)}
+                placeholder="Long-term goal"
+              />
+            </div>
+            <div className="form-group">
+              <label>Desire</label>
+              <input
+                type="text"
+                className="input"
+                value={character.identity.desire}
+                onChange={(e) => updateIdentity('desire', e.target.value)}
+                placeholder="Immediate want"
               />
             </div>
           </div>
         </div>
       )}
 
-      {/* Step 2: Stats */}
+      {/* Step 2: Attributes */}
       {step === 2 && (
         <div className="create-form">
-          <h3>Ability Scores</h3>
-          <p className="form-hint">Set your character&apos;s base abilities (1-30)</p>
+          <h3>Attributes</h3>
+          <p className="form-hint">
+            Assign dots to your attributes (1-5). Total: {totalAttributeDots} dots
+          </p>
           
-          <div className="stats-grid-create">
-            {Object.entries(stats).map(([stat, value]) => (
-              <div key={stat} className="stat-input-group">
-                <label>{stat.charAt(0).toUpperCase() + stat.slice(1).substring(0, 3)}</label>
-                <input
-                  type="number"
-                  className="input stat-input"
-                  value={value}
-                  onChange={(e) => handleStatChange(stat, e.target.value)}
-                  min="1"
-                  max="30"
-                />
-                <span className="stat-modifier-display">
-                  {value >= 10 ? '+' : ''}{Math.floor((value - 10) / 2)}
-                </span>
+          <div className="attributes-grid">
+            {Object.entries(ATTRIBUTES).map(([category, { label, attrs }]) => (
+              <div key={category} className="attribute-category">
+                <h4 className="category-label">{label}</h4>
+                {attrs.map(attr => (
+                  <div key={attr} className="attribute-row">
+                    <span className="attr-name">{ATTRIBUTE_LABELS[attr]}</span>
+                    <DotRating
+                      value={character.attributes[category][attr]}
+                      max={5}
+                      min={1}
+                      onChange={(value) => updateAttribute(category, attr, value)}
+                      size="md"
+                    />
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          <div className="derived-stats-preview">
+            <div className="derived-stat">
+              <span className="derived-label">Health</span>
+              <span className="derived-value">{character.health.max}</span>
+              <span className="derived-calc">(Stamina + 3)</span>
+            </div>
+            <div className="derived-stat">
+              <span className="derived-label">Willpower</span>
+              <span className="derived-value">{character.willpower.max}</span>
+              <span className="derived-calc">(Composure + Resolve)</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Step 3: Skills */}
+      {step === 3 && (
+        <div className="create-form">
+          <h3>Skills</h3>
+          <p className="form-hint">
+            Assign dots to your skills (0-5). Total: {totalSkillDots} dots
+          </p>
+          
+          <div className="skills-grid">
+            {Object.entries(SKILLS).map(([category, { label, skills }]) => (
+              <div key={category} className="skill-category">
+                <h4 className="category-label">{label}</h4>
+                {skills.map(skill => (
+                  <div key={skill} className="skill-row">
+                    <span className="skill-name">{SKILL_LABELS[skill]}</span>
+                    <DotRating
+                      value={character.skills[category][skill]}
+                      max={5}
+                      min={0}
+                      onChange={(value) => updateSkill(category, skill, value)}
+                      size="sm"
+                    />
+                  </div>
+                ))}
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Step 3: Review */}
-      {step === 3 && (
+      {/* Step 4: Review */}
+      {step === 4 && (
         <div className="create-form review-form">
-          <h3>Review Your Character</h3>
+          <h3>Review Your Hunter</h3>
           
           <div className="review-card">
             <div className="review-avatar">
-              {image ? (
-                <img src={image} alt={name} />
+              {character.identity.portraitUrl ? (
+                <img src={character.identity.portraitUrl} alt={character.identity.name} />
               ) : (
-                <span>{name?.[0]?.toUpperCase() || '?'}</span>
+                <span>{character.identity.name?.[0]?.toUpperCase() || '?'}</span>
               )}
             </div>
             <div className="review-info">
-              <h4>{name}</h4>
-              <p>Level {level} Hunter</p>
-              <p>HP: {hp}/{maxHp}</p>
+              <h4>{character.identity.name}</h4>
+              <p>{character.identity.concept || 'Hunter'}</p>
+              {character.identity.creed && <p className="creed-badge">{character.identity.creed}</p>}
             </div>
           </div>
 
-          <div className="review-stats">
-            {Object.entries(stats).map(([stat, value]) => (
-              <div key={stat} className="review-stat">
-                <span className="review-stat-name">{stat.substring(0, 3).toUpperCase()}</span>
-                <span className="review-stat-value">{value}</span>
+          <div className="review-section">
+            <h5>Core Stats</h5>
+            <div className="review-stats-row">
+              <div className="review-stat-box">
+                <span className="stat-name">Health</span>
+                <span className="stat-value">{character.health.max}</span>
               </div>
-            ))}
+              <div className="review-stat-box">
+                <span className="stat-name">Willpower</span>
+                <span className="stat-value">{character.willpower.max}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="review-section">
+            <h5>Attributes ({totalAttributeDots} dots)</h5>
+            <div className="review-attributes">
+              {Object.entries(ATTRIBUTES).map(([category, { label, attrs }]) => (
+                <div key={category} className="review-attr-group">
+                  <span className="review-group-label">{label}:</span>
+                  {attrs.map(attr => (
+                    <span key={attr} className="review-attr">
+                      {ATTRIBUTE_LABELS[attr].substring(0, 3)} {character.attributes[category][attr]}
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="review-section">
+            <h5>Skills ({totalSkillDots} dots)</h5>
+            <div className="review-skills">
+              {Object.entries(SKILLS).map(([category, { skills }]) => 
+                skills.filter(skill => character.skills[category][skill] > 0).map(skill => (
+                  <span key={skill} className="review-skill">
+                    {SKILL_LABELS[skill]} ●{character.skills[category][skill]}
+                  </span>
+                ))
+              )}
+              {totalSkillDots === 0 && <span className="no-skills">No skills assigned</span>}
+            </div>
           </div>
         </div>
       )}
@@ -296,7 +479,7 @@ function CreateCharacterStep({ onBack, onCreate, hasCharacters }) {
             <ArrowLeftIcon size={16} /> Back
           </button>
         )}
-        {step < 3 ? (
+        {step < 4 ? (
           <button 
             className="btn btn-primary" 
             onClick={() => setStep(step + 1)}
@@ -309,7 +492,7 @@ function CreateCharacterStep({ onBack, onCreate, hasCharacters }) {
             className="btn btn-success btn-lg" 
             onClick={handleCreate}
           >
-            Create Character
+            Create Hunter
           </button>
         )}
       </div>

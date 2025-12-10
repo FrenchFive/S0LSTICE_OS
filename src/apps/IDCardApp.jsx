@@ -1,11 +1,17 @@
 import { useState, useEffect } from 'react';
 import './IDCardApp.css';
 import { database as db } from '../utils/database';
+import { DotRating, DamageTrack, DesperationTracker } from '../components/DotRating';
+import {
+  ATTRIBUTES,
+  ATTRIBUTE_LABELS,
+  getAttributeValue
+} from '../utils/huntersData';
 
 export default function IDCardApp() {
   const [character, setCharacter] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [backstory, setBackstory] = useState('');
+  const [history, setHistory] = useState('');
 
   const loadCharacter = () => {
     const currentCharId = db.getCurrentCharacterId();
@@ -13,7 +19,7 @@ export default function IDCardApp() {
       const char = db.getCharacter(currentCharId);
       if (char) {
         setCharacter(char);
-        setBackstory(char.backstory || '');
+        setHistory(char.biography?.history || char.backstory || '');
       }
     }
   };
@@ -23,55 +29,56 @@ export default function IDCardApp() {
     loadCharacter();
   }, []);
 
-  const handleSaveBackstory = () => {
+  const handleSaveHistory = () => {
     if (character) {
-      const updated = { ...character, backstory };
+      const updated = {
+        ...character,
+        biography: {
+          ...character.biography,
+          history
+        }
+      };
       db.saveCharacter(updated);
       setCharacter(updated);
       setIsEditing(false);
     }
   };
 
-  const getModifier = (stat) => {
-    return Math.floor((stat - 10) / 2);
-  };
-
-  const formatModifier = (mod) => {
-    return mod >= 0 ? `+${mod}` : `${mod}`;
-  };
+  // Handle both old and new character formats
+  const getName = () => character.identity?.name || character.name || 'Unknown';
+  const getImage = () => character.identity?.portraitUrl || character.image || null;
+  const getConcept = () => character.identity?.concept || '';
+  const getCreed = () => character.identity?.creed || '';
+  const getDrive = () => character.identity?.drive || '';
+  const getCell = () => character.identity?.cell || '';
 
   if (!character) {
     return (
       <div className="id-card-app">
         <div className="no-character">
-          <p>No character selected</p>
+          <p>No Hunter selected</p>
           <p>Go to Character app to select or create one</p>
         </div>
       </div>
     );
   }
 
-  const activeIdentity = character.activeIdentity || 'real';
-  const displayName = activeIdentity === 'disguise' && character.disguise
-    ? character.disguise.name
-    : activeIdentity === 'secret' && character.secretIdentity
-    ? character.secretIdentity.name
-    : character.name;
+  const displayName = getName();
 
   return (
     <div className="id-card-app">
       <div className="id-card">
         <div className="id-card-header">
-          <h2>🪪 Hunter ID Card</h2>
-          {activeIdentity !== 'real' && (
-            <span className="identity-badge">{activeIdentity === 'disguise' ? '🎭 Disguised' : '🕵️ Undercover'}</span>
+          <h2>🪪 Hunter ID</h2>
+          {getCreed() && (
+            <span className="creed-badge">{getCreed()}</span>
           )}
         </div>
 
         <div className="id-card-body">
           <div className="id-photo-section">
-            {character.image ? (
-              <img src={character.image} alt={displayName} className="id-photo" />
+            {getImage() ? (
+              <img src={getImage()} alt={displayName} className="id-photo" />
             ) : (
               <div className="id-photo-placeholder">
                 {displayName.charAt(0).toUpperCase()}
@@ -85,55 +92,93 @@ export default function IDCardApp() {
               <div className="id-value">{displayName}</div>
             </div>
 
-            <div className="id-field">
-              <label>Level:</label>
-              <div className="id-value">{character.level}</div>
-            </div>
+            {getConcept() && (
+              <div className="id-field">
+                <label>Concept:</label>
+                <div className="id-value">{getConcept()}</div>
+              </div>
+            )}
 
-            <div className="id-field">
-              <label>HP:</label>
-              <div className="id-value">{character.currentHP} / {character.maxHP}</div>
-            </div>
+            {getDrive() && (
+              <div className="id-field">
+                <label>Drive:</label>
+                <div className="id-value">{getDrive()}</div>
+              </div>
+            )}
+
+            {getCell() && (
+              <div className="id-field">
+                <label>Cell:</label>
+                <div className="id-value">{getCell()}</div>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="stats-grid">
-          <div className="stat-card">
-            <div className="stat-label">STR</div>
-            <div className="stat-value">{character.stats.str}</div>
-            <div className="stat-modifier">{formatModifier(getModifier(character.stats.str))}</div>
+        {/* Attributes Display */}
+        {character.attributes && (
+          <div className="attributes-section">
+            <h3>Attributes</h3>
+            <div className="attributes-display">
+              {Object.entries(ATTRIBUTES).map(([category, { label, attrs }]) => (
+                <div key={category} className="attr-category">
+                  <h4>{label}</h4>
+                  {attrs.map(attr => (
+                    <div key={attr} className="attr-item">
+                      <span className="attr-name">{ATTRIBUTE_LABELS[attr]}</span>
+                      <DotRating 
+                        value={getAttributeValue(character, attr)} 
+                        max={5}
+                        size="sm"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="stat-card">
-            <div className="stat-label">DEX</div>
-            <div className="stat-value">{character.stats.dex}</div>
-            <div className="stat-modifier">{formatModifier(getModifier(character.stats.dex))}</div>
+        )}
+
+        {/* Health & Willpower */}
+        {character.health && character.willpower && (
+          <div className="vitals-section">
+            <div className="vital-track">
+              <DamageTrack
+                max={character.health.max || 7}
+                superficial={character.health.superficial || 0}
+                aggravated={character.health.aggravated || 0}
+                label="Health"
+                variant="health"
+              />
+            </div>
+            <div className="vital-track">
+              <DamageTrack
+                max={character.willpower.max || 5}
+                superficial={character.willpower.superficial || 0}
+                aggravated={character.willpower.aggravated || 0}
+                label="Willpower"
+                variant="willpower"
+              />
+            </div>
           </div>
-          <div className="stat-card">
-            <div className="stat-label">CON</div>
-            <div className="stat-value">{character.stats.con}</div>
-            <div className="stat-modifier">{formatModifier(getModifier(character.stats.con))}</div>
+        )}
+
+        {/* Desperation */}
+        {character.desperation && (
+          <div className="desperation-section">
+            <DesperationTracker
+              pool={character.desperation.pool || 0}
+              danger={character.desperation.danger || 0}
+              despair={character.desperation.despair || false}
+              compact
+            />
           </div>
-          <div className="stat-card">
-            <div className="stat-label">INT</div>
-            <div className="stat-value">{character.stats.int}</div>
-            <div className="stat-modifier">{formatModifier(getModifier(character.stats.int))}</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">WIS</div>
-            <div className="stat-value">{character.stats.wis}</div>
-            <div className="stat-modifier">{formatModifier(getModifier(character.stats.wis))}</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-label">CHA</div>
-            <div className="stat-value">{character.stats.cha}</div>
-            <div className="stat-modifier">{formatModifier(getModifier(character.stats.cha))}</div>
-          </div>
-        </div>
+        )}
       </div>
 
       <div className="backstory-section">
         <div className="section-header">
-          <h3>📖 Backstory</h3>
+          <h3>📖 History</h3>
           {!isEditing && (
             <button onClick={() => setIsEditing(true)} className="btn-edit">
               ✏️ Edit
@@ -144,24 +189,24 @@ export default function IDCardApp() {
         {isEditing ? (
           <div className="backstory-editor">
             <textarea
-              value={backstory}
-              onChange={(e) => setBackstory(e.target.value)}
-              placeholder="Write your character's backstory here..."
+              value={history}
+              onChange={(e) => setHistory(e.target.value)}
+              placeholder="Write your hunter's history here..."
               className="backstory-textarea"
               rows={10}
             />
             <div className="editor-actions">
-              <button onClick={handleSaveBackstory} className="btn-save">
+              <button onClick={handleSaveHistory} className="btn-save">
                 💾 Save
               </button>
-              <button onClick={() => { setIsEditing(false); setBackstory(character.backstory || ''); }} className="btn-cancel">
+              <button onClick={() => { setIsEditing(false); setHistory(character.biography?.history || ''); }} className="btn-cancel">
                 ❌ Cancel
               </button>
             </div>
           </div>
         ) : (
           <div className="backstory-display">
-            {backstory || 'No backstory yet. Click Edit to add one!'}
+            {history || 'No history yet. Click Edit to add one!'}
           </div>
         )}
       </div>
