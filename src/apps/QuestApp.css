@@ -1,0 +1,409 @@
+.quest-app {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.quest-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.quest-header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+.btn-add-quest {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border: 4px solid #000;
+  border-radius: 12px;
+  background: #BAFFC9;
+  color: #000;
+  cursor: pointer;
+  box-shadow: 6px 6px 0 #000;
+  transition: all 0.2s;
+}
+
+.btn-add-quest:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0 #000;
+}
+
+.quest-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #FFB3BA 0%, #FFDFBA 100%);
+  border: 4px solid #000;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 6px 6px 0 #000;
+}
+
+.stat-value {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #333;
+}
+
+.quest-form {
+  background: #FFFFBA;
+  border: 4px solid #000;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 6px 6px 0 #000;
+}
+
+.quest-form h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 3px solid #000;
+  border-radius: 8px;
+  font-family: inherit;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  border: 4px solid #000;
+  border-radius: 12px;
+  background: #BAE1FF;
+  color: #000;
+  cursor: pointer;
+  box-shadow: 6px 6px 0 #000;
+  transition: all 0.2s;
+}
+
+.btn-submit:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0 #000;
+}
+
+.quest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: #F5F5F5;
+  border: 4px solid #000;
+  border-radius: 12px;
+}
+
+.empty-state p {
+  font-size: 24px;
+  margin: 10px 0;
+}
+
+.empty-subtitle {
+  font-size: 16px !important;
+  color: #666;
+}
+
+.quest-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 20px;
+  background: #fff;
+  border: 4px solid #000;
+  border-radius: 12px;
+  box-shadow: 6px 6px 0 #000;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.quest-card:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0 #000;
+}
+
+.quest-card.completed {
+  opacity: 0.7;
+  background: #E8E8E8;
+}
+
+.quest-card.completed .quest-title {
+  text-decoration: line-through;
+}
+
+.quest-card.priority-low {
+  border-left: 8px solid #BAFFC9;
+}
+
+.quest-card.priority-medium {
+  border-left: 8px solid #FFFFBA;
+}
+
+.quest-card.priority-high {
+  border-left: 8px solid #FFDFBA;
+}
+
+.quest-card.priority-urgent {
+  border-left: 8px solid #FFB3BA;
+}
+
+.quest-checkbox {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.quest-checkbox input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.quest-content {
+  flex: 1;
+}
+
+.quest-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.quest-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.quest-category,
+.quest-priority,
+.quest-author {
+  padding: 4px 10px;
+  border: 2px solid #000;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.quest-priority.priority-low {
+  background: #BAFFC9;
+}
+
+.quest-priority.priority-medium {
+  background: #FFFFBA;
+}
+
+.quest-priority.priority-high {
+  background: #FFDFBA;
+}
+
+.quest-priority.priority-urgent {
+  background: #FFB3BA;
+}
+
+.quest-description {
+  font-size: 14px;
+  color: #444;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+.quest-actions {
+  flex-shrink: 0;
+}
+
+.btn-delete {
+  padding: 8px 12px;
+  font-size: 18px;
+  border: 3px solid #000;
+  border-radius: 8px;
+  background: #FFB3BA;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-delete:hover {
+  transform: scale(1.1);
+}
+
+.quest-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  border: 4px solid #000;
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 10px 10px 0 #000;
+  position: relative;
+}
+
+.btn-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 8px 12px;
+  font-size: 18px;
+  font-weight: bold;
+  border: 3px solid #000;
+  border-radius: 8px;
+  background: #FFB3BA;
+  cursor: pointer;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 28px;
+}
+
+.modal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.badge {
+  padding: 6px 12px;
+  border: 3px solid #000;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.badge.priority-low {
+  background: #BAFFC9;
+}
+
+.badge.priority-medium {
+  background: #FFFFBA;
+}
+
+.badge.priority-high {
+  background: #FFDFBA;
+}
+
+.badge.priority-urgent {
+  background: #FFB3BA;
+}
+
+.modal-section {
+  margin-bottom: 20px;
+}
+
+.modal-section h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.modal-section p {
+  line-height: 1.6;
+  color: #333;
+}
+
+.modal-info {
+  font-size: 14px;
+  color: #666;
+  margin: 5px 0;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.btn-toggle,
+.btn-delete-large {
+  flex: 1;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  border: 4px solid #000;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 6px 6px 0 #000;
+  transition: all 0.2s;
+}
+
+.btn-complete {
+  background: #BAFFC9;
+}
+
+.btn-uncomplete {
+  background: #FFFFBA;
+}
+
+.btn-delete-large {
+  background: #FFB3BA;
+}
+
+.btn-toggle:hover,
+.btn-delete-large:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0 #000;
+}
