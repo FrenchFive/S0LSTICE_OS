@@ -2,9 +2,27 @@
 
 A modern, professional character management application for Hunters role-playing game. Built with React and featuring a clean, Shopify-inspired flat UI design with modern shadows, smooth transitions, and a vibrant color palette.
 
-![Home Screen](https://github.com/user-attachments/assets/4b091266-b0c6-44fc-81ca-000a8e1f73d8)
+## 🖼️ Screenshots
 
-![Character Select](https://github.com/user-attachments/assets/9e9ed591-3dbb-4243-9aa1-44bc25457b74)
+### Splash Screen
+The app features a distinctive splash screen with the **Delight** display font and the signature **S0LSTICE** branding where the zero has a diagonal white bar to clearly distinguish it from the letter "O".
+
+![Splash Screen](docs/screenshots/splash-screen.png)
+
+### Welcome Screen
+Clean, modern welcome screen with the sticker-style UI design.
+
+![Character Select](docs/screenshots/character-select.png)
+
+### Character Creator
+Step-by-step character creation with intuitive form design.
+
+![Character Creator](docs/screenshots/character-creator.png)
+
+### Mobile View
+Responsive phone-style layout for mobile devices.
+
+![Phone Home](docs/screenshots/phone-home.png)
 
 ## ✨ Features
 
@@ -38,11 +56,13 @@ A modern, professional character management application for Hunters role-playing
 ### 🎨 Modern Flat UI (Shopify-Inspired)
 - Clean, professional color palette with vibrant accents
 - Subtle shadows and smooth transitions
-- Inter font family for modern typography
+- **Delight** display font for branding and **Inter** for UI typography
+- Signature **S0LSTICE** logo with slashed zero (white diagonal bar) for clear zero vs. O distinction
 - Smooth hover effects and animations
 - Focus states for accessibility
 - Fully responsive design
 - Modern elevation system
+- Animated splash screen with custom branding
 
 ## 🚀 Getting Started
 
@@ -168,6 +188,7 @@ See [docs/SERVER_SETUP.md](docs/SERVER_SETUP.md) for detailed manual setup instr
 - **Build Tool**: Vite 7
 - **Language**: JavaScript (ES6+)
 - **Styling**: Custom CSS with CSS Variables
+- **Fonts**: Delight (display), Inter (UI)
 - **Storage**: Browser LocalStorage API
 - **Linting**: ESLint with React plugins
 

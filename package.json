@@ -43,7 +43,9 @@
         "portable"
       ],
       "icon": "public/icon.ico",
-      "signingHashAlgorithms": ["sha256"],
+      "signingHashAlgorithms": [
+        "sha256"
+      ],
       "publisherName": "FrenchFive"
     },
     "mac": {
