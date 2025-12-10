@@ -133,6 +133,7 @@ jobs:
         run: npm run build
       
       - name: Update version in package.json
+        shell: bash
         run: |
           VERSION="${{ needs.version.outputs.version }}"
           VERSION=${VERSION#v}
