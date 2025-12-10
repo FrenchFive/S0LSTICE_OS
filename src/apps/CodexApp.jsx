@@ -12,7 +12,7 @@ export default function CodexApp() {
   const [selectedCreature, setSelectedCreature] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showPrivatePages, setShowPrivatePages] = useState(false);
-  const isDM = dmMode.isDMMode();
+  const isDM = dmMode.isDM();
   const character = database.getCurrentCharacter();
 
   useEffect(() => {
@@ -29,7 +29,9 @@ export default function CodexApp() {
 
       ws.on('bestiary_sync', (data) => {
         if (data.creatures) {
-          bestiaryDatabase.syncCreatures(data.creatures);
+          data.creatures.forEach(creature => {
+            bestiaryDatabase.syncEntry(creature);
+          });
           loadData();
         }
       });
@@ -50,7 +52,7 @@ export default function CodexApp() {
       : allPages.filter(p => !p.isPrivate);
     setPages(filteredPages);
 
-    const allCreatures = bestiaryDatabase.getAllCreatures();
+    const allCreatures = bestiaryDatabase.getAllEntries();
     setCreatures(allCreatures);
   };
 
@@ -112,37 +114,37 @@ export default function CodexApp() {
       type: '',
       description: '',
       stats: '',
-      author: character?.name || 'Unknown'
+      addedBy: character?.name || 'Unknown'
     };
-    const saved = bestiaryDatabase.saveCreature(newCreature);
+    const saved = bestiaryDatabase.saveEntry(newCreature);
     setSelectedCreature(saved);
     setIsEditing(true);
     loadData();
 
     if (wsClient.connected) {
-      wsClient.syncBestiary(bestiaryDatabase.getAllCreatures());
+      wsClient.syncBestiary(bestiaryDatabase.getAllEntries());
     }
   };
 
   const handleSaveCreature = (creature) => {
-    const saved = bestiaryDatabase.saveCreature(creature);
+    const saved = bestiaryDatabase.saveEntry(creature);
     setSelectedCreature(saved);
     setIsEditing(false);
     loadData();
 
     if (wsClient.connected) {
-      wsClient.syncBestiary(bestiaryDatabase.getAllCreatures());
+      wsClient.syncBestiary(bestiaryDatabase.getAllEntries());
     }
   };
 
   const handleDeleteCreature = (id) => {
     if (confirm('Are you sure you want to delete this creature?')) {
-      bestiaryDatabase.deleteCreature(id);
+      bestiaryDatabase.deleteEntry(id);
       setSelectedCreature(null);
       loadData();
 
       if (wsClient.connected) {
-        wsClient.syncBestiary(bestiaryDatabase.getAllCreatures());
+        wsClient.syncBestiary(bestiaryDatabase.getAllEntries());
       }
     }
   };
@@ -271,7 +273,7 @@ export default function CodexApp() {
                     }}
                   >
                     <div className="page-title">{creature.name}</div>
-                    <div className="page-author">by {creature.author}</div>
+                    <div className="page-author">by {creature.addedBy}</div>
                   </div>
                 ))
               )}
@@ -413,7 +415,7 @@ function CreatureViewer({ creature, onEdit, onDelete }) {
         </div>
       </div>
       <div className="page-meta">
-        <span>Added by: {creature.author}</span>
+        <span>Added by: {creature.addedBy}</span>
         <span>Updated: {new Date(creature.updatedAt).toLocaleString()}</span>
       </div>
       <div className="creature-details">
