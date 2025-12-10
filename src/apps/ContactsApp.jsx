@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import './ContactsApp.css';
 import * as contactsDb from '../utils/sharedData';
 import { database as db, dmMode } from '../utils/database';
@@ -7,8 +7,8 @@ import { PhoneIcon, MessageIcon, PlusIcon, TrashIcon, SendIcon } from '../compon
 
 export default function ContactsApp() {
   const [activeTab, setActiveTab] = useState('contacts');
-  const [contacts, setContacts] = useState([]);
-  const [messages, setMessages] = useState([]);
+  const [contactsVersion, setContactsVersion] = useState(0);
+  const [messagesVersion, setMessagesVersion] = useState(0);
   const [selectedContact, setSelectedContact] = useState(null);
   const [newMessage, setNewMessage] = useState('');
   const [newContact, setNewContact] = useState({
@@ -21,40 +21,45 @@ export default function ContactsApp() {
   const character = db.getCharacter(db.getCurrentCharacterId());
   const isDM = dmMode.isDM();
 
-  const loadContacts = useCallback(() => {
+  const contacts = useMemo(() => {
+    const _version = contactsVersion; // Trigger recalculation when version changes
     const allContacts = contactsDb.contactsDatabase.getAllContacts();
     
     if (isDM) {
       // DM sees all contacts
-      setContacts(allContacts);
+      return allContacts;
     } else {
       // Players see their own contacts + public contacts from others
       const charId = db.getCurrentCharacterId();
-      const filtered = allContacts.filter(c => 
+      return allContacts.filter(c => 
         c.characterId === charId || c.visibility === 'public'
       );
-      setContacts(filtered);
     }
-  }, [isDM]);
+  }, [isDM, contactsVersion]);
 
-  const loadMessages = useCallback(() => {
+  const messages = useMemo(() => {
+    const _version = messagesVersion; // Trigger recalculation when version changes
     const allMessages = contactsDb.messagesDatabase.getAllMessages();
     const charId = db.getCurrentCharacterId();
     
     if (isDM) {
       // DM sees all messages
-      setMessages(allMessages);
+      return allMessages;
     } else {
       // Players see their own messages
-      const filtered = allMessages.filter(m => m.characterId === charId);
-      setMessages(filtered);
+      return allMessages.filter(m => m.characterId === charId);
     }
-  }, [isDM]);
+  }, [isDM, messagesVersion]);
+
+  const loadContacts = useCallback(() => {
+    setContactsVersion(v => v + 1);
+  }, []);
+
+  const loadMessages = useCallback(() => {
+    setMessagesVersion(v => v + 1);
+  }, []);
 
   useEffect(() => {
-    loadContacts();
-    loadMessages();
-
     // Listen for WebSocket updates
     if (wsClient) {
       const handleContactSync = () => {

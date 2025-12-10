@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { codexDatabase, bestiaryDatabase } from '../utils/sharedData';
 import { wsClient } from '../utils/websocket';
 import { database, dmMode } from '../utils/database';
@@ -7,8 +7,8 @@ import './CodexApp.css';
 
 export default function CodexApp() {
   const [activeTab, setActiveTab] = useState('lore'); // 'lore' or 'bestiary'
-  const [pages, setPages] = useState([]);
-  const [creatures, setCreatures] = useState([]);
+  const [pagesVersion, setPagesVersion] = useState(0);
+  const [creaturesVersion, setCreaturesVersion] = useState(0);
   const [selectedPage, setSelectedPage] = useState(null);
   const [selectedCreature, setSelectedCreature] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -16,20 +16,25 @@ export default function CodexApp() {
   const isDM = dmMode.isDM();
   const character = database.getCurrentCharacter();
 
-  const loadData = useCallback(() => {
+  const pages = useMemo(() => {
+    const _version = pagesVersion; // Trigger recalculation when version changes
     const allPages = codexDatabase.getAllPages();
-    const filteredPages = isDM || showPrivatePages
+    return isDM || showPrivatePages
       ? allPages
       : allPages.filter(p => !p.isPrivate);
-    setPages(filteredPages);
+  }, [isDM, showPrivatePages, pagesVersion]);
 
-    const allCreatures = bestiaryDatabase.getAllEntries();
-    setCreatures(allCreatures);
-  }, [isDM, showPrivatePages]);
+  const creatures = useMemo(() => {
+    const _version = creaturesVersion; // Trigger recalculation when version changes
+    return bestiaryDatabase.getAllEntries();
+  }, [creaturesVersion]);
+
+  const loadData = useCallback(() => {
+    setPagesVersion(v => v + 1);
+    setCreaturesVersion(v => v + 1);
+  }, []);
 
   useEffect(() => {
-    loadData();
-
     const ws = wsClient;
     if (ws) {
       ws.on('codex_sync', (data) => {

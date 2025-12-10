@@ -2,6 +2,7 @@
   "name": "s0lstice-os",
   "private": true,
   "version": "1.1.0",
+  "type": "module",
   "main": "electron/main.js",
   "description": "S0LSTICE_OS - Your Hunter's Digital Companion",
   "author": {
