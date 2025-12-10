@@ -5,7 +5,7 @@ A modern, professional character management application for Hunters role-playing
 ## 🖼️ Screenshots
 
 ### Splash Screen
-The app features a distinctive splash screen with the **Delight** display font and the signature **S0LSTICE** branding where the zero has a diagonal amber bar to clearly distinguish it from the letter "O".
+The app features a distinctive splash screen with the **Delight** display font and the signature **S0LSTICE** branding where the zero has a diagonal white bar to clearly distinguish it from the letter "O".
 
 ![Splash Screen](docs/screenshots/splash-screen.png)
 
@@ -57,7 +57,7 @@ Responsive phone-style layout for mobile devices.
 - Clean, professional color palette with vibrant accents
 - Subtle shadows and smooth transitions
 - **Delight** display font for branding and **Inter** for UI typography
-- Signature **S0LSTICE** logo with slashed zero (amber diagonal bar) for clear zero vs. O distinction
+- Signature **S0LSTICE** logo with slashed zero (white diagonal bar) for clear zero vs. O distinction
 - Smooth hover effects and animations
 - Focus states for accessibility
 - Fully responsive design
