@@ -63,7 +63,7 @@
 
 @media (min-width: 768px) and (max-width: 1199px) {
   .desktop-layout {
-    background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-sunken) 100%);
+    background: linear-gradient(145deg, #e8ecf3 0%, #d0d5dd 50%, #c4c9d1 100%);
     padding: var(--spacing-4);
   }
 
@@ -75,30 +75,72 @@
 
   .phone-frame {
     /* Use viewport-relative sizing that scales */
-    width: min(390px, 45vw);
-    height: min(780px, calc(100vh - 48px));
+    width: min(340px, 42vw);
+    height: min(680px, calc(100vh - 48px));
     max-height: calc(100vh - 48px);
-    border: 4px solid var(--outline-color);
-    border-radius: 40px;
-    box-shadow: var(--shadow-xl);
-    aspect-ratio: 9 / 18;
+    border: 6px solid #1a1a1a;
+    border-radius: 36px;
+    box-shadow: 
+      inset 0 0 0 2px #333,
+      0 0 0 1px rgba(0,0,0,0.1),
+      0 20px 40px -10px rgba(0,0,0,0.3),
+      0 30px 60px -20px rgba(0,0,0,0.2);
+    aspect-ratio: 9 / 19;
+    background: #000;
+    position: relative;
+  }
+
+  /* Inner bezel effect */
+  .phone-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 30px;
+    background: var(--color-surface);
+    z-index: 0;
   }
 
   .phone-notch {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    top: 10px;
+    top: 8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 100px;
-    height: 24px;
-    background-color: var(--outline-color);
-    border-radius: 16px;
+    width: 90px;
+    height: 22px;
+    background-color: #1a1a1a;
+    border-radius: 14px;
     z-index: 100;
+    gap: 6px;
+  }
+
+  /* Camera dot */
+  .phone-notch::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: linear-gradient(145deg, #2a2a3a 0%, #1a1a2a 100%);
+    border-radius: 50%;
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.1);
+  }
+
+  /* Speaker grille */
+  .phone-notch::after {
+    content: '';
+    width: 32px;
+    height: 4px;
+    background: #333;
+    border-radius: 2px;
   }
 
   .phone-frame .phone-layout {
-    padding-top: 16px;
+    padding-top: 14px;
+    position: relative;
+    z-index: 1;
+    border-radius: 30px;
+    overflow: hidden;
   }
 }
 
@@ -109,7 +151,7 @@
 
 @media (min-width: 1200px) {
   .desktop-layout {
-    background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-sunken) 100%);
+    background: linear-gradient(145deg, #e8ecf3 0%, #d0d5dd 50%, #c4c9d1 100%);
     padding: var(--spacing-5);
   }
 
@@ -120,28 +162,70 @@
   }
 
   .phone-frame {
-    width: 360px;
-    height: min(720px, calc(100vh - 48px));
-    border: 4px solid var(--outline-color);
-    border-radius: 44px;
-    box-shadow: var(--shadow-xl), 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    width: 340px;
+    height: min(700px, calc(100vh - 48px));
+    border: 6px solid #1a1a1a;
+    border-radius: 40px;
+    box-shadow: 
+      inset 0 0 0 2px #333,
+      0 0 0 1px rgba(0,0,0,0.1),
+      0 25px 50px -12px rgba(0,0,0,0.35),
+      0 40px 80px -25px rgba(0,0,0,0.25);
+    background: #000;
+    position: relative;
+  }
+
+  /* Inner bezel effect */
+  .phone-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 34px;
+    background: var(--color-surface);
+    z-index: 0;
   }
 
   .phone-notch {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    top: 12px;
+    top: 10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 110px;
-    height: 26px;
-    background-color: var(--outline-color);
-    border-radius: 18px;
+    width: 100px;
+    height: 24px;
+    background-color: #1a1a1a;
+    border-radius: 16px;
     z-index: 100;
+    gap: 8px;
+  }
+
+  /* Camera dot */
+  .phone-notch::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: linear-gradient(145deg, #2a2a3a 0%, #1a1a2a 100%);
+    border-radius: 50%;
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.15);
+  }
+
+  /* Speaker grille */
+  .phone-notch::after {
+    content: '';
+    width: 36px;
+    height: 4px;
+    background: #333;
+    border-radius: 2px;
   }
 
   .phone-frame .phone-layout {
-    padding-top: 18px;
+    padding-top: 16px;
+    position: relative;
+    z-index: 1;
+    border-radius: 34px;
+    overflow: hidden;
   }
 }
 
@@ -159,15 +243,36 @@
 }
 
 .desktop-layout.expanded .phone-frame {
-  width: 300px;
-  height: min(640px, calc(100vh - 48px));
-  border-radius: 36px;
+  width: 280px;
+  height: min(580px, calc(100vh - 48px));
+  border-radius: 32px;
+  border-width: 5px;
+}
+
+.desktop-layout.expanded .phone-frame::before {
+  border-radius: 28px;
+}
+
+.desktop-layout.expanded .phone-frame .phone-layout {
+  border-radius: 28px;
+  padding-top: 12px;
 }
 
 .desktop-layout.expanded .phone-notch {
-  width: 90px;
-  height: 22px;
-  top: 10px;
+  width: 80px;
+  height: 20px;
+  top: 8px;
+  gap: 6px;
+}
+
+.desktop-layout.expanded .phone-notch::before {
+  width: 8px;
+  height: 8px;
+}
+
+.desktop-layout.expanded .phone-notch::after {
+  width: 28px;
+  height: 3px;
 }
 
 /* ==========================================
@@ -239,13 +344,13 @@
 
 @media (min-width: 1600px) {
   .phone-frame {
-    width: 380px;
-    height: min(780px, calc(100vh - 48px));
+    width: 360px;
+    height: min(740px, calc(100vh - 48px));
   }
 
   .desktop-layout.expanded .phone-frame {
-    width: 340px;
-    height: min(700px, calc(100vh - 48px));
+    width: 320px;
+    height: min(660px, calc(100vh - 48px));
   }
 
   .expanded-panel {
@@ -259,13 +364,29 @@
 
 @media (min-width: 2000px) {
   .phone-frame {
-    width: 400px;
-    height: min(844px, calc(100vh - 60px));
+    width: 380px;
+    height: min(780px, calc(100vh - 60px));
+    border-width: 7px;
+    border-radius: 44px;
+  }
+
+  .phone-frame::before {
+    border-radius: 38px;
+  }
+
+  .phone-frame .phone-layout {
+    border-radius: 38px;
+  }
+
+  .phone-notch {
+    width: 110px;
+    height: 28px;
+    top: 12px;
   }
 
   .desktop-layout.expanded .phone-frame {
-    width: 360px;
-    height: min(750px, calc(100vh - 60px));
+    width: 340px;
+    height: min(700px, calc(100vh - 60px));
   }
 }
 

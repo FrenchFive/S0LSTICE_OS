@@ -1,5 +1,6 @@
 /* ==========================================
    HOME SCREEN - Responsive Design
+   Uses CSS container queries for phone-aware sizing
    ========================================== */
 
 .home-screen {
@@ -8,42 +9,44 @@
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  container-type: inline-size;
+  container-name: homescreen;
 }
 
 .home-wallpaper {
   min-height: 100%;
-  padding: var(--spacing-4);
+  padding: var(--spacing-3);
   background-color: var(--color-bg);
 }
 
 /* ==========================================
-   CHARACTER WIDGET
+   CHARACTER WIDGET - Responsive to container
    ========================================== */
 
 .character-widget {
   display: flex;
   align-items: center;
-  gap: var(--spacing-3);
-  padding: var(--spacing-4);
+  gap: clamp(8px, 2.5cqi, 14px);
+  padding: clamp(10px, 3cqi, 18px);
   background-color: var(--color-surface);
-  border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
-  margin-bottom: var(--spacing-5);
+  border: 2px solid var(--outline-color);
+  border-radius: clamp(12px, 4cqi, 20px);
+  box-shadow: 3px 3px 0 var(--outline-color);
+  margin-bottom: clamp(12px, 3cqi, 20px);
 }
 
 .widget-avatar {
-  width: 56px;
-  height: 56px;
-  border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-lg);
+  width: clamp(36px, 12cqi, 56px);
+  height: clamp(36px, 12cqi, 56px);
+  border: 2px solid var(--outline-color);
+  border-radius: clamp(8px, 2.5cqi, 14px);
   overflow: hidden;
   background-color: var(--color-primary-light);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 2px 2px 0 var(--outline-color);
 }
 
 .widget-avatar img {
@@ -53,7 +56,7 @@
 }
 
 .widget-avatar-placeholder {
-  font-size: var(--font-size-2xl);
+  font-size: clamp(14px, 5cqi, 24px);
   font-weight: var(--font-weight-extrabold);
   color: var(--color-primary);
 }
@@ -64,24 +67,24 @@
 }
 
 .widget-greeting {
-  font-size: var(--font-size-xs);
+  font-size: clamp(9px, 2.8cqi, 13px);
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
 }
 
 .widget-name {
-  font-size: var(--font-size-lg);
+  font-size: clamp(12px, 4cqi, 20px);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
   line-height: 1.2;
-  margin: 2px 0;
+  margin: 1px 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .widget-level {
-  font-size: var(--font-size-xs);
+  font-size: clamp(8px, 2.5cqi, 12px);
   color: var(--color-text-muted);
   font-weight: var(--font-weight-semibold);
 }
@@ -90,31 +93,32 @@
 .dm-badge {
   display: flex;
   align-items: center;
-  gap: var(--spacing-1);
-  padding: var(--spacing-1) var(--spacing-2);
+  gap: 3px;
+  padding: 3px 6px;
   background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-primary) 100%);
   color: white;
   border-radius: var(--radius-full);
-  font-size: 10px;
+  font-size: clamp(8px, 2.5cqi, 11px);
   font-weight: var(--font-weight-bold);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 1px 1px 0 var(--outline-color);
   flex-shrink: 0;
 }
 
 .dm-badge svg {
-  width: 12px;
-  height: 12px;
+  width: clamp(10px, 3cqi, 14px);
+  height: clamp(10px, 3cqi, 14px);
 }
 
 /* ==========================================
-   APP GRID - Auto-fit for all screen sizes
+   APP GRID - Responsive to container size
    ========================================== */
 
 .app-grid {
   display: grid;
-  /* Auto-fit columns: min 70px, max 1fr, fits as many as possible */
-  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-  gap: var(--spacing-3);
+  /* 4 columns on phone - fits nicely like iOS/Android */
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(6px, 2cqi, 12px);
+  padding: var(--spacing-1) 0;
 }
 
 .app-icon {
@@ -123,45 +127,45 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-1);
-  padding: var(--spacing-2);
-  border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-lg);
+  gap: 2px;
+  padding: clamp(4px, 1.5cqi, 10px);
+  border: 2px solid var(--outline-color);
+  border-radius: clamp(8px, 3cqi, 14px);
   background-color: var(--color-surface);
   cursor: pointer;
-  box-shadow: var(--shadow-md);
+  box-shadow: 2px 2px 0 var(--outline-color);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   min-width: 0;
 }
 
 .app-icon:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--outline-color);
 }
 
 .app-icon:active {
   transform: translate(1px, 1px);
-  box-shadow: var(--shadow-active);
+  box-shadow: 1px 1px 0 var(--outline-color);
 }
 
 .app-icon-graphic {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: clamp(20px, 8cqi, 36px);
+  height: clamp(20px, 8cqi, 36px);
   border-radius: var(--radius-md);
   color: var(--color-text);
   flex-shrink: 0;
 }
 
 .app-icon-graphic svg {
-  width: 24px;
-  height: 24px;
+  width: clamp(16px, 6cqi, 28px);
+  height: clamp(16px, 6cqi, 28px);
 }
 
 .app-icon-name {
-  font-size: 9px;
+  font-size: clamp(7px, 2.5cqi, 11px);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
   text-align: center;
@@ -176,7 +180,7 @@
 .app-icon.dm-only {
   position: relative;
   border-color: var(--color-warning);
-  box-shadow: 0 0 8px rgba(234, 179, 8, 0.3), var(--shadow-md);
+  box-shadow: 0 0 6px rgba(234, 179, 8, 0.3), 2px 2px 0 var(--outline-color);
 }
 
 .app-icon.dm-only .app-icon-graphic {
@@ -189,13 +193,13 @@
 
 .app-dm-badge {
   position: absolute;
-  top: 2px;
-  right: 2px;
-  background: var(--color-bg-base);
+  top: 1px;
+  right: 1px;
+  background: var(--color-bg);
   color: var(--color-warning);
-  font-size: 7px;
+  font-size: clamp(5px, 1.8cqi, 8px);
   font-weight: var(--font-weight-bold);
-  padding: 1px 3px;
+  padding: 1px 2px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-warning);
 }
@@ -206,12 +210,12 @@
 
 .no-character-prompt {
   text-align: center;
-  padding: var(--spacing-6);
+  padding: clamp(16px, 5cqi, 28px);
   background-color: var(--color-surface);
-  border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
-  margin-top: var(--spacing-5);
+  border: 2px solid var(--outline-color);
+  border-radius: clamp(12px, 4cqi, 20px);
+  box-shadow: 3px 3px 0 var(--outline-color);
+  margin-top: clamp(12px, 4cqi, 20px);
 }
 
 .prompt-icon {
@@ -223,190 +227,77 @@
 }
 
 .prompt-icon svg {
-  width: 48px;
-  height: 48px;
+  width: clamp(32px, 12cqi, 52px);
+  height: clamp(32px, 12cqi, 52px);
 }
 
 .no-character-prompt p {
-  font-size: var(--font-size-base);
+  font-size: clamp(12px, 4cqi, 16px);
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
   margin-bottom: var(--spacing-4);
 }
 
 /* ==========================================
-   RESPONSIVE - Larger screens
+   CONTAINER QUERIES - Phone-aware sizing
+   These adjust based on the phone container size
    ========================================== */
 
-@media (min-width: 400px) {
-  .app-grid {
-    grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
-    gap: var(--spacing-3);
-  }
-
-  .app-icon {
-    padding: var(--spacing-3);
-    border-radius: var(--radius-xl);
-  }
-
-  .app-icon-graphic {
-    width: 36px;
-    height: 36px;
-  }
-
-  .app-icon-graphic svg {
-    width: 28px;
-    height: 28px;
-  }
-
-  .app-icon-name {
-    font-size: 10px;
-  }
-}
-
-@media (min-width: 500px) {
-  .home-wallpaper {
-    padding: var(--spacing-5);
-  }
-
-  .character-widget {
-    padding: var(--spacing-5);
-    gap: var(--spacing-4);
-  }
-
-  .widget-avatar {
-    width: 64px;
-    height: 64px;
-  }
-
-  .widget-name {
-    font-size: var(--font-size-xl);
-  }
-
-  .widget-greeting,
-  .widget-level {
-    font-size: var(--font-size-sm);
-  }
-
-  .app-grid {
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: var(--spacing-4);
-  }
-
-  .app-icon-graphic {
-    width: 40px;
-    height: 40px;
-  }
-
-  .app-icon-graphic svg {
-    width: 32px;
-    height: 32px;
-  }
-
-  .app-icon-name {
-    font-size: 11px;
-  }
-}
-
-@media (min-width: 768px) {
-  .character-widget {
-    padding: var(--spacing-5);
-  }
-
-  .widget-avatar {
-    width: 72px;
-    height: 72px;
-  }
-
-  .widget-avatar-placeholder {
-    font-size: var(--font-size-3xl);
-  }
-
-  .widget-name {
-    font-size: var(--font-size-2xl);
-  }
-
-  .dm-badge {
-    padding: var(--spacing-2) var(--spacing-3);
-    font-size: var(--font-size-xs);
-  }
-
-  .dm-badge svg {
-    width: 14px;
-    height: 14px;
-  }
-
+/* Small phone containers (< 300px wide) */
+@container homescreen (max-width: 299px) {
   .app-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: var(--spacing-4);
+    gap: 4px;
   }
-
-  .app-icon {
-    padding: var(--spacing-3);
+  
+  .character-widget {
+    gap: 6px;
+    padding: 8px;
   }
+}
 
-  .app-icon-graphic {
-    width: 44px;
-    height: 44px;
+/* Medium phone containers (300px - 380px) */
+@container homescreen (min-width: 300px) and (max-width: 379px) {
+  .app-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
   }
+}
 
-  .app-icon-name {
-    font-size: var(--font-size-xs);
+/* Large phone containers (380px+) */
+@container homescreen (min-width: 380px) {
+  .app-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
   }
-
-  .no-character-prompt {
-    padding: var(--spacing-8);
+  
+  .home-wallpaper {
+    padding: var(--spacing-4);
   }
+}
 
-  .prompt-icon svg {
-    width: 64px;
-    height: 64px;
+/* Very large containers (expanded panel, desktop) */
+@container homescreen (min-width: 500px) {
+  .app-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
   }
 }
 
 /* ==========================================
-   LANDSCAPE MOBILE
+   LANDSCAPE MOBILE - Height-based adjustments
    ========================================== */
 
 @media (max-height: 500px) {
   .home-wallpaper {
-    padding: var(--spacing-3);
-  }
-
-  .character-widget {
-    padding: var(--spacing-3);
-    margin-bottom: var(--spacing-3);
-  }
-
-  .widget-avatar {
-    width: 44px;
-    height: 44px;
-  }
-
-  .widget-name {
-    font-size: var(--font-size-base);
-  }
-
-  .app-grid {
-    grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
-    gap: var(--spacing-2);
-  }
-
-  .app-icon {
     padding: var(--spacing-2);
   }
 
-  .app-icon-graphic {
-    width: 28px;
-    height: 28px;
+  .character-widget {
+    margin-bottom: var(--spacing-2);
   }
 
-  .app-icon-graphic svg {
-    width: 22px;
-    height: 22px;
-  }
-
-  .app-icon-name {
-    font-size: 8px;
+  .app-grid {
+    grid-template-columns: repeat(6, 1fr);
   }
 }
