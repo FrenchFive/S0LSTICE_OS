@@ -23,7 +23,6 @@ import DMRewardsApp from './apps/DMRewardsApp';
 import ConditionsApp from './apps/ConditionsApp';
 import TouchstonesApp from './apps/TouchstonesApp';
 import ChronicleApp from './apps/ChronicleApp';
-import AdvancedDiceApp from './apps/AdvancedDiceApp';
 import CampaignApp from './apps/CampaignApp';
 import EdgesApp from './apps/EdgesApp';
 
@@ -34,7 +33,7 @@ import { wsClient } from './utils/websocket';
 // Icons
 import { UserIcon, WalletIcon } from './components/icons/Icons';
 
-// Simple app components mapping
+// Simple app components mapping (dice is handled on home screen)
 const SIMPLE_APPS = {
   friends: FriendsApp,
   codex: CodexApp,
@@ -49,7 +48,6 @@ const SIMPLE_APPS = {
   conditions: ConditionsApp,
   touchstones: TouchstonesApp,
   chronicle: ChronicleApp,
-  dice: AdvancedDiceApp,
   campaign: CampaignApp,
   edges: EdgesApp,
 };

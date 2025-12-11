@@ -32,7 +32,7 @@
   border: 2px solid var(--outline-color);
   border-radius: clamp(12px, 4cqi, 20px);
   box-shadow: 3px 3px 0 var(--outline-color);
-  margin-bottom: clamp(12px, 3cqi, 20px);
+  margin-bottom: clamp(12px, 3cqi, 16px);
 }
 
 .widget-avatar {
@@ -121,6 +121,91 @@
 }
 
 /* ==========================================
+   DICE WIDGET - Large prominent button
+   ========================================== */
+
+.dice-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: clamp(16px, 5cqi, 24px);
+  margin-bottom: clamp(12px, 3cqi, 16px);
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
+  border: 3px solid var(--outline-color);
+  border-radius: clamp(16px, 5cqi, 24px);
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--outline-color);
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.dice-widget::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255,255,255,0.3) 50%,
+    transparent 70%
+  );
+  transform: rotate(45deg);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { transform: translateX(-100%) rotate(45deg); }
+  50% { transform: translateX(100%) rotate(45deg); }
+}
+
+.dice-widget:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--outline-color);
+}
+
+.dice-widget:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--outline-color);
+}
+
+.dice-widget-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-1);
+  position: relative;
+  z-index: 1;
+}
+
+.dice-widget-icon svg {
+  width: clamp(32px, 12cqi, 48px);
+  height: clamp(32px, 12cqi, 48px);
+}
+
+.dice-widget-label {
+  font-size: clamp(14px, 5cqi, 20px);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  position: relative;
+  z-index: 1;
+}
+
+.dice-widget-hint {
+  font-size: clamp(9px, 2.5cqi, 12px);
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ==========================================
    APP GRID - Responsive to container size
    ========================================== */
 
@@ -130,6 +215,10 @@
   grid-template-columns: repeat(4, 1fr);
   gap: clamp(6px, 2cqi, 12px);
   padding: var(--spacing-1) 0;
+}
+
+.app-grid.touch-dragging {
+  cursor: grabbing;
 }
 
 .app-icon {
@@ -145,8 +234,11 @@
   background-color: var(--color-surface);
   cursor: pointer;
   box-shadow: 2px 2px 0 var(--outline-color);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
   min-width: 0;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .app-icon:hover {
@@ -157,6 +249,26 @@
 .app-icon:active {
   transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 var(--outline-color);
+}
+
+/* Dragging states */
+.app-icon.is-dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.app-icon.drag-over {
+  transform: scale(1.05);
+  box-shadow: 0 0 0 3px var(--color-primary), 3px 3px 0 var(--outline-color);
+}
+
+.app-icon[draggable="true"] {
+  cursor: grab;
+}
+
+.app-icon[draggable="true"]:active {
+  cursor: grabbing;
 }
 
 .app-icon-graphic {
@@ -215,6 +327,16 @@
   border: 1px solid var(--color-warning);
 }
 
+/* Drag hint */
+.drag-hint {
+  text-align: center;
+  font-size: clamp(8px, 2.5cqi, 11px);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-3);
+  padding: var(--spacing-2);
+  opacity: 0.7;
+}
+
 /* ==========================================
    NO CHARACTER PROMPT
    ========================================== */
@@ -265,6 +387,10 @@
     gap: 6px;
     padding: 8px;
   }
+
+  .dice-widget {
+    padding: 12px;
+  }
 }
 
 /* Medium phone containers (300px - 380px) */
@@ -308,7 +434,16 @@
     margin-bottom: var(--spacing-2);
   }
 
+  .dice-widget {
+    padding: 10px;
+    margin-bottom: var(--spacing-2);
+  }
+
   .app-grid {
     grid-template-columns: repeat(6, 1fr);
+  }
+
+  .drag-hint {
+    display: none;
   }
 }
