@@ -6,7 +6,6 @@ import {
   BookIcon,
   IdCardIcon,
   PhoneIcon,
-  ChartIcon,
   ChecklistIcon,
   MapIcon,
   BackpackIcon,
@@ -27,12 +26,10 @@ import './HomeScreen.css';
 
 // App definitions with harmonious color assignments
 const APPS = [
-  { id: 'character', name: 'Character', icon: UserIcon, color: 'var(--app-color-1)' },
+  { id: 'identity', name: 'Identity', icon: IdCardIcon, color: 'var(--app-color-1)' },
   { id: 'friends', name: 'Friends', icon: UsersIcon, color: 'var(--app-color-3)' },
   { id: 'codex', name: 'Codex', icon: BookIcon, color: 'var(--app-color-5)' },
-  { id: 'id', name: 'ID Card', icon: IdCardIcon, color: 'var(--app-color-4)' },
   { id: 'contacts', name: 'Contacts', icon: PhoneIcon, color: 'var(--app-color-7)' },
-  { id: 'stats', name: 'Stats', icon: ChartIcon, color: 'var(--app-color-2)' },
   { id: 'quest', name: 'Quests', icon: ChecklistIcon, color: 'var(--app-color-3)' },
   { id: 'map', name: 'Map', icon: MapIcon, color: 'var(--app-color-4)' },
   { id: 'inventory', name: 'Inventory', icon: BackpackIcon, color: 'var(--app-color-2)' },
@@ -148,7 +145,7 @@ function HomeScreen({ onAppOpen }) {
             <p>No character selected</p>
             <button 
               className="btn btn-primary"
-              onClick={() => onAppOpen('character')}
+              onClick={() => onAppOpen('identity')}
             >
               Select Character
             </button>

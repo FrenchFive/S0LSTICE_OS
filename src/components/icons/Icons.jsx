@@ -525,3 +525,17 @@ export const InfoIcon = (props) => (
     <line x1="12" y1="8" x2="12.01" y2="8" />
   </IconWrapper>
 );
+
+// Chevron Down icon
+export const ChevronDownIcon = (props) => (
+  <IconWrapper {...props}>
+    <polyline points="6 9 12 15 18 9" />
+  </IconWrapper>
+);
+
+// Chevron Up icon
+export const ChevronUpIcon = (props) => (
+  <IconWrapper {...props}>
+    <polyline points="18 15 12 9 6 15" />
+  </IconWrapper>
+);

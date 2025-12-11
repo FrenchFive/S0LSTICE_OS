@@ -8,9 +8,8 @@ import './DesktopLayout.css';
 import FriendsApp from '../apps/FriendsApp';
 import CodexApp from '../apps/CodexApp';
 import MapApp from '../apps/MapApp';
-import IDCardApp from '../apps/IDCardApp';
+import IdentityApp from '../apps/IDCardApp';
 import ContactsApp from '../apps/ContactsApp';
-import StatsApp from '../apps/StatsApp';
 import QuestApp from '../apps/QuestApp';
 import InventoryApp from '../apps/InventoryApp';
 import PetsApp from '../apps/PetsApp';
@@ -18,16 +17,14 @@ import NotesApp from '../apps/NotesApp';
 import CombatApp from '../apps/CombatApp';
 import BankPage from '../pages/BankPage';
 import Settings from '../pages/Settings';
-import CharacterMain from '../pages/CharacterMain';
 
 // App registry with metadata
 const APPS = {
   friends: { component: FriendsApp, title: 'Friends', expandable: true },
   codex: { component: CodexApp, title: 'Codex', expandable: true },
   map: { component: MapApp, title: 'Map', expandable: true },
-  id: { component: IDCardApp, title: 'ID Card', expandable: true },
+  identity: { component: IdentityApp, title: 'Identity', expandable: true, needsCharacter: true },
   contacts: { component: ContactsApp, title: 'Contacts', expandable: true },
-  stats: { component: StatsApp, title: 'Stats', expandable: true },
   quest: { component: QuestApp, title: 'Quests', expandable: true },
   inventory: { component: InventoryApp, title: 'Inventory', expandable: true },
   pets: { component: PetsApp, title: 'Pets', expandable: true },
@@ -35,7 +32,6 @@ const APPS = {
   combat: { component: CombatApp, title: 'Combat', expandable: true },
   bank: { component: BankPage, title: 'Bank', expandable: true, needsCharacter: true },
   settings: { component: Settings, title: 'Settings', expandable: true },
-  character: { component: CharacterMain, title: 'Character', expandable: true, needsCharacter: true },
 };
 
 function DesktopLayout({ character, onCharacterUpdate, onSwitchCharacter }) {
@@ -104,7 +100,7 @@ function DesktopLayout({ character, onCharacterUpdate, onSwitchCharacter }) {
       props.currentCharacter = character;
       props.onClose = handleBackToHome;
       props.onSwitchCharacter = onSwitchCharacter;
-    } else if (currentApp === 'character' || currentApp === 'bank') {
+    } else if (currentApp === 'identity' || currentApp === 'bank') {
       props.character = character;
       props.onUpdate = onCharacterUpdate;
     }
@@ -146,7 +142,7 @@ function DesktopLayout({ character, onCharacterUpdate, onSwitchCharacter }) {
         props.currentCharacter = character;
         props.onClose = handleBackToHome;
         props.onSwitchCharacter = onSwitchCharacter;
-      } else if (currentApp === 'character' || currentApp === 'bank') {
+      } else if (currentApp === 'identity' || currentApp === 'bank') {
         props.character = character;
         props.onUpdate = onCharacterUpdate;
       }
