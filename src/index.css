@@ -5,12 +5,42 @@
   box-sizing: border-box;
 }
 
+html {
+  /* Prevent text size adjustment on orientation change */
+  -webkit-text-size-adjust: 100%;
+  /* Smooth scrolling */
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  /* Use dynamic viewport height for mobile browsers */
+  min-height: 100dvh;
+  /* Prevent overscroll bounce on iOS */
+  overscroll-behavior: none;
+  /* Enable touch scrolling momentum */
+  -webkit-overflow-scrolling: touch;
 }
 
 #root {
   min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+}
+
+/* Prevent pull-to-refresh on mobile */
+html, body {
+  overscroll-behavior-y: contain;
+}
+
+/* Disable tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Improve touch targets for accessibility */
+button, a, input, select, textarea {
+  touch-action: manipulation;
 }

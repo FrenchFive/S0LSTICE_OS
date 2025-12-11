@@ -165,19 +165,63 @@
 
 @media (max-width: 640px) {
   .splash-title h1 {
-    font-size: 40px;
+    font-size: 36px;
     letter-spacing: 3px;
   }
 
   .splash-title h1 .zero-slash::before {
-    width: 5px;
+    width: 4px;
   }
 
   .splash-subtitle {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   .splash-tagline {
     font-size: var(--font-size-base);
+    padding: 0 var(--spacing-4);
+  }
+
+  .splash-loader {
+    bottom: 40px;
+  }
+}
+
+@media (max-width: 400px) {
+  .splash-title h1 {
+    font-size: 28px;
+    letter-spacing: 2px;
+  }
+
+  .splash-title h1 .zero-slash::before {
+    width: 3px;
+  }
+
+  .splash-subtitle {
+    font-size: 18px;
+  }
+}
+
+/* Landscape mobile */
+@media (max-height: 500px) {
+  .splash-content {
+    gap: var(--spacing-2);
+  }
+
+  .splash-title h1 {
+    font-size: 32px;
+  }
+
+  .splash-subtitle {
+    font-size: 18px;
+  }
+
+  .splash-loader {
+    bottom: 20px;
+  }
+
+  .loader-dots span {
+    width: 8px;
+    height: 8px;
   }
 }

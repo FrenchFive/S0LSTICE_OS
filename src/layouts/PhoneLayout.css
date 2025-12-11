@@ -1,49 +1,55 @@
 /* ==========================================
    PHONE LAYOUT - Main App Shell
+   Responsive design that adapts to all screens
    ========================================== */
 
 .phone-layout {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   background-color: var(--color-bg);
   overflow: hidden;
+  /* CSS custom property for container-aware sizing */
+  container-type: inline-size;
+  container-name: phonelayout;
 }
 
 /* ==========================================
    STATUS BAR - Top bar with time/battery
+   Responsive to phone container size
    ========================================== */
 
 .status-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-3) var(--spacing-5);
+  padding: clamp(4px, 1.5cqi, 10px) clamp(8px, 3cqi, 16px);
   background-color: var(--color-surface);
-  border-bottom: var(--outline-width) solid var(--outline-color);
-  height: 52px;
+  border-bottom: 2px solid var(--outline-color);
+  height: clamp(32px, 10cqi, 44px);
+  min-height: clamp(32px, 10cqi, 44px);
   flex-shrink: 0;
-  box-shadow: 0 4px 0 var(--outline-color);
+  box-shadow: 0 2px 0 var(--outline-color);
   z-index: var(--z-sticky);
 }
 
 .status-left {
   display: flex;
   align-items: center;
-  gap: var(--spacing-3);
+  gap: var(--spacing-2);
 }
 
 .status-time {
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-sm);
+  font-size: clamp(10px, 3cqi, 14px);
   color: var(--color-text);
 }
 
 .status-right {
   display: flex;
   align-items: center;
-  gap: var(--spacing-4);
+  gap: clamp(6px, 2cqi, 12px);
 }
 
 .status-icon {
@@ -51,6 +57,11 @@
   align-items: center;
   justify-content: center;
   color: var(--color-text-secondary);
+}
+
+.status-icon svg {
+  width: clamp(12px, 4cqi, 18px);
+  height: clamp(12px, 4cqi, 18px);
 }
 
 .status-icon.connected {
@@ -69,18 +80,23 @@
 .status-battery {
   display: flex;
   align-items: center;
-  gap: var(--spacing-2);
-  padding: var(--spacing-1) var(--spacing-3);
+  gap: 2px;
+  padding: 2px clamp(4px, 1.5cqi, 8px);
   background-color: var(--color-bg-sunken);
   border: 2px solid var(--outline-color);
   border-radius: var(--radius-md);
-  font-size: var(--font-size-xs);
+  font-size: clamp(9px, 2.5cqi, 12px);
   font-weight: var(--font-weight-bold);
 }
 
 .battery-icon {
   display: flex;
   align-items: center;
+}
+
+.battery-icon svg {
+  width: clamp(10px, 3cqi, 14px);
+  height: clamp(10px, 3cqi, 14px);
 }
 
 .battery-high { color: var(--color-success); }
@@ -93,19 +109,21 @@
 
 .notification-toast {
   position: fixed;
-  top: 68px;
+  top: clamp(40px, 12cqi, 56px);
   left: 50%;
   transform: translateX(-50%);
   background-color: var(--color-surface);
   color: var(--color-text);
-  padding: var(--spacing-3) var(--spacing-6);
-  border: var(--outline-width) solid var(--outline-color);
+  padding: clamp(8px, 2cqi, 12px) clamp(12px, 3cqi, 20px);
+  border: 2px solid var(--outline-color);
   border-radius: var(--radius-lg);
   font-weight: var(--font-weight-semibold);
+  font-size: clamp(11px, 3cqi, 14px);
   box-shadow: var(--shadow-lg);
   z-index: var(--z-toast);
   animation: toastSlideIn 0.3s ease-out;
-  max-width: calc(100% - 40px);
+  max-width: calc(100% - 24px);
+  text-align: center;
 }
 
 @keyframes toastSlideIn {
@@ -128,6 +146,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   background-color: var(--color-bg);
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ==========================================
@@ -135,39 +154,47 @@
    ========================================== */
 
 .phone-home-bar {
-  height: 72px;
+  height: clamp(40px, 12cqi, 56px);
+  min-height: clamp(40px, 12cqi, 56px);
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--color-bg);
-  border-top: var(--outline-width) solid var(--outline-color);
+  border-top: 2px solid var(--outline-color);
   flex-shrink: 0;
   padding: var(--spacing-2);
+  /* Safe area for devices with home indicators */
+  padding-bottom: max(var(--spacing-2), env(safe-area-inset-bottom, 0));
 }
 
 .home-button {
-  width: 56px;
-  height: 56px;
+  width: clamp(32px, 10cqi, 44px);
+  height: clamp(32px, 10cqi, 44px);
   border-radius: var(--radius-full);
   background-color: var(--color-surface);
-  border: var(--outline-width) solid var(--outline-color);
+  border: 2px solid var(--outline-color);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-md);
+  box-shadow: 2px 2px 0 var(--outline-color);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   color: var(--color-text);
 }
 
+.home-button svg {
+  width: clamp(16px, 5cqi, 22px);
+  height: clamp(16px, 5cqi, 22px);
+}
+
 .home-button:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: var(--shadow-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--outline-color);
 }
 
 .home-button:active {
-  transform: translate(2px, 2px);
-  box-shadow: var(--shadow-active);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--outline-color);
 }
 
 /* ==========================================
@@ -177,29 +204,38 @@
 .app-header {
   display: flex;
   align-items: center;
-  gap: var(--spacing-3);
-  padding: var(--spacing-4) var(--spacing-5);
+  gap: clamp(8px, 2cqi, 12px);
+  padding: clamp(8px, 2.5cqi, 14px) clamp(10px, 3cqi, 16px);
   background-color: var(--color-surface);
-  border-bottom: var(--outline-width) solid var(--outline-color);
-  box-shadow: 0 4px 0 var(--outline-color);
+  border-bottom: 2px solid var(--outline-color);
+  box-shadow: 0 2px 0 var(--outline-color);
   position: sticky;
   top: 0;
   z-index: var(--z-elevated);
+  min-height: clamp(36px, 11cqi, 48px);
 }
 
 .app-header-title {
-  font-size: var(--font-size-xl);
+  font-size: clamp(13px, 4cqi, 18px);
   font-weight: var(--font-weight-bold);
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
   flex: 1;
+  min-width: 0;
+}
+
+.app-header-title span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .app-header-actions {
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
+  flex-shrink: 0;
 }
 
 /* ==========================================
@@ -207,17 +243,17 @@
    ========================================== */
 
 .app-content {
-  padding: var(--spacing-5);
+  padding: clamp(10px, 3cqi, 16px);
   min-height: 100%;
 }
 
 .app-content-centered {
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
 .app-content-wide {
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -227,11 +263,11 @@
 
 .section {
   background-color: var(--color-surface);
-  border: var(--outline-width) solid var(--outline-color);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-5);
-  box-shadow: var(--shadow-md);
-  margin-bottom: var(--spacing-5);
+  border: 2px solid var(--outline-color);
+  border-radius: clamp(10px, 3cqi, 16px);
+  padding: clamp(10px, 3cqi, 16px);
+  box-shadow: 2px 2px 0 var(--outline-color);
+  margin-bottom: clamp(10px, 3cqi, 16px);
 }
 
 .section-header {
@@ -239,13 +275,13 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-3);
-  margin-bottom: var(--spacing-4);
+  margin-bottom: var(--spacing-3);
   padding-bottom: var(--spacing-3);
-  border-bottom: var(--outline-width) solid var(--outline-color);
+  border-bottom: 2px solid var(--outline-color);
 }
 
 .section-title {
-  font-size: var(--font-size-lg);
+  font-size: clamp(12px, 3.5cqi, 16px);
   font-weight: var(--font-weight-bold);
   display: flex;
   align-items: center;
@@ -253,34 +289,79 @@
 }
 
 /* ==========================================
-   RESPONSIVE ADJUSTMENTS
+   CONTAINER QUERIES - Phone-aware sizing
    ========================================== */
 
-@media (max-width: 768px) {
+/* Small phone containers */
+@container phonelayout (max-width: 299px) {
   .status-bar {
-    padding: var(--spacing-2) var(--spacing-4);
-    height: 48px;
+    padding: 4px 8px;
+    height: 30px;
+    min-height: 30px;
   }
-
-  .app-header {
-    padding: var(--spacing-3) var(--spacing-4);
+  
+  .phone-home-bar {
+    height: 36px;
+    min-height: 36px;
   }
-
-  .app-content {
-    padding: var(--spacing-4);
+  
+  .home-button {
+    width: 28px;
+    height: 28px;
   }
+}
 
-  .section {
-    padding: var(--spacing-4);
-    border-radius: var(--radius-lg);
+/* ==========================================
+   LANDSCAPE MOBILE
+   ========================================== */
+
+@media (max-height: 500px) {
+  .status-bar {
+    height: 32px;
+    min-height: 32px;
+    padding: var(--spacing-1) var(--spacing-3);
   }
 
   .phone-home-bar {
-    height: 64px;
+    height: 36px;
+    min-height: 36px;
   }
 
   .home-button {
-    width: 48px;
-    height: 48px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .app-header {
+    min-height: 36px;
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+
+  .app-content {
+    padding: var(--spacing-2);
+  }
+
+  .section {
+    padding: var(--spacing-2);
+    margin-bottom: var(--spacing-2);
+  }
+}
+
+/* ==========================================
+   SAFE AREAS for notched devices
+   ========================================== */
+
+@supports (padding: env(safe-area-inset-top)) {
+  .status-bar {
+    padding-top: max(var(--spacing-2), env(safe-area-inset-top));
+  }
+
+  .phone-home-bar {
+    padding-bottom: max(var(--spacing-2), env(safe-area-inset-bottom));
+  }
+
+  .app-content {
+    padding-left: max(var(--spacing-3), env(safe-area-inset-left));
+    padding-right: max(var(--spacing-3), env(safe-area-inset-right));
   }
 }

@@ -628,6 +628,10 @@
    ========================================== */
 
 @media (max-width: 768px) {
+  .stats-app {
+    padding: var(--spacing-4);
+  }
+
   .attributes-grid,
   .skills-grid {
     grid-template-columns: 1fr;
@@ -637,35 +641,166 @@
     flex-direction: column;
     gap: var(--spacing-3);
   }
+
+  .stats-header {
+    padding: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+  }
+
+  .pool-builder-section,
+  .roll-result,
+  .attributes-section,
+  .skills-section,
+  .recent-rolls-section {
+    padding: var(--spacing-4);
+    margin-bottom: var(--spacing-4);
+  }
 }
 
 @media (max-width: 640px) {
   .stats-app {
-    padding: var(--spacing-4);
+    padding: var(--spacing-3);
   }
   
   .stats-header {
     flex-direction: column;
     gap: var(--spacing-3);
+    padding: var(--spacing-3);
   }
   
   .stats-title {
     text-align: center;
+  }
+
+  .stats-header h2 {
+    font-size: var(--font-size-lg);
+    justify-content: center;
   }
   
   .stats-xp-display {
     width: 100%;
     justify-content: space-between;
   }
+
+  .stats-xp-bar {
+    padding: var(--spacing-2) var(--spacing-3);
+  }
   
   .pool-display {
     flex-direction: column;
     gap: var(--spacing-1);
+  }
+
+  .pool-value {
+    font-size: var(--font-size-2xl);
+  }
+
+  .pool-breakdown {
+    min-height: 28px;
+  }
+
+  .pool-part {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-1);
+  }
+
+  .number-input button {
+    width: 28px;
+    height: 28px;
+    font-size: var(--font-size-base);
+  }
+
+  .number-input span {
+    min-width: 32px;
+    font-size: var(--font-size-base);
+  }
+
+  .btn-roll {
+    padding: var(--spacing-3);
+    font-size: var(--font-size-base);
   }
   
   .result-header {
     flex-direction: column;
     gap: var(--spacing-2);
     text-align: center;
+  }
+
+  .result-outcome {
+    font-size: var(--font-size-lg);
+  }
+
+  .die {
+    width: 32px;
+    height: 32px;
+    font-size: var(--font-size-base);
+  }
+
+  .attr-row,
+  .skill-row {
+    padding: var(--spacing-1);
+  }
+
+  .attr-name,
+  .skill-name {
+    font-size: var(--font-size-xs);
+  }
+
+  .attribute-category h4,
+  .skill-category h4 {
+    font-size: 10px;
+    margin-bottom: var(--spacing-1);
+    padding-bottom: var(--spacing-1);
+  }
+
+  .skills-grid {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 400px) {
+  .stats-app {
+    padding: var(--spacing-2);
+  }
+
+  .pool-builder-section,
+  .roll-result,
+  .attributes-section,
+  .skills-section,
+  .recent-rolls-section {
+    padding: var(--spacing-3);
+    border-radius: var(--radius-lg);
+  }
+
+  .pool-builder-section h3,
+  .attributes-section h3,
+  .skills-section h3,
+  .recent-rolls-section h3 {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-3);
+    padding-bottom: var(--spacing-2);
+  }
+}
+
+/* Landscape mobile */
+@media (max-height: 500px) {
+  .stats-app {
+    padding: var(--spacing-3);
+  }
+
+  .stats-header {
+    padding: var(--spacing-2);
+    margin-bottom: var(--spacing-2);
+  }
+
+  .pool-builder-section,
+  .attributes-section,
+  .skills-section {
+    padding: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+  }
+
+  .skills-grid {
+    max-height: 200px;
   }
 }

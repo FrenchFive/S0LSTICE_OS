@@ -377,19 +377,86 @@
 }
 
 /* Responsive */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .quest-app {
     padding: var(--spacing-4);
   }
 
+  .quest-header h1 {
+    font-size: var(--font-size-xl);
+  }
+
+  .quest-form {
+    padding: var(--spacing-4);
+  }
+
+  .quest-form h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  .modal-content {
+    padding: var(--spacing-4);
+  }
+}
+
+@media (max-width: 640px) {
+  .quest-app {
+    padding: var(--spacing-3);
+  }
+
   .quest-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: var(--spacing-2);
+  }
+
+  .quest-header h1 {
+    font-size: var(--font-size-lg);
+    justify-content: center;
+  }
+
+  .btn-add-quest {
+    width: 100%;
+    justify-content: center;
+    padding: var(--spacing-2) var(--spacing-4);
+    font-size: var(--font-size-sm);
+  }
+
+  .quest-stats {
+    margin-bottom: var(--spacing-4);
+    gap: var(--spacing-3);
+  }
+
+  .quest-app .stat-card {
+    padding: var(--spacing-3);
+  }
+
+  .quest-app .stat-value {
+    font-size: var(--font-size-2xl);
+  }
+
+  .quest-form {
+    padding: var(--spacing-3);
+    margin-bottom: var(--spacing-4);
+  }
+
+  .quest-form h3 {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-3);
   }
 
   .quest-card {
     flex-direction: column;
     gap: var(--spacing-3);
+    padding: var(--spacing-3);
+  }
+
+  .quest-title {
+    font-size: var(--font-size-base);
+  }
+
+  .quest-meta {
+    font-size: var(--font-size-xs);
   }
 
   .quest-actions {
@@ -400,7 +467,59 @@
     width: 100%;
   }
 
+  .modal-content {
+    padding: var(--spacing-4);
+    max-height: 85vh;
+  }
+
+  .modal-content h2 {
+    font-size: var(--font-size-xl);
+  }
+
   .modal-actions {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 400px) {
+  .quest-app {
+    padding: var(--spacing-2);
+  }
+
+  .quest-form,
+  .quest-card {
+    border-radius: var(--radius-lg);
+  }
+
+  .quest-category,
+  .quest-priority,
+  .quest-author {
+    padding: 2px var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* Landscape mobile */
+@media (max-height: 500px) {
+  .quest-app {
+    padding: var(--spacing-3);
+  }
+
+  .quest-stats {
+    margin-bottom: var(--spacing-3);
+  }
+
+  .quest-form {
+    padding: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+  }
+
+  .quest-list {
+    gap: var(--spacing-3);
+  }
+
+  .modal-content {
+    max-height: 90vh;
+    padding: var(--spacing-3);
   }
 }

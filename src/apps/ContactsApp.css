@@ -1,309 +1,360 @@
+/* ==========================================
+   CONTACTS APP - Responsive Design
+   ========================================== */
+
 .contacts-app {
-  padding: 20px;
+  padding: var(--spacing-4);
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
+
+/* ==========================================
+   TABS
+   ========================================== */
 
 .tabs {
   display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-  border-bottom: 3px solid black;
-  padding-bottom: 10px;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+  border-bottom: var(--outline-width) solid var(--outline-color);
+  padding-bottom: var(--spacing-2);
+  flex-wrap: wrap;
 }
 
 .tab {
-  padding: 10px 20px;
-  border: 3px solid black;
-  border-radius: 8px 8px 0 0;
-  background: white;
-  font-size: 14px;
-  font-weight: bold;
+  padding: var(--spacing-2) var(--spacing-4);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--color-surface);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-xs);
 }
 
 .tab:hover {
-  background: #F0F0F0;
+  background: var(--color-surface-hover);
 }
 
 .tab.active {
-  background: #BAFFC9;
+  background: var(--color-success-light);
   transform: translateY(3px);
+  box-shadow: none;
 }
+
+/* ==========================================
+   CONTACTS LIST
+   ========================================== */
 
 .contacts-list {
   flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .contacts-list h3 {
-  margin: 0 0 16px 0;
-  font-size: 20px;
+  margin: 0 0 var(--spacing-4) 0;
+  font-size: var(--font-size-lg);
 }
 
 .empty-state {
   text-align: center;
-  padding: 60px 20px;
-  background: white;
-  border: 4px solid black;
-  border-radius: 12px;
-  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
+  padding: var(--spacing-8) var(--spacing-4);
+  background: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
 }
 
 .empty-state p {
-  font-size: 16px;
-  margin: 8px 0;
+  font-size: var(--font-size-base);
+  margin: var(--spacing-2) 0;
 }
 
 .contact-cards {
   display: grid;
-  gap: 16px;
+  gap: var(--spacing-4);
 }
 
 .contact-card {
-  background: white;
-  border: 4px solid black;
-  border-radius: 12px;
-  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
-  padding: 16px;
-  transition: transform 0.2s;
+  background: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-4);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .contact-card:hover {
-  transform: translateY(-2px);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hover);
 }
 
 .contact-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
-  padding-bottom: 12px;
-  border-bottom: 2px solid black;
+  margin-bottom: var(--spacing-3);
+  padding-bottom: var(--spacing-3);
+  border-bottom: 2px solid var(--outline-color);
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
 }
 
 .contact-name {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
 }
 
 .contact-actions {
   display: flex;
-  gap: 8px;
+  gap: var(--spacing-2);
 }
 
 .btn-message,
 .btn-delete {
-  padding: 6px 12px;
-  border: 3px solid black;
-  border-radius: 6px;
-  font-size: 16px;
+  padding: var(--spacing-2) var(--spacing-3);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
   cursor: pointer;
-  background: white;
-  transition: transform 0.1s;
+  background: var(--color-surface);
+  transition: transform var(--transition-fast);
+  box-shadow: var(--shadow-xs);
 }
 
 .btn-message {
-  background: #BAE1FF;
+  background: var(--color-secondary-light);
 }
 
 .btn-delete {
-  background: #FFB3BA;
+  background: var(--color-danger-light);
 }
 
 .btn-message:hover,
 .btn-delete:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .contact-info {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  font-size: 14px;
+  gap: var(--spacing-2);
+  font-size: var(--font-size-sm);
 }
 
 .contact-type,
 .contact-visibility {
   display: flex;
-  gap: 8px;
+  gap: var(--spacing-2);
 }
 
 .contact-type span,
 .contact-visibility span {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   text-transform: capitalize;
 }
 
 .contact-notes {
-  padding: 8px;
-  background: #F5F5F5;
-  border: 2px solid black;
-  border-radius: 6px;
+  padding: var(--spacing-2);
+  background: var(--color-bg-sunken);
+  border: 2px solid var(--outline-color);
+  border-radius: var(--radius-md);
   font-style: italic;
+  font-size: var(--font-size-sm);
 }
 
 .contact-meta {
-  font-size: 12px;
-  color: #666;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
 }
+
+/* ==========================================
+   MESSAGES VIEW
+   ========================================== */
 
 .messages-view {
   flex: 1;
   display: flex;
-  gap: 16px;
+  flex-direction: column;
+  gap: var(--spacing-4);
   overflow: hidden;
 }
 
 .messages-sidebar {
-  width: 250px;
-  background: white;
-  border: 4px solid black;
-  border-radius: 12px;
-  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
-  padding: 16px;
-  overflow-y: auto;
+  background: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-3);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  flex-shrink: 0;
 }
 
 .messages-sidebar h4 {
-  margin: 0 0 12px 0;
-  font-size: 16px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid black;
+  margin: 0 0 var(--spacing-3) 0;
+  font-size: var(--font-size-base);
+  padding-bottom: var(--spacing-2);
+  border-bottom: 2px solid var(--outline-color);
+}
+
+.conversation-list {
+  display: flex;
+  gap: var(--spacing-2);
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: var(--spacing-2);
 }
 
 .conversation-item {
-  padding: 12px;
-  border: 3px solid black;
-  border-radius: 8px;
-  margin-bottom: 8px;
+  padding: var(--spacing-2) var(--spacing-3);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  background: white;
-  transition: all 0.2s;
+  background: var(--color-surface);
+  transition: all var(--transition-fast);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--spacing-2);
+  flex-shrink: 0;
+  min-width: 120px;
 }
 
 .conversation-item:hover {
-  background: #F0F0F0;
+  background: var(--color-surface-hover);
 }
 
 .conversation-item.active {
-  background: #BAFFC9;
-  transform: scale(1.02);
+  background: var(--color-success-light);
 }
 
 .conversation-name {
-  font-weight: bold;
-  font-size: 14px;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  white-space: nowrap;
 }
 
 .message-count {
-  background: #FFB3BA;
-  border: 2px solid black;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  background: var(--color-danger-light);
+  border: 2px solid var(--outline-color);
+  border-radius: var(--radius-full);
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  flex-shrink: 0;
 }
 
 .messages-content {
   flex: 1;
-  background: white;
-  border: 4px solid black;
-  border-radius: 12px;
-  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
-  padding: 16px;
+  background: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-4);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
 }
 
 .messages-header {
-  padding-bottom: 12px;
-  border-bottom: 3px solid black;
-  margin-bottom: 16px;
+  padding-bottom: var(--spacing-3);
+  border-bottom: var(--outline-width) solid var(--outline-color);
+  margin-bottom: var(--spacing-3);
+  flex-shrink: 0;
 }
 
 .messages-header h3 {
-  margin: 0 0 8px 0;
-  font-size: 20px;
+  margin: 0 0 var(--spacing-2) 0;
+  font-size: var(--font-size-lg);
 }
 
 .npc-notice {
-  font-size: 12px;
-  color: #666;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
   font-style: italic;
 }
 
 .messages-thread {
   flex: 1;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: var(--spacing-3);
+  margin-bottom: var(--spacing-3);
+  min-height: 0;
 }
 
 .message-bubble {
-  background: #F5F5F5;
-  border: 3px solid black;
-  border-radius: 12px;
-  padding: 12px;
-  max-width: 70%;
+  background: var(--color-bg-sunken);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-3);
+  max-width: 85%;
   align-self: flex-start;
 }
 
 .message-sender {
-  font-weight: bold;
-  font-size: 12px;
-  margin-bottom: 4px;
-  color: #666;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xs);
+  margin-bottom: var(--spacing-1);
+  color: var(--color-text-secondary);
 }
 
 .message-text {
-  font-size: 14px;
-  margin-bottom: 4px;
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-1);
+  word-wrap: break-word;
 }
 
 .message-time {
-  font-size: 11px;
-  color: #999;
+  font-size: 10px;
+  color: var(--color-text-muted);
   text-align: right;
 }
 
 .message-input {
   display: flex;
-  gap: 12px;
+  gap: var(--spacing-2);
+  flex-shrink: 0;
 }
 
 .message-input input {
   flex: 1;
-  padding: 12px;
-  border: 3px solid black;
-  border-radius: 8px;
+  padding: var(--spacing-3);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
   font-family: inherit;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
+  min-width: 0;
 }
 
 .btn-send {
-  padding: 12px 24px;
-  background: #BAFFC9;
-  border: 3px solid black;
-  border-radius: 8px;
-  font-weight: bold;
+  padding: var(--spacing-3) var(--spacing-4);
+  background: var(--color-success-light);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
   cursor: pointer;
-  transition: transform 0.1s;
+  transition: transform var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
 }
 
 .btn-send:hover {
   transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .no-conversation {
@@ -311,76 +362,141 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  color: #666;
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  text-align: center;
+  padding: var(--spacing-4);
 }
 
+/* ==========================================
+   ADD CONTACT FORM
+   ========================================== */
+
 .add-contact-form {
-  max-width: 600px;
+  max-width: 500px;
   margin: 0 auto;
-  background: white;
-  border: 4px solid black;
-  border-radius: 12px;
-  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
-  padding: 24px;
+  background: var(--color-surface);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-5);
 }
 
 .add-contact-form h3 {
-  margin: 0 0 20px 0;
-  font-size: 20px;
-  padding-bottom: 12px;
-  border-bottom: 3px solid black;
+  margin: 0 0 var(--spacing-4) 0;
+  font-size: var(--font-size-lg);
+  padding-bottom: var(--spacing-3);
+  border-bottom: var(--outline-width) solid var(--outline-color);
 }
 
 .form-field {
-  margin-bottom: 16px;
+  margin-bottom: var(--spacing-4);
 }
 
 .form-field label {
   display: block;
-  font-weight: bold;
-  margin-bottom: 8px;
-  font-size: 14px;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-2);
+  font-size: var(--font-size-sm);
 }
 
 .form-field input,
 .form-field select,
 .form-field textarea {
   width: 100%;
-  padding: 12px;
-  border: 3px solid black;
-  border-radius: 8px;
+  padding: var(--spacing-3);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
   font-family: inherit;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
 }
 
 .form-field textarea {
   resize: vertical;
+  min-height: 80px;
 }
 
 .btn-add {
   width: 100%;
-  padding: 14px;
-  background: #BAFFC9;
-  border: 3px solid black;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
+  padding: var(--spacing-3);
+  background: var(--color-success-light);
+  border: var(--outline-width) solid var(--outline-color);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
   cursor: pointer;
-  transition: transform 0.1s;
+  transition: transform var(--transition-fast);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-add:hover {
-  transform: translateY(-2px);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-hover);
 }
 
-@media (max-width: 768px) {
+/* ==========================================
+   RESPONSIVE - Larger screens
+   ========================================== */
+
+@media (min-width: 768px) {
+  .contacts-app {
+    padding: var(--spacing-5);
+  }
+
   .messages-view {
-    flex-direction: column;
+    flex-direction: row;
   }
 
   .messages-sidebar {
-    width: 100%;
-    height: 200px;
+    width: 220px;
+    flex-shrink: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .conversation-list {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow-x: visible;
+  }
+
+  .conversation-item {
+    min-width: auto;
+  }
+
+  .contact-cards {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+/* ==========================================
+   LANDSCAPE MOBILE
+   ========================================== */
+
+@media (max-height: 500px) {
+  .contacts-app {
+    padding: var(--spacing-3);
+  }
+
+  .tabs {
+    margin-bottom: var(--spacing-2);
+    padding-bottom: var(--spacing-1);
+  }
+
+  .tab {
+    padding: var(--spacing-1) var(--spacing-3);
+    font-size: var(--font-size-xs);
+  }
+
+  .messages-sidebar {
+    padding: var(--spacing-2);
+  }
+
+  .messages-content {
+    padding: var(--spacing-3);
+  }
+
+  .add-contact-form {
+    padding: var(--spacing-4);
   }
 }

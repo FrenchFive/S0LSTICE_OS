@@ -981,35 +981,203 @@
    RESPONSIVE
    ========================================== */
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .combat-header {
-    flex-direction: column;
-    gap: var(--spacing-3);
-    align-items: flex-start;
+    padding: var(--spacing-3) var(--spacing-4);
   }
-  
-  .form-row {
-    flex-direction: column;
+
+  .combat-header h1 {
+    font-size: var(--font-size-lg);
   }
-  
-  .turn-tracker {
-    flex-direction: column;
-    gap: var(--spacing-2);
+
+  .combat-content {
+    padding: var(--spacing-3);
   }
-  
-  .initiative-list {
-    flex-direction: column;
+
+  .encounter-editor {
+    padding: var(--spacing-3);
   }
-  
+
   .creatures-grid {
     grid-template-columns: 1fr;
   }
-  
+}
+
+@media (max-width: 640px) {
+  .combat-header {
+    flex-direction: column;
+    gap: var(--spacing-2);
+    align-items: stretch;
+    padding: var(--spacing-3);
+  }
+
+  .combat-header h1 {
+    font-size: var(--font-size-base);
+    justify-content: center;
+  }
+
+  .combat-content {
+    padding: var(--spacing-2);
+  }
+
+  .section-title {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-3);
+  }
+
+  .encounter-card {
+    padding: var(--spacing-3);
+  }
+
+  .encounter-card h3 {
+    font-size: var(--font-size-base);
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  .form-section {
+    padding: var(--spacing-3);
+  }
+
+  .creatures-section {
+    padding: var(--spacing-3);
+  }
+
+  .creature-item {
+    padding: var(--spacing-2);
+    gap: var(--spacing-2);
+  }
+
+  .creature-token {
+    width: 28px;
+    height: 28px;
+    font-size: var(--font-size-xs);
+  }
+
+  .combat-info-header {
+    flex-direction: column;
+    gap: var(--spacing-3);
+    padding: var(--spacing-3);
+  }
+
+  .turn-tracker {
+    flex-direction: column;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2);
+  }
+
+  .turn-token {
+    width: 32px;
+    height: 32px;
+    font-size: var(--font-size-base);
+  }
+
+  .turn-name {
+    font-size: var(--font-size-base);
+  }
+
+  .initiative-order {
+    padding: var(--spacing-2);
+  }
+
+  .initiative-list {
+    flex-direction: column;
+    gap: var(--spacing-1);
+  }
+
+  .initiative-item {
+    padding: var(--spacing-2);
+  }
+
+  .action-economy {
+    gap: var(--spacing-1);
+  }
+
+  .action-row {
+    gap: var(--spacing-1);
+  }
+
+  .action-btn {
+    padding: var(--spacing-1) var(--spacing-2);
+    font-size: var(--font-size-xs);
+  }
+
   .combat-controls {
     flex-direction: column;
+    padding: var(--spacing-3);
+    gap: var(--spacing-2);
   }
-  
+
   .combat-controls .btn {
     width: 100%;
+  }
+
+  .creature-editor-modal,
+  .status-selector-modal {
+    max-width: 95%;
+    max-height: 90vh;
+  }
+
+  .status-effects-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 400px) {
+  .combat-content {
+    padding: var(--spacing-1);
+  }
+
+  .encounter-card,
+  .form-section,
+  .creatures-section,
+  .combat-info-header,
+  .initiative-order,
+  .combat-controls {
+    border-radius: var(--radius-lg);
+  }
+
+  .status-effects-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Landscape mobile */
+@media (max-height: 500px) {
+  .combat-header {
+    padding: var(--spacing-2) var(--spacing-3);
+  }
+
+  .combat-content {
+    padding: var(--spacing-2);
+  }
+
+  .encounter-card {
+    padding: var(--spacing-2);
+  }
+
+  .combat-info-header {
+    padding: var(--spacing-2);
+    margin-bottom: var(--spacing-2);
+  }
+
+  .turn-tracker {
+    margin-bottom: var(--spacing-2);
+  }
+
+  .initiative-order {
+    margin-bottom: var(--spacing-2);
+  }
+
+  .combat-creatures {
+    margin-bottom: var(--spacing-2);
+  }
+
+  .creature-editor-modal,
+  .status-selector-modal {
+    max-height: 95vh;
   }
 }
