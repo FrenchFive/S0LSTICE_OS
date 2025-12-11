@@ -140,6 +140,23 @@ function PhoneApp() {
     handleBackToHome();
   }, [handleBackToHome]);
 
+  const handleClearCharacter = useCallback(() => {
+    // Clear current character and go to character select
+    setCurrentCharacter(null);
+    setIsDMMode(false);
+    dmMode.setDM(false);
+    setCurrentApp('identity');
+  }, []);
+
+  const handleDeleteCharacter = useCallback((charId) => {
+    // Delete the character from database
+    database.deleteCharacter(charId);
+    // Clear current character
+    setCurrentCharacter(null);
+    // Go to character select
+    setCurrentApp('identity');
+  }, []);
+
   const renderApp = () => {
     // Home screen
     if (currentApp === 'home') {
@@ -170,7 +187,6 @@ function PhoneApp() {
           <IdentityApp
             character={currentCharacter}
             onUpdate={setCurrentCharacter}
-            onCreateNew={handleCreateCharacter}
             onSelectCharacter={() => {
               setCurrentCharacter(null);
               // This will show the character select screen
@@ -202,6 +218,8 @@ function PhoneApp() {
         <Settings
           currentCharacter={currentCharacter}
           onClose={handleBackToHome}
+          onClearCharacter={handleClearCharacter}
+          onDeleteCharacter={handleDeleteCharacter}
         />
       );
     }

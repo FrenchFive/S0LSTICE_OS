@@ -34,7 +34,7 @@ const APPS = {
   settings: { component: Settings, title: 'Settings', expandable: true },
 };
 
-function DesktopLayout({ character, onCharacterUpdate, onSwitchCharacter }) {
+function DesktopLayout({ character, onCharacterUpdate, onSwitchCharacter, onClearCharacter, onDeleteCharacter }) {
   const [currentApp, setCurrentApp] = useState('home');
   const [isExpanded, setIsExpanded] = useState(false);
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1200);
@@ -100,6 +100,8 @@ function DesktopLayout({ character, onCharacterUpdate, onSwitchCharacter }) {
       props.currentCharacter = character;
       props.onClose = handleBackToHome;
       props.onSwitchCharacter = onSwitchCharacter;
+      props.onClearCharacter = onClearCharacter;
+      props.onDeleteCharacter = onDeleteCharacter;
     } else if (currentApp === 'identity' || currentApp === 'bank') {
       props.character = character;
       props.onUpdate = onCharacterUpdate;
@@ -142,6 +144,8 @@ function DesktopLayout({ character, onCharacterUpdate, onSwitchCharacter }) {
         props.currentCharacter = character;
         props.onClose = handleBackToHome;
         props.onSwitchCharacter = onSwitchCharacter;
+        props.onClearCharacter = onClearCharacter;
+        props.onDeleteCharacter = onDeleteCharacter;
       } else if (currentApp === 'identity' || currentApp === 'bank') {
         props.character = character;
         props.onUpdate = onCharacterUpdate;

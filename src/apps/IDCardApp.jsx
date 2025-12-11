@@ -165,6 +165,7 @@ function EditableField({ label, value, onSave, type = 'text', placeholder = '' }
   }, [isEditing]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setEditValue(value || '');
   }, [value]);
 
@@ -231,7 +232,7 @@ function EditableField({ label, value, onSave, type = 'text', placeholder = '' }
   );
 }
 
-export default function IDCardApp({ character: propCharacter, onUpdate, onCreateNew, onSelectCharacter }) {
+export default function IDCardApp({ character: propCharacter, onUpdate, onSelectCharacter }) {
   const [character, setCharacter] = useState(propCharacter || null);
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [showCharacterEditor, setShowCharacterEditor] = useState(false);
@@ -276,6 +277,7 @@ export default function IDCardApp({ character: propCharacter, onUpdate, onCreate
 
   useEffect(() => {
     if (propCharacter) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCharacter(propCharacter);
       const ids = secretIdentityDatabase.getIdentities(propCharacter.id);
       setIdentities(ids);

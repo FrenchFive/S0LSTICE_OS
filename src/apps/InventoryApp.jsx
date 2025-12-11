@@ -123,7 +123,10 @@ function InventoryApp() {
     <div className="inventory-app">
       <div className="inventory-header">
         <h1><BackpackIcon size={32} /> Inventory</h1>
-        <button className="btn-add-item" onClick={() => setShowAddForm(!showAddForm)}>
+        <button 
+          className={`btn ${showAddForm ? 'btn-secondary' : 'btn-primary'}`} 
+          onClick={() => setShowAddForm(!showAddForm)}
+        >
           {showAddForm ? <><XIcon size={16} /> Cancel</> : <><PlusIcon size={16} /> Add Item</>}
         </button>
       </div>
@@ -151,6 +154,7 @@ function InventoryApp() {
             <label>Name *</label>
             <input
               type="text"
+              className="input"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder="Item name"
@@ -162,6 +166,7 @@ function InventoryApp() {
             <div className="form-group">
               <label>Type</label>
               <select
+                className="input"
                 value={formData.type}
                 onChange={(e) => setFormData({ ...formData, type: e.target.value })}
               >
@@ -177,6 +182,7 @@ function InventoryApp() {
             <div className="form-group">
               <label>Rarity</label>
               <select
+                className="input"
                 value={formData.rarity}
                 onChange={(e) => setFormData({ ...formData, rarity: e.target.value })}
               >
@@ -194,6 +200,7 @@ function InventoryApp() {
               <label>Quantity</label>
               <input
                 type="number"
+                className="input"
                 value={formData.quantity}
                 onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) || 1 })}
                 min="1"
@@ -204,6 +211,7 @@ function InventoryApp() {
               <label>Weight (lbs)</label>
               <input
                 type="number"
+                className="input"
                 step="0.1"
                 value={formData.weight}
                 onChange={(e) => setFormData({ ...formData, weight: parseFloat(e.target.value) || 0 })}
@@ -215,6 +223,7 @@ function InventoryApp() {
           <div className="form-group">
             <label>Description</label>
             <textarea
+              className="input"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Item description"
@@ -222,7 +231,7 @@ function InventoryApp() {
             />
           </div>
 
-          <button type="submit" className="btn-submit">Add to Inventory</button>
+          <button type="submit" className="btn btn-success btn-submit">Add to Inventory</button>
         </form>
       )}
 
@@ -242,6 +251,7 @@ function InventoryApp() {
         <div className="search-box">
           <input
             type="text"
+            className="input"
             placeholder="Search items..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}

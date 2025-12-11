@@ -56,6 +56,33 @@
   gap: var(--spacing-2);
 }
 
+.item-form .form-group {
+  margin-bottom: var(--spacing-4);
+}
+
+.item-form .form-group label {
+  display: block;
+  margin-bottom: var(--spacing-2);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+}
+
+.item-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-4);
+}
+
+.item-form textarea.input {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.item-form .btn-submit {
+  width: 100%;
+  margin-top: var(--spacing-2);
+}
+
 /* Filters */
 .inventory-filters {
   margin-bottom: var(--spacing-5);

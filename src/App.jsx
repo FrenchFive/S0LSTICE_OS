@@ -69,6 +69,21 @@ function App() {
     setAppState(APP_STATE.ONBOARDING);
   }, []);
 
+  // Handle clear character (go back to character select)
+  const handleClearCharacter = useCallback(() => {
+    setCurrentCharacter(null);
+    setIsDMMode(false);
+    dmMode.setDM(false);
+    setAppState(APP_STATE.ONBOARDING);
+  }, []);
+
+  // Handle delete character
+  const handleDeleteCharacter = useCallback((charId) => {
+    database.deleteCharacter(charId);
+    setCurrentCharacter(null);
+    setAppState(APP_STATE.ONBOARDING);
+  }, []);
+
   // Render based on app state
   switch (appState) {
     case APP_STATE.SPLASH:
@@ -93,6 +108,8 @@ function App() {
           character={currentCharacter}
           onCharacterUpdate={handleCharacterUpdate}
           onSwitchCharacter={handleSwitchCharacter}
+          onClearCharacter={handleClearCharacter}
+          onDeleteCharacter={handleDeleteCharacter}
           isDMMode={isDMMode}
         />
       );

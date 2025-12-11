@@ -180,6 +180,41 @@
   color: var(--color-text-secondary);
 }
 
+.character-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.character-actions .btn {
+  width: 100%;
+}
+
+/* ==========================================
+   DANGER ZONE SECTION
+   ========================================== */
+
+.card-danger {
+  border-color: var(--color-danger);
+}
+
+.card-danger .card-header {
+  color: var(--color-danger);
+}
+
+.danger-zone-content {
+  padding: var(--spacing-4);
+  background-color: var(--color-danger-light);
+  border: var(--outline-width) solid var(--color-danger);
+  border-radius: var(--radius-lg);
+}
+
+.danger-warning {
+  margin: 0 0 var(--spacing-4) 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
 /* ==========================================
    DM MODE SECTION
    ========================================== */

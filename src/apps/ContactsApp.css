@@ -360,12 +360,62 @@
 .no-conversation {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: var(--font-size-base);
   color: var(--color-text-secondary);
   text-align: center;
   padding: var(--spacing-4);
+  gap: var(--spacing-3);
+}
+
+.no-messages {
+  text-align: center;
+  padding: var(--spacing-6);
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.no-contacts-hint {
+  text-align: center;
+  padding: var(--spacing-3);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-style: italic;
+}
+
+.no-character {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-3);
+  color: var(--color-text-secondary);
+  text-align: center;
+  padding: var(--spacing-6);
+}
+
+.no-character p {
+  margin: 0;
+  font-size: var(--font-size-lg);
+}
+
+.no-character .hint {
+  font-size: var(--font-size-sm);
+  font-style: italic;
+}
+
+.hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.label {
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-secondary);
 }
 
 /* ==========================================

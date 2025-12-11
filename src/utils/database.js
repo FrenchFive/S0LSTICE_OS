@@ -412,9 +412,9 @@ export const bankDatabase = {
       balance: bank.balance
     });
     
-    // Keep only last 50 transactions
-    if (bank.transactions.length > 50) {
-      bank.transactions = bank.transactions.slice(0, 50);
+    // Keep only last 5 transactions
+    if (bank.transactions.length > 5) {
+      bank.transactions = bank.transactions.slice(0, 5);
     }
     
     localStorage.setItem(BANK_KEY + characterId, JSON.stringify(bank));

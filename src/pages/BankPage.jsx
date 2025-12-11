@@ -51,9 +51,10 @@ function BankPage({ character }) {
   if (!character) {
     return (
       <div className="bank-page">
-        <div className="card">
-          <h2>No Character Selected</h2>
-          <p>Please select a character to view their bank account.</p>
+        <div className="no-character">
+          <span className="big-icon">🏦</span>
+          <p>No Character Selected</p>
+          <p className="hint">Please select a character to view their bank account.</p>
         </div>
       </div>
     );
@@ -62,18 +63,18 @@ function BankPage({ character }) {
   return (
     <div className="bank-page">
       <div className="bank-header">
-        <h1>🏦 Hunter's Bank</h1>
-        <div className="account-name">{character.name}'s Account</div>
+        <h1>🏦 Hunter&apos;s Bank</h1>
+        <div className="account-name">{character.name}&apos;s Account</div>
       </div>
 
-      <div className="bank-layout">
-        {/* Balance Card */}
-        <div className="card balance-card">
-          <div className="balance-label">Current Balance</div>
-          <div className="balance-amount">{formatCurrency(bankData.balance)}</div>
-          <div className="balance-subtext">Available Funds</div>
-        </div>
+      {/* Balance Card */}
+      <div className="card balance-card">
+        <div className="balance-label">Current Balance</div>
+        <div className="balance-amount">{formatCurrency(bankData.balance)}</div>
+        <div className="balance-subtext">Available Funds</div>
+      </div>
 
+      <div className="bank-content">
         {/* Transaction Form */}
         <div className="card transaction-form">
           <div className="card-header">💰 New Transaction</div>
@@ -155,55 +156,13 @@ function BankPage({ character }) {
                   <div className={`transaction-amount ${transaction.amount > 0 ? 'positive' : 'negative'}`}>
                     {transaction.amount > 0 ? '+' : ''}{formatCurrency(transaction.amount)}
                   </div>
-                  <div className="transaction-balance">
-                    Balance: {formatCurrency(transaction.balance)}
-                  </div>
                 </div>
               ))}
             </div>
           )}
-        </div>
-
-        {/* Quick Actions */}
-        <div className="card quick-actions">
-          <div className="card-header">⚡ Quick Actions</div>
-          <div className="quick-actions-grid">
-            <button
-              className="btn btn-success"
-              onClick={() => {
-                setAmount('100');
-                setTransactionType('deposit');
-              }}
-            >
-              +$100
-            </button>
-            <button
-              className="btn btn-success"
-              onClick={() => {
-                setAmount('500');
-                setTransactionType('deposit');
-              }}
-            >
-              +$500
-            </button>
-            <button
-              className="btn btn-danger"
-              onClick={() => {
-                setAmount('50');
-                setTransactionType('withdrawal');
-              }}
-            >
-              -$50
-            </button>
-            <button
-              className="btn btn-danger"
-              onClick={() => {
-                setAmount('200');
-                setTransactionType('withdrawal');
-              }}
-            >
-              -$200
-            </button>
+          
+          <div className="history-note">
+            Only the last 5 transactions are shown
           </div>
         </div>
       </div>
