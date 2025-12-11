@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { database, dmMode } from './utils/database';
 import SplashScreen from './components/SplashScreen';
 import CharacterOnboarding from './components/CharacterOnboarding';
@@ -15,24 +15,15 @@ const APP_STATE = {
 
 function App() {
   const [appState, setAppState] = useState(APP_STATE.SPLASH);
-  const [currentCharacter, setCurrentCharacter] = useState(null);
-  const [isDMMode, setIsDMMode] = useState(false);
-
-  // Check for existing character or DM mode on load
-  useEffect(() => {
-    // Pre-load character data and DM mode state while splash is showing
-    const loadCharacterData = () => {
-      const savedCharacter = database.getCurrentCharacter();
-      const savedDMMode = dmMode.isDM();
-      
-      if (savedDMMode) {
-        setIsDMMode(true);
-      } else if (savedCharacter) {
-        setCurrentCharacter(savedCharacter);
-      }
-    };
-    loadCharacterData();
-  }, []);
+  // Initialize state directly from localStorage to avoid race conditions
+  const [currentCharacter, setCurrentCharacter] = useState(() => {
+    // Only load character if not in DM mode
+    if (!dmMode.isDM()) {
+      return database.getCurrentCharacter();
+    }
+    return null;
+  });
+  const [isDMMode, setIsDMMode] = useState(() => dmMode.isDM());
 
   // Handle splash screen completion
   const handleSplashComplete = useCallback(() => {
@@ -52,6 +43,7 @@ function App() {
   const handleCharacterComplete = useCallback((character) => {
     setCurrentCharacter(character);
     setIsDMMode(false);
+    dmMode.setDM(false); // Persist DM mode off when selecting a character
     setAppState(APP_STATE.MAIN);
   }, []);
 
