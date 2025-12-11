@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { database } from './utils/database';
+import { database, dmMode } from './utils/database';
 import SplashScreen from './components/SplashScreen';
 import CharacterOnboarding from './components/CharacterOnboarding';
 import DesktopLayout from './layouts/DesktopLayout';
@@ -16,13 +16,18 @@ const APP_STATE = {
 function App() {
   const [appState, setAppState] = useState(APP_STATE.SPLASH);
   const [currentCharacter, setCurrentCharacter] = useState(null);
+  const [isDMMode, setIsDMMode] = useState(false);
 
-  // Check for existing character on load
+  // Check for existing character or DM mode on load
   useEffect(() => {
-    // Pre-load character data while splash is showing
+    // Pre-load character data and DM mode state while splash is showing
     const loadCharacterData = () => {
       const savedCharacter = database.getCurrentCharacter();
-      if (savedCharacter) {
+      const savedDMMode = dmMode.isDM();
+      
+      if (savedDMMode) {
+        setIsDMMode(true);
+      } else if (savedCharacter) {
         setCurrentCharacter(savedCharacter);
       }
     };
@@ -31,18 +36,29 @@ function App() {
 
   // Handle splash screen completion
   const handleSplashComplete = useCallback(() => {
-    if (currentCharacter) {
+    if (isDMMode) {
+      // DM mode active, go directly to main app
+      setAppState(APP_STATE.MAIN);
+    } else if (currentCharacter) {
       // Character exists, go directly to main app
       setAppState(APP_STATE.MAIN);
     } else {
-      // No character, show onboarding
+      // No character and not DM, show onboarding
       setAppState(APP_STATE.ONBOARDING);
     }
-  }, [currentCharacter]);
+  }, [currentCharacter, isDMMode]);
 
   // Handle character selection/creation from onboarding
   const handleCharacterComplete = useCallback((character) => {
     setCurrentCharacter(character);
+    setIsDMMode(false);
+    setAppState(APP_STATE.MAIN);
+  }, []);
+
+  // Handle DM mode selection from onboarding
+  const handleDMSelect = useCallback(() => {
+    setIsDMMode(true);
+    setCurrentCharacter(null);
     setAppState(APP_STATE.MAIN);
   }, []);
 
@@ -56,6 +72,8 @@ function App() {
 
   // Handle switch character (go back to onboarding)
   const handleSwitchCharacter = useCallback(() => {
+    setIsDMMode(false);
+    dmMode.setDM(false);
     setAppState(APP_STATE.ONBOARDING);
   }, []);
 
@@ -73,6 +91,7 @@ function App() {
       return (
         <CharacterOnboarding 
           onComplete={handleCharacterComplete}
+          onSelectDM={handleDMSelect}
         />
       );
 
@@ -82,6 +101,7 @@ function App() {
           character={currentCharacter}
           onCharacterUpdate={handleCharacterUpdate}
           onSwitchCharacter={handleSwitchCharacter}
+          isDMMode={isDMMode}
         />
       );
 

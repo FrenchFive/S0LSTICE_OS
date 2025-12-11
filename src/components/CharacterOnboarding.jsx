@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { database } from '../utils/database';
+import { database, dmMode } from '../utils/database';
 import {
   createDefaultCharacter,
   calculateHealth,
@@ -18,11 +18,12 @@ import {
   ArrowRightIcon,
   ArrowLeftIcon,
   TrashIcon,
+  CrownIcon,
 } from './icons/Icons';
 import './CharacterOnboarding.css';
 
 // Step components
-function WelcomeStep({ onNext, hasCharacters }) {
+function WelcomeStep({ onNext, onSelectDM, hasCharacters }) {
   return (
     <div className="onboarding-step welcome-step">
       <div className="welcome-icon">
@@ -36,18 +37,24 @@ function WelcomeStep({ onNext, hasCharacters }) {
       <p className="welcome-description">
         {hasCharacters 
           ? 'Select a character to continue your chronicle or create a new Hunter.'
-          : 'Create your first Hunter to begin your journey into the darkness.'
+          : 'Create your first Hunter to begin your journey into the darkness, or enter as Game Master.'
         }
       </p>
-      <button className="btn btn-primary btn-lg" onClick={onNext}>
-        {hasCharacters ? 'Choose Hunter' : 'Create Hunter'}
-        <ArrowRightIcon size={20} />
-      </button>
+      <div className="welcome-actions">
+        <button className="btn btn-primary btn-lg" onClick={onNext}>
+          {hasCharacters ? 'Choose Hunter' : 'Create Hunter'}
+          <ArrowRightIcon size={20} />
+        </button>
+        <button className="btn btn-outline btn-lg dm-entry-btn" onClick={onSelectDM}>
+          <CrownIcon size={20} />
+          Enter as Game Master
+        </button>
+      </div>
     </div>
   );
 }
 
-function SelectCharacterStep({ characters, onSelect, onCreate, onDelete }) {
+function SelectCharacterStep({ characters, onSelect, onCreate, onDelete, onSelectDM }) {
   const [confirmDelete, setConfirmDelete] = useState(null);
 
   const handleDelete = (e, charId) => {
@@ -81,8 +88,22 @@ function SelectCharacterStep({ characters, onSelect, onCreate, onDelete }) {
   return (
     <div className="onboarding-step select-step">
       <h2>Select Your Hunter</h2>
-      <p className="step-description">Choose a Hunter to continue or create a new one.</p>
+      <p className="step-description">Choose a Hunter to continue, create a new one, or play as Game Master.</p>
       
+      {/* DM Mode Option */}
+      <div className="dm-mode-option-onboarding" onClick={onSelectDM}>
+        <div className="dm-mode-icon-onboarding">
+          <CrownIcon size={32} />
+        </div>
+        <div className="dm-mode-info-onboarding">
+          <h3>Play as Game Master</h3>
+          <p>Run the game, award XP, create encounters, and manage the session.</p>
+        </div>
+        <div className="dm-mode-arrow-onboarding">
+          <ArrowRightIcon size={20} />
+        </div>
+      </div>
+
       <div className="character-list">
         {characters.map(char => {
           const info = getCharacterInfo(char);
@@ -557,7 +578,7 @@ function CreateCharacterStep({ onBack, onCreate, hasCharacters }) {
 }
 
 // Main Onboarding Component
-function CharacterOnboarding({ onComplete }) {
+function CharacterOnboarding({ onComplete, onSelectDM }) {
   const [characters, setCharacters] = useState([]);
   const [currentStep, setCurrentStep] = useState('welcome'); // welcome, select, create
 
@@ -577,7 +598,15 @@ function CharacterOnboarding({ onComplete }) {
 
   const handleSelectCharacter = (character) => {
     database.setCurrentCharacter(character.id);
+    dmMode.setDM(false); // Ensure DM mode is off when selecting a character
     onComplete(character);
+  };
+
+  const handleSelectDM = () => {
+    dmMode.setDM(true);
+    if (onSelectDM) {
+      onSelectDM();
+    }
   };
 
   const handleCreateNew = () => {
@@ -586,6 +615,7 @@ function CharacterOnboarding({ onComplete }) {
 
   const handleCharacterCreated = (character) => {
     database.setCurrentCharacter(character.id);
+    dmMode.setDM(false); // Ensure DM mode is off when creating a character
     onComplete(character);
   };
 
@@ -606,6 +636,7 @@ function CharacterOnboarding({ onComplete }) {
         {currentStep === 'welcome' && (
           <WelcomeStep 
             onNext={handleNext} 
+            onSelectDM={handleSelectDM}
             hasCharacters={characters.length > 0}
           />
         )}
@@ -616,6 +647,7 @@ function CharacterOnboarding({ onComplete }) {
             onSelect={handleSelectCharacter}
             onCreate={handleCreateNew}
             onDelete={handleDeleteCharacter}
+            onSelectDM={handleSelectDM}
           />
         )}
         

@@ -100,6 +100,24 @@ function HomeScreen({ onAppOpen }) {
           </div>
         )}
 
+        {/* DM Mode Widget (when no character) */}
+        {!character && isDM && (
+          <div className="character-widget dm-widget">
+            <div className="widget-avatar dm-avatar">
+              <CrownIcon size={32} />
+            </div>
+            <div className="widget-info">
+              <div className="widget-greeting">{greeting},</div>
+              <div className="widget-name">Game Master</div>
+              <div className="widget-level">Running the Session</div>
+            </div>
+            <div className="dm-badge">
+              <CrownIcon size={14} />
+              <span>DM</span>
+            </div>
+          </div>
+        )}
+
         {/* App Grid */}
         <div className="app-grid">
           {visibleApps.map(app => {
@@ -121,8 +139,8 @@ function HomeScreen({ onAppOpen }) {
           })}
         </div>
 
-        {/* No Character Prompt */}
-        {!character && (
+        {/* No Character Prompt (only when not in DM mode) */}
+        {!character && !isDM && (
           <div className="no-character-prompt">
             <div className="prompt-icon">
               <UserIcon size={64} />

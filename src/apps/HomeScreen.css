@@ -109,6 +109,17 @@
   height: clamp(10px, 3cqi, 14px);
 }
 
+/* DM Mode Widget (when no character selected) */
+.character-widget.dm-widget {
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-warning-light) 100%);
+  border-color: var(--color-warning);
+}
+
+.widget-avatar.dm-avatar {
+  background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-primary) 100%);
+  color: white;
+}
+
 /* ==========================================
    APP GRID - Responsive to container size
    ========================================== */
